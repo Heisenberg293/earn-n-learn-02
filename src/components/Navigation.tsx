@@ -19,7 +19,8 @@ const Navigation = () => {
     { name: "Home", path: "/" },
     { name: "Browse Tasks", path: "/tasks" },
     { name: "Post Task", path: "/post-task" },
-    { name: "About Us", path: "/about" },
+    { name: "Skills Matching", path: "/skills-matching" },
+    { name: "Profile", path: "/profile" },
   ];
 
   return (
