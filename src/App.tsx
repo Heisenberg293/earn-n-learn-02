@@ -10,6 +10,7 @@ import PostTask from "./pages/PostTask";
 import SkillsMatching from "./pages/SkillsMatching";
 import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile";
+import MicrofinanceSystem from "./pages/MicrofinanceSystem";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/post-task" element={<PostTask />} />
           <Route path="/skills-matching" element={<SkillsMatching />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/microfinance" element={<MicrofinanceSystem />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
