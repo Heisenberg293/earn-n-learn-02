@@ -7,6 +7,7 @@ import PeerLending from "@/components/microfinance/PeerLending";
 import Crowdfunding from "@/components/microfinance/Crowdfunding";
 import EscrowSystem from "@/components/microfinance/EscrowSystem";
 import Communication from "@/components/microfinance/Communication";
+import FinancialTools from "@/components/microfinance/FinancialTools";
 
 const MicrofinanceSystem = () => {
   const [activeTab, setActiveTab] = useState("peer-lending");
@@ -20,11 +21,12 @@ const MicrofinanceSystem = () => {
           <p className="text-muted-foreground mb-8">Financial tools to help students support each other</p>
           
           <Tabs defaultValue="peer-lending" onValueChange={setActiveTab} value={activeTab} className="w-full">
-            <TabsList className="grid grid-cols-4 mb-8">
+            <TabsList className="grid grid-cols-5 mb-8">
               <TabsTrigger value="peer-lending">Peer-to-Peer Lending</TabsTrigger>
               <TabsTrigger value="crowdfunding">Crowdfunding</TabsTrigger>
               <TabsTrigger value="escrow">Escrow System</TabsTrigger>
               <TabsTrigger value="communication">Communication</TabsTrigger>
+              <TabsTrigger value="financial-tools">Financial Tools</TabsTrigger>
             </TabsList>
             
             <TabsContent value="peer-lending">
@@ -41,6 +43,10 @@ const MicrofinanceSystem = () => {
             
             <TabsContent value="communication">
               <Communication />
+            </TabsContent>
+            
+            <TabsContent value="financial-tools">
+              <FinancialTools />
             </TabsContent>
           </Tabs>
         </div>
