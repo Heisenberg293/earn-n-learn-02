@@ -8,6 +8,7 @@ import { toast } from "@/hooks/use-toast";
 import { mockTaskPosts } from "../data/financial-data";
 import { TaskPost } from "../types/financial-types";
 import { ClipboardList, Briefcase, Search, BarChart4, Clock, DollarSign, CheckCircle2, Tag } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 const TaskDashboard = () => {
   const [taskPosts, setTaskPosts] = useState<TaskPost[]>(mockTaskPosts);
@@ -107,13 +108,29 @@ const TaskDashboard = () => {
   const renderStatusBadge = (status: TaskPost["status"]) => {
     switch (status) {
       case "open":
-        return "bg-green-100 text-green-800";
+        return (
+          <Badge variant="outline" className="bg-blue-100 text-blue-800 border-blue-300">
+            Open
+          </Badge>
+        );
       case "in-progress":
-        return "bg-blue-100 text-blue-800";
+        return (
+          <Badge variant="outline" className="bg-yellow-100 text-yellow-800 border-yellow-300">
+            In Progress
+          </Badge>
+        );
       case "completed":
-        return "bg-gray-100 text-gray-800";
+        return (
+          <Badge variant="outline" className="bg-green-100 text-green-800 border-green-300">
+            Completed
+          </Badge>
+        );
       default:
-        return "bg-gray-100 text-gray-800";
+        return (
+          <Badge variant="outline">
+            {status}
+          </Badge>
+        );
     }
   };
 

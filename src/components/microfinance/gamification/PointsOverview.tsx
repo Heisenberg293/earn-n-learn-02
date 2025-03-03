@@ -1,10 +1,10 @@
-
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Coins, TrendingUp, BarChart } from "lucide-react";
 import { UserPoints } from "../types/financial-types";
+import { Badge } from "@/components/ui/badge";
 
 // Mock points data
 const mockPointsData: UserPoints = {
