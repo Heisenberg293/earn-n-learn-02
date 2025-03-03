@@ -47,3 +47,40 @@ export interface TaskPost {
   skills: string[];
   applicants: number;
 }
+
+// New gamification types
+export interface UserBadge {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  dateEarned: string;
+  category: "skills" | "financial" | "community" | "achievements";
+}
+
+export interface LeaderboardEntry {
+  id: string;
+  userId: string;
+  name: string;
+  avatarUrl?: string;
+  points: number;
+  rank: number;
+  taskCompleted: number;
+  skillsShared: number;
+}
+
+export interface UserPoints {
+  total: number;
+  breakdown: {
+    tasksCompleted: number;
+    skillsShared: number;
+    communityParticipation: number;
+    lending: number;
+  };
+  history: {
+    date: string;
+    amount: number;
+    description: string;
+    category: "tasks" | "skills" | "community" | "lending";
+  }[];
+}
