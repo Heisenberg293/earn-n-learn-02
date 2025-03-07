@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { HandShake, CreditCard, Coins, DollarSign, Shield } from "lucide-react";
+import { Handshake, CreditCard, Coins, DollarSign, Shield } from "lucide-react";
 
 interface PaymentMethod {
   id: string;
@@ -66,7 +66,7 @@ const SkillPaymentConnection = () => {
     <Card className="w-full">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <HandShake className="h-5 w-5 text-primary" />
+          <Handshake className="h-5 w-5 text-primary" />
           Job Payment Connection
         </CardTitle>
         <CardDescription>
