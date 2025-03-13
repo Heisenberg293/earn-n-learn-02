@@ -4,7 +4,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Budgeting from "./financial/Budgeting";
 import SavingsGoals from "./financial/SavingsGoals";
 import MicroInvesting from "./financial/MicroInvesting";
-import TaskDashboard from "./financial/TaskDashboard";
 
 const FinancialTools = () => {
   const [activeTab, setActiveTab] = useState("budgeting");
@@ -12,11 +11,10 @@ const FinancialTools = () => {
   return (
     <div>
       <Tabs defaultValue="budgeting" onValueChange={setActiveTab} value={activeTab} className="w-full">
-        <TabsList className="grid grid-cols-4 mb-8">
+        <TabsList className="grid grid-cols-3 mb-8">
           <TabsTrigger value="budgeting">Budgeting</TabsTrigger>
           <TabsTrigger value="savings">Savings Goals</TabsTrigger>
           <TabsTrigger value="investing">Micro-Investing</TabsTrigger>
-          <TabsTrigger value="tasks">Task Dashboard</TabsTrigger>
         </TabsList>
         
         <TabsContent value="budgeting">
@@ -29,10 +27,6 @@ const FinancialTools = () => {
         
         <TabsContent value="investing">
           <MicroInvesting />
-        </TabsContent>
-        
-        <TabsContent value="tasks">
-          <TaskDashboard />
         </TabsContent>
       </Tabs>
     </div>

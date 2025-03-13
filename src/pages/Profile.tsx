@@ -4,6 +4,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Navigation from "@/components/Navigation";
 import ProfileTab from "@/components/profile/ProfileTab";
 import GamificationTab from "@/components/profile/GamificationTab";
+import TaskDashboard from "@/components/microfinance/financial/TaskDashboard";
+import SettingsTab from "@/components/profile/SettingsTab";
 
 const Profile = () => {
   return (
@@ -17,15 +19,25 @@ const Profile = () => {
         <Tabs defaultValue="profile" className="mb-8">
           <TabsList className="mb-4 w-full justify-start">
             <TabsTrigger value="profile">Profile Info</TabsTrigger>
-            <TabsTrigger value="gamification">Gamification</TabsTrigger>
+            <TabsTrigger value="tasks">My Tasks</TabsTrigger>
+            <TabsTrigger value="leaderboard">Leaderboard</TabsTrigger>
+            <TabsTrigger value="settings">Settings</TabsTrigger>
           </TabsList>
           
           <TabsContent value="profile">
             <ProfileTab />
           </TabsContent>
           
-          <TabsContent value="gamification">
+          <TabsContent value="tasks">
+            <TaskDashboard />
+          </TabsContent>
+          
+          <TabsContent value="leaderboard">
             <GamificationTab />
+          </TabsContent>
+          
+          <TabsContent value="settings">
+            <SettingsTab />
           </TabsContent>
         </Tabs>
       </main>
