@@ -17,9 +17,7 @@ const Navigation = () => {
 
   const links = [
     { name: "Home", path: "/" },
-    { name: "Browse Tasks", path: "/tasks" },
-    { name: "Post Task", path: "/post-task" },
-    { name: "Skills Matching", path: "/skills-matching" },
+    { name: "Task Hub", path: "/task-hub" },
     { name: "Microfinance", path: "/microfinance" },
     { name: "Newsfeed", path: "/newsfeed" },
     { name: "Profile", path: "/profile" },
