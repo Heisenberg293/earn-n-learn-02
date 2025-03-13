@@ -11,6 +11,7 @@ import SkillsMatching from "./pages/SkillsMatching";
 import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile";
 import MicrofinanceSystem from "./pages/MicrofinanceSystem";
+import Newsfeed from "./pages/Newsfeed";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/skills-matching" element={<SkillsMatching />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/microfinance" element={<MicrofinanceSystem />} />
+          <Route path="/newsfeed" element={<Newsfeed />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

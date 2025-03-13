@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -20,6 +21,7 @@ const Navigation = () => {
     { name: "Post Task", path: "/post-task" },
     { name: "Skills Matching", path: "/skills-matching" },
     { name: "Microfinance", path: "/microfinance" },
+    { name: "Newsfeed", path: "/newsfeed" },
     { name: "Profile", path: "/profile" },
   ];
 
