@@ -1,466 +1,344 @@
 
-import { useState, useEffect } from "react";
-import { Input } from "@/components/ui/input";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  BookOpen,
-  Code,
-  Paintbrush,
-  TrendingUp,
-  Heart,
-  Plus,
-  X,
-  Sparkles,
-  Languages,
-  Calculator,
-  LifeBuoy
-} from "lucide-react";
+import { ArrowLeftRight, Book, Box, Code, Paintbrush, Search } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
-// Mock data for skills categories
-const skillCategories = [
-  { id: "academic", name: "Academic", icon: BookOpen },
-  { id: "coding", name: "Coding", icon: Code },
-  { id: "design", name: "Design", icon: Paintbrush },
-  { id: "marketing", name: "Marketing", icon: TrendingUp },
-  { id: "language", name: "Language", icon: Languages },
-  { id: "math", name: "Mathematics", icon: Calculator },
-  { id: "support", name: "Tech Support", icon: LifeBuoy },
-];
+type SwapType = "skill" | "material";
 
-// Mock data for skills
-const availableSkills = {
-  academic: ["Research", "Essay Writing", "Mathematics", "Physics", "History", "Literature"],
-  coding: ["JavaScript", "Python", "React", "Node.js", "CSS", "HTML", "TypeScript"],
-  design: ["UI/UX", "Graphic Design", "Logo Design", "Illustration", "Photoshop", "Figma"],
-  marketing: ["Social Media", "Content Writing", "SEO", "Email Marketing", "Analytics", "Branding"],
-  language: ["English", "Spanish", "French", "German", "Chinese", "Japanese"],
-  math: ["Calculus", "Statistics", "Algebra", "Geometry", "Trigonometry"],
-  support: ["Hardware Troubleshooting", "Network Setup", "Software Installation", "Data Recovery"],
-};
-
-// Mock user data
-const mockUsers = [
-  {
-    id: 1,
-    name: "Alex Johnson",
-    avatar: "https://i.pravatar.cc/150?img=1",
-    initials: "AJ",
-    skills: ["JavaScript", "React", "CSS"],
-    learning: ["Python", "UI/UX", "TypeScript"],
-    rating: 4.8,
-    matchScore: 92,
-  },
-  {
-    id: 2,
-    name: "Taylor Smith",
-    avatar: "https://i.pravatar.cc/150?img=2",
-    initials: "TS",
-    skills: ["Python", "Research", "Mathematics"],
-    learning: ["JavaScript", "React", "Content Writing"],
-    rating: 4.5,
-    matchScore: 87,
-  },
-  {
-    id: 3,
-    name: "Jordan Lee",
-    avatar: "https://i.pravatar.cc/150?img=3",
-    initials: "JL",
-    skills: ["UI/UX", "Figma", "Graphic Design"],
-    learning: ["JavaScript", "React", "HTML"],
-    rating: 4.9,
-    matchScore: 85,
-  },
-  {
-    id: 4,
-    name: "Morgan Rivera",
-    avatar: "https://i.pravatar.cc/150?img=4",
-    initials: "MR",
-    skills: ["Content Writing", "SEO", "Social Media"],
-    learning: ["Graphic Design", "UI/UX", "Photoshop"],
-    rating: 4.7,
-    matchScore: 81,
-  },
-];
+interface SwapItem {
+  id: number;
+  user: string;
+  title: string;
+  offering: string;
+  seeking: string;
+  description: string;
+  type: SwapType;
+  category: string;
+}
 
 export const SkillsMatcher = () => {
   const { toast } = useToast();
-  const [selectedCategory, setSelectedCategory] = useState("coding");
-  const [userSkills, setUserSkills] = useState<string[]>(["JavaScript", "React"]);
-  const [learningGoals, setLearningGoals] = useState<string[]>(["Python", "UI/UX"]);
-  const [newSkill, setNewSkill] = useState("");
-  const [newGoal, setNewGoal] = useState("");
-  const [recommendations, setRecommendations] = useState(mockUsers);
-  const [activeView, setActiveView] = useState("profile");
-
-  // Function to add a new skill
-  const handleAddSkill = () => {
-    if (newSkill && !userSkills.includes(newSkill)) {
-      setUserSkills([...userSkills, newSkill]);
-      setNewSkill("");
-      
-      // Recalculate recommendations
-      updateRecommendations([...userSkills, newSkill], learningGoals);
-      
-      toast({
-        title: "Skill added",
-        description: `${newSkill} has been added to your skills.`,
-      });
+  const [activeTab, setActiveTab] = useState<"browse" | "create">("browse");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterType, setFilterType] = useState<"all" | SwapType>("all");
+  const [swapType, setSwapType] = useState<SwapType>("skill");
+  
+  // Form data
+  const [title, setTitle] = useState("");
+  const [offering, setOffering] = useState("");
+  const [seeking, setSeeking] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("academic");
+  
+  const [swapItems, setSwapItems] = useState<SwapItem[]>([
+    {
+      id: 1,
+      user: "Alex_Student",
+      title: "Python for Graphic Design",
+      offering: "Python Programming",
+      seeking: "Graphic Design Basics",
+      description: "I can help you learn Python basics including data structures, functions, and simple applications. Looking for someone to teach me Adobe Photoshop and Illustrator basics.",
+      type: "skill",
+      category: "coding",
+    },
+    {
+      id: 2,
+      user: "DesignPro42",
+      title: "Essay Writing for UI Design",
+      offering: "UI/UX Design",
+      seeking: "Essay Writing and Editing",
+      description: "I'm a UI/UX designer willing to teach design principles, wireframing, and prototyping. Need help with academic writing, especially for humanities subjects.",
+      type: "skill",
+      category: "design",
+    },
+    {
+      id: 3,
+      user: "MarketingMaster",
+      title: "Marketing for Math Tutoring",
+      offering: "Social Media Marketing",
+      seeking: "Advanced Calculus Tutoring",
+      description: "Can teach you how to grow your personal brand through social media. Looking for help with calculus III and differential equations.",
+      type: "skill",
+      category: "marketing",
+    },
+    {
+      id: 4,
+      user: "BookWorm99",
+      title: "Computer Science Textbooks",
+      offering: "Data Structures & Algorithms Textbook (2022 edition)",
+      seeking: "Machine Learning Textbook",
+      description: "I have a barely used Data Structures and Algorithms textbook. Looking to swap for any recent Machine Learning or AI textbooks.",
+      type: "material",
+      category: "academic",
+    },
+    {
+      id: 5,
+      user: "DesignKit23",
+      title: "Design Tools for Lab Equipment",
+      offering: "Adobe Creative Cloud License (6 months)",
+      seeking: "Chemistry Lab Equipment",
+      description: "I have an extra Adobe CC license valid for 6 more months. Looking for basic chemistry lab equipment for home experiments.",
+      type: "material",
+      category: "design",
     }
-  };
-
-  // Function to remove a skill
-  const handleRemoveSkill = (skill: string) => {
-    const updatedSkills = userSkills.filter((s) => s !== skill);
-    setUserSkills(updatedSkills);
-    
-    // Recalculate recommendations
-    updateRecommendations(updatedSkills, learningGoals);
-  };
-
-  // Function to add a new learning goal
-  const handleAddLearningGoal = () => {
-    if (newGoal && !learningGoals.includes(newGoal)) {
-      setLearningGoals([...learningGoals, newGoal]);
-      setNewGoal("");
-      
-      // Recalculate recommendations
-      updateRecommendations(userSkills, [...learningGoals, newGoal]);
-      
+  ]);
+  
+  const categories = [
+    { id: "academic", name: "Academic", icon: Book },
+    { id: "coding", name: "Coding", icon: Code },
+    { id: "design", name: "Design", icon: Paintbrush },
+    { id: "marketing", name: "Marketing", icon: Paintbrush },
+  ];
+  
+  const handleCreateSwap = () => {
+    if (!title || !offering || !seeking || !description) {
       toast({
-        title: "Learning goal added",
-        description: `${newGoal} has been added to your learning goals.`,
+        title: "Missing information",
+        description: "Please fill in all fields",
       });
+      return;
     }
-  };
-
-  // Function to remove a learning goal
-  const handleRemoveLearningGoal = (goal: string) => {
-    const updatedGoals = learningGoals.filter((g) => g !== goal);
-    setLearningGoals(updatedGoals);
     
-    // Recalculate recommendations
-    updateRecommendations(userSkills, updatedGoals);
-  };
-
-  // Function to update recommendations based on skills and learning goals
-  const updateRecommendations = (skills: string[], goals: string[]) => {
-    // Simple matching algorithm:
-    // 1. Find users who have skills that match your learning goals
-    // 2. Find users who want to learn skills that you have
-    // 3. Calculate a match score based on the number of matches
-
-    const updatedRecommendations = mockUsers.map(user => {
-      let matchScore = 0;
-      
-      // Check if user has skills that match your learning goals
-      goals.forEach(goal => {
-        if (user.skills.includes(goal)) {
-          matchScore += 10;
-        }
-      });
-      
-      // Check if user wants to learn skills that you have
-      skills.forEach(skill => {
-        if (user.learning.includes(skill)) {
-          matchScore += 10;
-        }
-      });
-      
-      return {
-        ...user,
-        matchScore: Math.min(matchScore, 100)
-      };
-    });
+    const newSwap: SwapItem = {
+      id: swapItems.length + 1,
+      user: "CurrentUser",
+      title,
+      offering,
+      seeking,
+      description,
+      type: swapType,
+      category,
+    };
     
-    // Sort recommendations by match score (highest first)
-    updatedRecommendations.sort((a, b) => b.matchScore - a.matchScore);
+    setSwapItems([newSwap, ...swapItems]);
     
-    setRecommendations(updatedRecommendations);
-  };
-
-  // Function to handle user connections
-  const handleConnect = (userId: number) => {
+    // Reset form
+    setTitle("");
+    setOffering("");
+    setSeeking("");
+    setDescription("");
+    
     toast({
-      title: "Connection request sent",
-      description: "The user will be notified of your interest to connect",
+      title: "Exchange Created",
+      description: `Your ${swapType} exchange has been posted successfully!`,
+    });
+    
+    setActiveTab("browse");
+  };
+  
+  const filteredSwaps = swapItems.filter((item) => {
+    const matchesSearch = 
+      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.offering.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.seeking.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesType = filterType === "all" || item.type === filterType;
+    
+    return matchesSearch && matchesType;
+  });
+  
+  const contactUser = (item: SwapItem) => {
+    toast({
+      title: "Contact Request Sent",
+      description: `You've sent a request to connect with ${item.user} about their exchange offer.`,
     });
   };
-
-  // Initialize recommendations on component mount
-  useEffect(() => {
-    updateRecommendations(userSkills, learningGoals);
-  }, []);
 
   return (
     <div>
-      <div className="mb-6">
-        <h2 className="text-2xl font-semibold">Student Skill Swap</h2>
-        <p className="text-gray-600 mt-2">Find help or offer your skills to fellow students</p>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Skills Profile Section */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Skill Preferences</CardTitle>
-            <CardDescription>
-              Set your preferences to find the best skill swap matches
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {/* Skills I can teach Section */}
-            <div className="mb-6">
-              <h3 className="text-md font-medium mb-4">Skills I can teach:</h3>
-              <div className="mb-4">
-                <div className="flex gap-2 mb-6">
-                  <Select
-                    value={selectedCategory}
-                    onValueChange={setSelectedCategory}
-                  >
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {skillCategories.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>
-                          <div className="flex items-center gap-2">
-                            <category.icon className="h-4 w-4 text-gray-500" />
-                            <span>{category.name}</span>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  
-                  <Select
-                    value={newSkill}
-                    onValueChange={setNewSkill}
-                  >
-                    <SelectTrigger className="flex-1">
-                      <SelectValue placeholder="Select skills to teach" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {availableSkills[selectedCategory as keyof typeof availableSkills].map((skill) => (
-                        <SelectItem key={skill} value={skill}>
-                          {skill}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  
-                  <Button 
-                    onClick={handleAddSkill}
-                    disabled={!newSkill}
-                    size="icon"
-                  >
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
-                
-                <div className="flex flex-wrap gap-2">
-                  {userSkills.map((skill) => (
-                    <Badge 
-                      key={skill} 
-                      variant="secondary"
-                      className="px-3 py-1 flex items-center gap-1"
-                    >
-                      {skill}
-                      <button 
-                        className="ml-1 hover:text-destructive"
-                        onClick={() => handleRemoveSkill(skill)}
-                      >
-                        <X className="h-3 w-3" />
-                      </button>
-                    </Badge>
-                  ))}
-                  
-                  {userSkills.length === 0 && (
-                    <p className="text-sm text-muted-foreground">
-                      No skills added yet
-                    </p>
-                  )}
-                </div>
-              </div>
+      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)}>
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
+          <h2 className="text-2xl font-semibold">Skills & Materials Exchange</h2>
+          <TabsList>
+            <TabsTrigger value="browse">Browse Exchanges</TabsTrigger>
+            <TabsTrigger value="create">Create Exchange</TabsTrigger>
+          </TabsList>
+        </div>
+        
+        <TabsContent value="browse">
+          <div className="mb-6 flex flex-col md:flex-row gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                type="text"
+                placeholder="Search exchanges..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
             </div>
             
-            {/* Skills I want to learn Section */}
-            <div>
-              <h3 className="text-md font-medium mb-4">Skills I want to learn:</h3>
-              <div className="mb-4">
-                <div className="flex gap-2 mb-6">
-                  <Select
-                    value={selectedCategory}
-                    onValueChange={setSelectedCategory}
-                  >
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {skillCategories.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>
-                          <div className="flex items-center gap-2">
-                            <category.icon className="h-4 w-4 text-gray-500" />
-                            <span>{category.name}</span>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  
-                  <Select
-                    value={newGoal}
-                    onValueChange={setNewGoal}
-                  >
-                    <SelectTrigger className="flex-1">
-                      <SelectValue placeholder="Select skills to learn" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {availableSkills[selectedCategory as keyof typeof availableSkills].map((skill) => (
-                        <SelectItem key={skill} value={skill}>
-                          {skill}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  
-                  <Button 
-                    onClick={handleAddLearningGoal}
-                    disabled={!newGoal}
-                    size="icon"
-                  >
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
-                
-                <div className="flex flex-wrap gap-2">
-                  {learningGoals.map((goal) => (
-                    <Badge 
-                      key={goal} 
-                      variant="outline"
-                      className="px-3 py-1 flex items-center gap-1"
-                    >
-                      {goal}
-                      <button 
-                        className="ml-1 hover:text-destructive"
-                        onClick={() => handleRemoveLearningGoal(goal)}
-                      >
-                        <X className="h-3 w-3" />
-                      </button>
-                    </Badge>
-                  ))}
-                  
-                  {learningGoals.length === 0 && (
-                    <p className="text-sm text-muted-foreground">
-                      No learning goals added yet
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button onClick={() => setActiveView("recommendations")}>
-              Find Matches
-            </Button>
-          </CardFooter>
-        </Card>
-        
-        {/* Recommendations Section */}
-        <div>
-          <h3 className="text-xl font-semibold mb-4">Recommended Matches</h3>
-          <div className="space-y-4">
-            {recommendations.slice(0, 3).map((user) => (
-              <Card key={user.id}>
+            <select
+              className="md:w-48 h-10 rounded-md border border-input px-3 py-2"
+              value={filterType}
+              onChange={(e) => setFilterType(e.target.value as any)}
+            >
+              <option value="all">All Types</option>
+              <option value="skill">Skills Only</option>
+              <option value="material">Materials Only</option>
+            </select>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredSwaps.map((item) => (
+              <Card key={item.id} className="hover:shadow-md transition-shadow">
                 <CardHeader className="pb-2">
-                  <div className="flex items-center gap-4">
-                    {user.avatar ? (
-                      <img 
-                        src={user.avatar} 
-                        alt={user.name}
-                        className="w-10 h-10 rounded-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-medium">
-                        {user.initials}
-                      </div>
-                    )}
-                    <div>
-                      <CardTitle className="text-lg">{user.name}</CardTitle>
-                      <div className="flex items-center gap-1 text-amber-500">
-                        <span>★</span>
-                        <span className="text-sm">{user.rating}</span>
-                      </div>
-                    </div>
-                    <div className="ml-auto">
-                      <Badge variant="secondary" className="bg-blue-100 text-blue-700 hover:bg-blue-200">
-                        {user.matchScore}% Match
-                      </Badge>
-                    </div>
+                  <div className="flex justify-between items-start">
+                    <CardTitle>{item.title}</CardTitle>
+                    <Badge variant={item.type === "skill" ? "default" : "secondary"}>
+                      {item.type === "skill" ? "Skill" : "Material"}
+                    </Badge>
                   </div>
+                  <p className="text-sm text-gray-500">Posted by {item.user}</p>
                 </CardHeader>
                 <CardContent>
-                  <div className="mb-2">
-                    <h4 className="text-sm font-medium text-muted-foreground mb-1">
-                      Can teach:
-                    </h4>
-                    <div className="flex flex-wrap gap-1">
-                      {user.skills.map((skill) => (
-                        <Badge key={skill} variant="secondary" className="text-xs bg-green-100 text-green-700 hover:bg-green-200">
-                          {skill}
-                        </Badge>
-                      ))}
+                  <div className="flex items-center gap-2 mb-4">
+                    {item.category === "coding" && <Code className="h-4 w-4 text-blue-500" />}
+                    {item.category === "design" && <Paintbrush className="h-4 w-4 text-purple-500" />}
+                    {item.category === "academic" && <Book className="h-4 w-4 text-green-500" />}
+                    {item.category === "marketing" && <Paintbrush className="h-4 w-4 text-orange-500" />}
+                    <span className="text-sm font-medium">
+                      {categories.find(c => c.id === item.category)?.name || item.category}
+                    </span>
+                  </div>
+                
+                  <div className="flex items-center justify-between mb-3 bg-gray-50 p-3 rounded-md">
+                    <div className="flex-1">
+                      <p className="text-xs text-gray-500">Offering</p>
+                      <p className="font-medium text-sm">{item.offering}</p>
+                    </div>
+                    <ArrowLeftRight className="h-4 w-4 text-gray-400 mx-2" />
+                    <div className="flex-1">
+                      <p className="text-xs text-gray-500">Seeking</p>
+                      <p className="font-medium text-sm">{item.seeking}</p>
                     </div>
                   </div>
-                  <div>
-                    <h4 className="text-sm font-medium text-muted-foreground mb-1">
-                      Wants to learn:
-                    </h4>
-                    <div className="flex flex-wrap gap-1">
-                      {user.learning.map((skill) => (
-                        <Badge key={skill} variant="outline" className="text-xs">
-                          {skill}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter className="flex justify-between items-center pt-2 border-t">
-                  <div className="flex items-center gap-1">
-                    <Sparkles className="h-4 w-4 text-amber-500" />
-                    <span className="font-medium text-sm">{user.matchScore}% Match</span>
-                  </div>
+                  
+                  <p className="text-sm text-gray-600 mb-4 line-clamp-2">{item.description}</p>
+                  
                   <Button 
                     variant="outline" 
-                    size="sm" 
-                    className="gap-1"
-                    onClick={() => handleConnect(user.id)}
+                    className="w-full"
+                    onClick={() => contactUser(item)}
                   >
-                    <Heart className="h-4 w-4" />
-                    Connect
+                    Contact to Exchange
                   </Button>
-                </CardFooter>
+                </CardContent>
               </Card>
             ))}
           </div>
-        </div>
-      </div>
+          
+          {filteredSwaps.length === 0 && (
+            <div className="text-center py-12">
+              <h3 className="text-lg font-medium text-gray-600">
+                No exchanges found matching your criteria
+              </h3>
+              <p className="text-gray-500 mt-2">
+                Try adjusting your search or create a new exchange
+              </p>
+            </div>
+          )}
+        </TabsContent>
+        
+        <TabsContent value="create">
+          <Card>
+            <CardHeader>
+              <CardTitle>Create a New Exchange</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <Button
+                  variant={swapType === "skill" ? "default" : "outline"}
+                  onClick={() => setSwapType("skill")}
+                  className="flex items-center gap-2"
+                >
+                  <Code className="h-4 w-4" />
+                  Skill Exchange
+                </Button>
+                <Button
+                  variant={swapType === "material" ? "default" : "outline"}
+                  onClick={() => setSwapType("material")}
+                  className="flex items-center gap-2"
+                >
+                  <Box className="h-4 w-4" />
+                  Material Exchange
+                </Button>
+              </div>
+            
+              <div>
+                <label className="block text-sm font-medium mb-1">Title</label>
+                <Input
+                  placeholder="Give your exchange a title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    {swapType === "skill" ? "Skill You're Offering" : "Material You're Offering"}
+                  </label>
+                  <Input
+                    placeholder={swapType === "skill" ? "e.g. Python Programming" : "e.g. Calculus Textbook"}
+                    value={offering}
+                    onChange={(e) => setOffering(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    {swapType === "skill" ? "Skill You're Seeking" : "Material You're Seeking"}
+                  </label>
+                  <Input
+                    placeholder={swapType === "skill" ? "e.g. Graphic Design" : "e.g. Statistics Software"}
+                    value={seeking}
+                    onChange={(e) => setSeeking(e.target.value)}
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-1">Category</label>
+                <select
+                  className="w-full h-10 rounded-md border border-input px-3 py-2"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                >
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-1">Description</label>
+                <textarea
+                  className="w-full p-2 border rounded-md min-h-20"
+                  placeholder="Describe what you're offering and what you're looking for in more detail..."
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </div>
+              
+              <div className="flex justify-end gap-4 pt-4">
+                <Button variant="outline" onClick={() => setActiveTab("browse")}>
+                  Cancel
+                </Button>
+                <Button onClick={handleCreateSwap}>
+                  Create Exchange
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

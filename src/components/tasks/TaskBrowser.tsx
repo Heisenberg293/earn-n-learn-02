@@ -15,10 +15,54 @@ import {
   TrendingUp,
   Search,
 } from "lucide-react";
+import { TaskDetailView } from "./TaskDetailView";
 
 export const TaskBrowser = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedTask, setSelectedTask] = useState<null | any>(null);
+  const [taskList, setTaskList] = useState([
+    {
+      id: 1,
+      title: "Python Programming Assignment",
+      category: "coding",
+      budget: "$150-300",
+      difficulty: "Intermediate",
+      description: "Need help with a Python data analysis project involving pandas, matplotlib, and data visualization. The project requires cleaning a dataset, performing exploratory data analysis, and creating visualizations to communicate findings effectively.",
+      deadline: "2023-12-15",
+      status: "available",
+    },
+    {
+      id: 2,
+      title: "Logo Design for Tech Startup",
+      category: "design",
+      budget: "$200-400",
+      difficulty: "Intermediate",
+      description: "Create a modern, minimalist logo for a SaaS company focusing on productivity tools. The logo should convey innovation and efficiency while maintaining a clean, professional appearance. Please include at least 3 concepts and be prepared for 2 rounds of revisions.",
+      deadline: "2023-12-20",
+      status: "available",
+    },
+    {
+      id: 3,
+      title: "Research Paper Review",
+      category: "academic",
+      budget: "$100-200",
+      difficulty: "Advanced",
+      description: "Review and provide feedback on a 20-page research paper in the field of environmental science. Looking for someone to check methodology, analysis, and conclusions while providing constructive feedback on structure and clarity. Knowledge of climate science preferred.",
+      deadline: "2023-12-10",
+      status: "available",
+    },
+    {
+      id: 4,
+      title: "Social Media Strategy",
+      category: "marketing",
+      budget: "$300-600",
+      difficulty: "Beginner",
+      description: "Develop a social media content calendar and strategy for a small fitness business. Need help planning content for Instagram, TikTok, and Facebook that will engage the target audience of 25-40 year old fitness enthusiasts. Should include content themes, posting schedule, and engagement tactics.",
+      deadline: "2023-12-25",
+      status: "available",
+    },
+  ]);
 
   const categories = [
     { id: "all", name: "All Categories", icon: null },
@@ -28,42 +72,26 @@ export const TaskBrowser = () => {
     { id: "marketing", name: "Marketing", icon: TrendingUp },
   ];
 
-  const tasks = [
-    {
-      id: 1,
-      title: "Python Programming Assignment",
-      category: "coding",
-      budget: "$150-300",
-      difficulty: "Intermediate",
-      description: "Need help with a Python data analysis project",
-    },
-    {
-      id: 2,
-      title: "Logo Design for Tech Startup",
-      category: "design",
-      budget: "$200-400",
-      difficulty: "Intermediate",
-      description: "Create a modern, minimalist logo for a SaaS company",
-    },
-    {
-      id: 3,
-      title: "Research Paper Review",
-      category: "academic",
-      budget: "$100-200",
-      difficulty: "Advanced",
-      description: "Review and provide feedback on a 20-page research paper",
-    },
-    {
-      id: 4,
-      title: "Social Media Strategy",
-      category: "marketing",
-      budget: "$300-600",
-      difficulty: "Beginner",
-      description: "Develop a social media content calendar and strategy",
-    },
-  ];
+  const handleViewDetails = (task: any) => {
+    setSelectedTask(task);
+  };
 
-  const filteredTasks = tasks.filter((task) => {
+  const handleCloseDetails = () => {
+    setSelectedTask(null);
+  };
+
+  const handleUpdateTaskStatus = (taskId: number, status: "accepted" | "rejected") => {
+    const updatedTasks = taskList.map(task => {
+      if (task.id === taskId) {
+        return { ...task, status };
+      }
+      return task;
+    });
+    setTaskList(updatedTasks);
+    setSelectedTask(updatedTasks.find(task => task.id === taskId) || null);
+  };
+
+  const filteredTasks = taskList.filter((task) => {
     const matchesSearch = task.title
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
@@ -128,12 +156,15 @@ export const TaskBrowser = () => {
             </div>
             
             <h3 className="text-xl font-semibold mb-2">{task.title}</h3>
-            <p className="text-gray-600 text-sm mb-4">{task.description}</p>
+            <p className="text-gray-600 text-sm mb-4 line-clamp-2">{task.description}</p>
             <p className="text-gray-600 mb-4 text-sm font-medium">
               Budget: {task.budget}
             </p>
             
-            <button className="w-full px-4 py-2 rounded-lg bg-accent text-white font-medium hover:bg-accent/90 transition-colors">
+            <button 
+              className="w-full px-4 py-2 rounded-lg bg-accent text-white font-medium hover:bg-accent/90 transition-colors"
+              onClick={() => handleViewDetails(task)}
+            >
               View Details
             </button>
           </div>
@@ -149,6 +180,14 @@ export const TaskBrowser = () => {
             Try adjusting your search or filters
           </p>
         </div>
+      )}
+
+      {selectedTask && (
+        <TaskDetailView 
+          task={selectedTask} 
+          onClose={handleCloseDetails} 
+          onUpdateTaskStatus={handleUpdateTaskStatus}
+        />
       )}
     </div>
   );

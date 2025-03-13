@@ -19,7 +19,7 @@ const TaskHub = () => {
         <div className="max-w-6xl mx-auto">
           <div className="mb-8">
             <h1 className="text-3xl font-bold">Skill & Task Hub</h1>
-            <p className="text-gray-600 mt-2">Find tasks, post your own, or match with others based on skills</p>
+            <p className="text-gray-600 mt-2">Find tasks, post your own, or exchange skills and materials with others</p>
           </div>
           
           <Tabs 
@@ -31,7 +31,7 @@ const TaskHub = () => {
             <TabsList className="mb-8 grid grid-cols-3 w-full md:w-auto">
               <TabsTrigger value="browse">Browse Tasks</TabsTrigger>
               <TabsTrigger value="post">Post Task</TabsTrigger>
-              <TabsTrigger value="match">Skills Matching</TabsTrigger>
+              <TabsTrigger value="match">Skills Exchange</TabsTrigger>
             </TabsList>
             
             <TabsContent value="browse">
