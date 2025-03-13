@@ -31,6 +31,12 @@ const HeroSection = () => {
             >
               Post a Task
             </Link>
+            <Link
+              to="/microfinance"
+              className="w-full sm:w-auto px-8 py-3 rounded-full bg-secondary text-gray-900 font-medium border border-gray-200 hover:bg-accent/10 transition-colors"
+            >
+              Get Funding
+            </Link>
           </div>
         </div>
       </div>
