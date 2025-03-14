@@ -2,9 +2,10 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, X, Clock, Tag, DollarSign } from "lucide-react";
+import { Check, X, Clock, Tag, DollarSign, MessageCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { Link } from "react-router-dom";
 
 interface Task {
   id: number;
@@ -110,24 +111,48 @@ export const TaskDetailView = ({ task, onClose, onUpdateTaskStatus }: TaskDetail
           </div>
         </CardContent>
         
-        <CardFooter className="flex gap-2 justify-end">
+        <CardFooter className="flex flex-col gap-4">
           {task.status === "available" && (
             <>
-              <Button variant="outline" onClick={handleReject} className="gap-2">
-                <X className="h-4 w-4" />
-                Decline Task
-              </Button>
-              <Button onClick={handleAccept} className="gap-2">
-                <Check className="h-4 w-4" />
-                Accept Task
-              </Button>
+              <div className="w-full flex gap-2 justify-end">
+                <Button variant="outline" onClick={handleReject} className="gap-2">
+                  <X className="h-4 w-4" />
+                  Decline Task
+                </Button>
+                <Button onClick={handleAccept} className="gap-2">
+                  <Check className="h-4 w-4" />
+                  Accept Task
+                </Button>
+              </div>
+              
+              <Link 
+                to="/microfinance" 
+                state={{ activeTab: "communication", initialChatType: task.status === "accepted" ? "accepted" : "declined" }}
+                className="flex items-center justify-center text-sm text-primary hover:underline cursor-pointer w-full"
+              >
+                <MessageCircle className="h-4 w-4 mr-1" />
+                Chat with task poster
+              </Link>
             </>
           )}
           
           {task.status !== "available" && (
-            <Button variant="outline" onClick={onClose}>
-              Close
-            </Button>
+            <>
+              <div className="w-full flex justify-end">
+                <Button variant="outline" onClick={onClose}>
+                  Close
+                </Button>
+              </div>
+              
+              <Link 
+                to="/microfinance" 
+                state={{ activeTab: "communication", initialChatType: task.status === "accepted" ? "accepted" : "declined" }}
+                className="flex items-center justify-center text-sm text-primary hover:underline cursor-pointer w-full"
+              >
+                <MessageCircle className="h-4 w-4 mr-1" />
+                Chat with task poster
+              </Link>
+            </>
           )}
         </CardFooter>
       </Card>

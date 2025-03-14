@@ -1,17 +1,29 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MessageCircle, Users, Bell } from "lucide-react";
 import DirectMessages from "./communication/DirectMessages";
 import GroupChats from "./communication/GroupChats";
 import Notifications from "./communication/Notifications";
 import { MOCK_NOTIFICATIONS } from "./data/mock-data";
+import { useLocation } from "react-router-dom";
 
 const Communication = () => {
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState("messages");
   
   // Count unread notifications
   const unreadNotifications = MOCK_NOTIFICATIONS.filter(notification => !notification.isRead).length;
+  
+  // Check if we're being navigated to with an initialChatType state parameter
+  useEffect(() => {
+    if (location.state?.activeTab === "communication") {
+      setActiveTab("messages");
+      
+      // Could use initialChatType here for further customization
+      // const chatType = location.state.initialChatType; // "accepted" or "declined"
+    }
+  }, [location]);
   
   return (
     <div className="space-y-6">
