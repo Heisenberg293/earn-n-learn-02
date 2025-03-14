@@ -53,11 +53,11 @@ const formSchema = z.object({
   }),
 });
 
-interface TaskPostFormProps {
+interface JobPostFormProps {
   onSuccess?: () => void;
 }
 
-export const TaskPostForm = ({ onSuccess }: TaskPostFormProps) => {
+export const JobPostForm = ({ onSuccess }: JobPostFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -85,10 +85,10 @@ export const TaskPostForm = ({ onSuccess }: TaskPostFormProps) => {
       <div className="mb-8">
         <h2 className="text-2xl font-semibold flex items-center gap-2">
           <FileText className="h-6 w-6 text-accent" />
-          Post a New Task
+          Post a New Job
         </h2>
         <p className="text-gray-600 mt-2">
-          Fill out the form below to create a new task for freelancers
+          Fill out the form below to create a new job for freelancers
         </p>
       </div>
 
@@ -100,12 +100,12 @@ export const TaskPostForm = ({ onSuccess }: TaskPostFormProps) => {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Task Title</FormLabel>
+                  <FormLabel>Job Title</FormLabel>
                   <FormControl>
                     <Input placeholder="E.g., Logo Design for Tech Startup" {...field} />
                   </FormControl>
                   <FormDescription>
-                    Choose a clear, specific title for your task.
+                    Choose a clear, specific title for your job.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -117,10 +117,10 @@ export const TaskPostForm = ({ onSuccess }: TaskPostFormProps) => {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Task Description</FormLabel>
+                  <FormLabel>Job Description</FormLabel>
                   <FormControl>
                     <Textarea 
-                      placeholder="Provide detailed information about the task requirements..." 
+                      placeholder="Provide detailed information about the job requirements..." 
                       className="min-h-[120px]" 
                       {...field} 
                     />
@@ -247,7 +247,7 @@ export const TaskPostForm = ({ onSuccess }: TaskPostFormProps) => {
                 className="bg-accent hover:bg-accent/90 text-white gap-2"
               >
                 <Upload className="h-4 w-4" />
-                Post Task
+                Post Job
               </Button>
             </div>
           </form>

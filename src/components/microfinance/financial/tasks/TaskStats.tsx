@@ -2,17 +2,17 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Briefcase, Clock, CheckCircle2 } from "lucide-react";
 
-interface TaskStatsProps {
+interface JobStatsProps {
   getStatusCountByType: (status: string) => number;
 }
 
-const TaskStats = ({ getStatusCountByType }: TaskStatsProps) => {
+const JobStats = ({ getStatusCountByType }: JobStatsProps) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="text-lg flex items-center gap-2">
-            <Briefcase className="text-blue-500" /> Open Tasks
+            <Briefcase className="text-blue-500" /> Open Jobs
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -45,4 +45,4 @@ const TaskStats = ({ getStatusCountByType }: TaskStatsProps) => {
   );
 };
 
-export default TaskStats;
+export default JobStats;

@@ -9,7 +9,7 @@ const HeroSection = () => {
       <div className="container mx-auto px-6 pt-32 pb-20">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="animate-fade-down text-5xl md:text-6xl font-bold tracking-tight mb-8">
-            Find Freelance Tasks,{" "}
+            Find Freelance Jobs,{" "}
             <span className="text-accent">Earn & Learn!</span>
           </h1>
           
@@ -23,13 +23,13 @@ const HeroSection = () => {
               to="/tasks"
               className="w-full sm:w-auto px-8 py-3 rounded-full bg-accent text-white font-medium hover:bg-accent/90 transition-colors"
             >
-              Browse Tasks
+              Browse Jobs
             </Link>
             <Link
               to="/post-task"
               className="w-full sm:w-auto px-8 py-3 rounded-full bg-white text-gray-900 font-medium border border-gray-200 hover:bg-gray-50 transition-colors"
             >
-              Post a Task
+              Post a Job
             </Link>
             <Link
               to="/microfinance"

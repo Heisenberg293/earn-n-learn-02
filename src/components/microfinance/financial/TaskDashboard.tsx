@@ -1,44 +1,44 @@
 
 import { useState } from "react";
-import { TaskPost } from "../types/financial-types";
+import { JobPost } from "../types/financial-types";
 import { mockTaskPosts } from "../data/financial-data";
-import TaskStats from "./tasks/TaskStats";
-import TaskPostForm from "./tasks/TaskPostForm";
-import TaskList from "./tasks/TaskList";
+import JobStats from "./tasks/TaskStats";
+import JobPostForm from "./tasks/TaskPostForm";
+import JobList from "./tasks/TaskList";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
-const TaskDashboard = () => {
-  const [taskPosts, setTaskPosts] = useState<TaskPost[]>(mockTaskPosts);
+const JobDashboard = () => {
+  const [jobPosts, setJobPosts] = useState<JobPost[]>(mockTaskPosts);
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredTasks = taskPosts.filter(task => {
-    const matchesStatus = filterStatus === "all" || task.status === filterStatus;
-    const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                         task.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         task.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()));
+  const filteredJobs = jobPosts.filter(job => {
+    const matchesStatus = filterStatus === "all" || job.status === filterStatus;
+    const matchesSearch = job.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                         job.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         job.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()));
     return matchesStatus && matchesSearch;
   });
 
   const getStatusCountByType = (status: string) => {
-    return taskPosts.filter(task => task.status === status).length;
+    return jobPosts.filter(job => job.status === status).length;
   };
 
   return (
     <div className="space-y-8">
-      {/* Task Statistics */}
-      <TaskStats getStatusCountByType={getStatusCountByType} />
+      {/* Job Statistics */}
+      <JobStats getStatusCountByType={getStatusCountByType} />
       
-      {/* Task Post Form */}
-      <TaskPostForm setTaskPosts={setTaskPosts} taskPosts={taskPosts} />
+      {/* Job Post Form */}
+      <JobPostForm setJobPosts={setJobPosts} jobPosts={jobPosts} />
       
       <div className="space-y-4">
         <div className="flex justify-between items-center">
-          <h3 className="text-xl font-bold">Your Tasks</h3>
+          <h3 className="text-xl font-bold">Your Jobs</h3>
           <div className="flex gap-2">
             <Input
-              placeholder="Search tasks..."
+              placeholder="Search jobs..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-[200px]"
@@ -56,15 +56,15 @@ const TaskDashboard = () => {
           </div>
         </div>
         
-        {/* Task List */}
-        <TaskList 
-          filteredTasks={filteredTasks} 
-          setTaskPosts={setTaskPosts} 
-          taskPosts={taskPosts} 
+        {/* Job List */}
+        <JobList 
+          filteredJobs={filteredJobs} 
+          setJobPosts={setJobPosts} 
+          jobPosts={jobPosts} 
         />
       </div>
     </div>
   );
 };
 
-export default TaskDashboard;
+export default JobDashboard;

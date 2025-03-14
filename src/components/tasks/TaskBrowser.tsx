@@ -15,13 +15,13 @@ import {
   TrendingUp,
   Search,
 } from "lucide-react";
-import { TaskDetailView } from "./TaskDetailView";
+import { JobDetailView } from "./TaskDetailView";
 
-export const TaskBrowser = () => {
+export const JobBrowser = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedTask, setSelectedTask] = useState<null | any>(null);
-  const [taskList, setTaskList] = useState([
+  const [selectedJob, setSelectedJob] = useState<null | any>(null);
+  const [jobList, setJobList] = useState([
     {
       id: 1,
       title: "Python Programming Assignment",
@@ -72,45 +72,45 @@ export const TaskBrowser = () => {
     { id: "marketing", name: "Marketing", icon: TrendingUp },
   ];
 
-  const handleViewDetails = (task: any) => {
-    setSelectedTask(task);
+  const handleViewDetails = (job: any) => {
+    setSelectedJob(job);
   };
 
   const handleCloseDetails = () => {
-    setSelectedTask(null);
+    setSelectedJob(null);
   };
 
-  const handleUpdateTaskStatus = (taskId: number, status: "accepted" | "rejected") => {
-    const updatedTasks = taskList.map(task => {
-      if (task.id === taskId) {
-        return { ...task, status };
+  const handleUpdateJobStatus = (jobId: number, status: "accepted" | "rejected") => {
+    const updatedJobs = jobList.map(job => {
+      if (job.id === jobId) {
+        return { ...job, status };
       }
-      return task;
+      return job;
     });
-    setTaskList(updatedTasks);
-    setSelectedTask(updatedTasks.find(task => task.id === taskId) || null);
+    setJobList(updatedJobs);
+    setSelectedJob(updatedJobs.find(job => job.id === jobId) || null);
   };
 
-  const filteredTasks = taskList.filter((task) => {
-    const matchesSearch = task.title
+  const filteredJobs = jobList.filter((job) => {
+    const matchesSearch = job.title
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
     const matchesCategory =
-      selectedCategory === "all" || task.category === selectedCategory;
+      selectedCategory === "all" || job.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
   return (
     <div>
       <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
-        <h2 className="text-2xl font-semibold">Available Tasks</h2>
+        <h2 className="text-2xl font-semibold">Available Jobs</h2>
         
         <div className="flex items-center gap-4 w-full md:w-auto">
           <div className="relative flex-1 md:w-64">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
             <Input
               type="text"
-              placeholder="Search tasks..."
+              placeholder="Search jobs..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
@@ -141,29 +141,29 @@ export const TaskBrowser = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredTasks.map((task) => (
+        {filteredJobs.map((job) => (
           <div
-            key={task.id}
+            key={job.id}
             className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow"
           >
             <div className="flex items-center justify-between mb-4">
               <span className="text-xs font-medium px-3 py-1 rounded-full bg-secondary">
-                {categories.find((c) => c.id === task.category)?.name}
+                {categories.find((c) => c.id === job.category)?.name}
               </span>
               <span className="text-xs font-medium text-accent">
-                {task.difficulty}
+                {job.difficulty}
               </span>
             </div>
             
-            <h3 className="text-xl font-semibold mb-2">{task.title}</h3>
-            <p className="text-gray-600 text-sm mb-4 line-clamp-2">{task.description}</p>
+            <h3 className="text-xl font-semibold mb-2">{job.title}</h3>
+            <p className="text-gray-600 text-sm mb-4 line-clamp-2">{job.description}</p>
             <p className="text-gray-600 mb-4 text-sm font-medium">
-              Budget: {task.budget}
+              Budget: {job.budget}
             </p>
             
             <button 
               className="w-full px-4 py-2 rounded-lg bg-accent text-white font-medium hover:bg-accent/90 transition-colors"
-              onClick={() => handleViewDetails(task)}
+              onClick={() => handleViewDetails(job)}
             >
               View Details
             </button>
@@ -171,10 +171,10 @@ export const TaskBrowser = () => {
         ))}
       </div>
 
-      {filteredTasks.length === 0 && (
+      {filteredJobs.length === 0 && (
         <div className="text-center py-12">
           <h3 className="text-lg font-medium text-gray-600">
-            No tasks found matching your criteria
+            No jobs found matching your criteria
           </h3>
           <p className="text-gray-500 mt-2">
             Try adjusting your search or filters
@@ -182,11 +182,11 @@ export const TaskBrowser = () => {
         </div>
       )}
 
-      {selectedTask && (
-        <TaskDetailView 
-          task={selectedTask} 
+      {selectedJob && (
+        <JobDetailView 
+          job={selectedJob} 
           onClose={handleCloseDetails} 
-          onUpdateTaskStatus={handleUpdateTaskStatus}
+          onUpdateJobStatus={handleUpdateJobStatus}
         />
       )}
     </div>

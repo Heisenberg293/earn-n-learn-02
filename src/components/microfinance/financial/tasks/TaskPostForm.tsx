@@ -6,15 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
-import { TaskPost } from "../../types/financial-types";
+import { JobPost } from "../../types/financial-types";
 
-interface TaskPostFormProps {
-  setTaskPosts: React.Dispatch<React.SetStateAction<TaskPost[]>>;
-  taskPosts: TaskPost[];
+interface JobPostFormProps {
+  setJobPosts: React.Dispatch<React.SetStateAction<JobPost[]>>;
+  jobPosts: JobPost[];
 }
 
-const TaskPostForm = ({ setTaskPosts, taskPosts }: TaskPostFormProps) => {
-  const [newTask, setNewTask] = useState<Partial<TaskPost>>({
+const JobPostForm = ({ setJobPosts, jobPosts }: JobPostFormProps) => {
+  const [newJob, setNewJob] = useState<Partial<JobPost>>({
     title: "",
     description: "",
     budget: 0,
@@ -24,8 +24,8 @@ const TaskPostForm = ({ setTaskPosts, taskPosts }: TaskPostFormProps) => {
   });
   const [skillInput, setSkillInput] = useState("");
 
-  const handleAddTask = () => {
-    if (!newTask.title || !newTask.description || !newTask.budget || !newTask.deadline) {
+  const handleAddJob = () => {
+    if (!newJob.title || !newJob.description || !newJob.budget || !newJob.deadline) {
       toast({
         title: "Incomplete information",
         description: "Please fill in all required fields",
@@ -34,19 +34,19 @@ const TaskPostForm = ({ setTaskPosts, taskPosts }: TaskPostFormProps) => {
       return;
     }
 
-    const task: TaskPost = {
+    const job: JobPost = {
       id: `tp${Date.now()}`,
-      title: newTask.title || "",
-      description: newTask.description || "",
-      budget: Number(newTask.budget) || 0,
-      deadline: newTask.deadline || "",
+      title: newJob.title || "",
+      description: newJob.description || "",
+      budget: Number(newJob.budget) || 0,
+      deadline: newJob.deadline || "",
       status: "open",
-      skills: newTask.skills || [],
+      skills: newJob.skills || [],
       applicants: 0
     };
 
-    setTaskPosts([task, ...taskPosts]);
-    setNewTask({
+    setJobPosts([job, ...jobPosts]);
+    setNewJob({
       title: "",
       description: "",
       budget: 0,
@@ -56,89 +56,89 @@ const TaskPostForm = ({ setTaskPosts, taskPosts }: TaskPostFormProps) => {
     });
     
     toast({
-      title: "Task posted",
-      description: "Your task has been successfully posted"
+      title: "Job posted",
+      description: "Your job has been successfully posted"
     });
   };
 
   const handleAddSkill = () => {
     if (!skillInput.trim()) return;
     
-    if (!newTask.skills) {
-      setNewTask({ ...newTask, skills: [skillInput.trim()] });
+    if (!newJob.skills) {
+      setNewJob({ ...newJob, skills: [skillInput.trim()] });
     } else {
-      setNewTask({ ...newTask, skills: [...newTask.skills, skillInput.trim()] });
+      setNewJob({ ...newJob, skills: [...newJob.skills, skillInput.trim()] });
     }
     
     setSkillInput("");
   };
 
   const handleRemoveSkill = (skillToRemove: string) => {
-    if (!newTask.skills) return;
+    if (!newJob.skills) return;
     
-    setNewTask({
-      ...newTask,
-      skills: newTask.skills.filter(skill => skill !== skillToRemove)
+    setNewJob({
+      ...newJob,
+      skills: newJob.skills.filter(skill => skill !== skillToRemove)
     });
   };
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Post a New Task</CardTitle>
+        <CardTitle>Post a New Job</CardTitle>
         <CardDescription>Describe what you need help with</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid gap-4">
           <div className="space-y-2">
-            <Label htmlFor="task-title">Task Title</Label>
+            <Label htmlFor="job-title">Job Title</Label>
             <Input
-              id="task-title"
+              id="job-title"
               placeholder="e.g., Website Development for Student Club"
-              value={newTask.title || ""}
-              onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
+              value={newJob.title || ""}
+              onChange={(e) => setNewJob({ ...newJob, title: e.target.value })}
             />
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="task-description">Description</Label>
+            <Label htmlFor="job-description">Description</Label>
             <Textarea
-              id="task-description"
-              placeholder="Describe your task in detail..."
+              id="job-description"
+              placeholder="Describe your job in detail..."
               rows={4}
-              value={newTask.description || ""}
-              onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
+              value={newJob.description || ""}
+              onChange={(e) => setNewJob({ ...newJob, description: e.target.value })}
             />
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="task-budget">Budget ($)</Label>
+              <Label htmlFor="job-budget">Budget ($)</Label>
               <Input
-                id="task-budget"
+                id="job-budget"
                 type="number"
                 placeholder="150"
-                value={newTask.budget || ""}
-                onChange={(e) => setNewTask({ ...newTask, budget: parseFloat(e.target.value) })}
+                value={newJob.budget || ""}
+                onChange={(e) => setNewJob({ ...newJob, budget: parseFloat(e.target.value) })}
               />
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="task-deadline">Deadline</Label>
+              <Label htmlFor="job-deadline">Deadline</Label>
               <Input
-                id="task-deadline"
+                id="job-deadline"
                 type="date"
-                value={newTask.deadline || ""}
-                onChange={(e) => setNewTask({ ...newTask, deadline: e.target.value })}
+                value={newJob.deadline || ""}
+                onChange={(e) => setNewJob({ ...newJob, deadline: e.target.value })}
               />
             </div>
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="task-skills">Required Skills</Label>
+            <Label htmlFor="job-skills">Required Skills</Label>
             <div className="flex gap-2">
               <Input
-                id="task-skills"
+                id="job-skills"
                 placeholder="e.g., React, Design, Writing"
                 value={skillInput}
                 onChange={(e) => setSkillInput(e.target.value)}
@@ -148,7 +148,7 @@ const TaskPostForm = ({ setTaskPosts, taskPosts }: TaskPostFormProps) => {
               </Button>
             </div>
             <div className="flex flex-wrap gap-2 mt-2">
-              {newTask.skills?.map((skill, index) => (
+              {newJob.skills?.map((skill, index) => (
                 <span 
                   key={index} 
                   className="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-sm flex items-center gap-1"
@@ -166,8 +166,8 @@ const TaskPostForm = ({ setTaskPosts, taskPosts }: TaskPostFormProps) => {
             </div>
           </div>
           
-          <Button onClick={handleAddTask} className="w-full">
-            Post Task
+          <Button onClick={handleAddJob} className="w-full">
+            Post Job
           </Button>
         </div>
       </CardContent>
@@ -175,4 +175,4 @@ const TaskPostForm = ({ setTaskPosts, taskPosts }: TaskPostFormProps) => {
   );
 };
 
-export default TaskPostForm;
+export default JobPostForm;

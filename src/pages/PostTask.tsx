@@ -56,7 +56,7 @@ const formSchema = z.object({
   }),
 });
 
-const PostTask = () => {
+const PostJob = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   
@@ -77,11 +77,11 @@ const PostTask = () => {
     console.log("Form submitted:", values);
     
     toast({
-      title: "Task Posted Successfully",
-      description: "Your task has been created and is now live!",
+      title: "Job Posted Successfully",
+      description: "Your job has been created and is now live!",
     });
     
-    // Redirect to the tasks page after submission
+    // Redirect to the jobs page after submission
     setTimeout(() => {
       navigate("/tasks");
     }, 1500);
@@ -96,10 +96,10 @@ const PostTask = () => {
           <div className="mb-8">
             <h1 className="text-3xl font-bold flex items-center gap-2">
               <FileText className="h-8 w-8 text-accent" />
-              Post a New Task
+              Post a New Job
             </h1>
             <p className="text-gray-600 mt-2">
-              Fill out the form below to create a new task for freelancers
+              Fill out the form below to create a new job for freelancers
             </p>
           </div>
 
@@ -111,12 +111,12 @@ const PostTask = () => {
                   name="title"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Task Title</FormLabel>
+                      <FormLabel>Job Title</FormLabel>
                       <FormControl>
                         <Input placeholder="E.g., Logo Design for Tech Startup" {...field} />
                       </FormControl>
                       <FormDescription>
-                        Choose a clear, specific title for your task.
+                        Choose a clear, specific title for your job.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -128,10 +128,10 @@ const PostTask = () => {
                   name="description"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Task Description</FormLabel>
+                      <FormLabel>Job Description</FormLabel>
                       <FormControl>
                         <Textarea 
-                          placeholder="Provide detailed information about the task requirements..." 
+                          placeholder="Provide detailed information about the job requirements..." 
                           className="min-h-[120px]" 
                           {...field} 
                         />
@@ -258,7 +258,7 @@ const PostTask = () => {
                     className="bg-accent hover:bg-accent/90 text-white gap-2"
                   >
                     <Upload className="h-4 w-4" />
-                    Post Task
+                    Post Job
                   </Button>
                 </div>
               </form>
@@ -270,4 +270,4 @@ const PostTask = () => {
   );
 };
 
-export default PostTask;
+export default PostJob;
