@@ -1,183 +1,104 @@
 
-import { Budget, SavingsGoal, Investment, TaskPost } from "../types/financial-types";
+import { FinancialTask, JobPost } from "../types/financial-types";
 
-export const mockBudgetData: Budget = {
-  income: 1200,
-  expenses: 850,
-  balance: 350,
-  transactions: [
-    {
-      id: "t1",
-      category: "Salary",
-      amount: 800,
-      type: "income",
-      date: "2023-06-01",
-      description: "Part-time job payment"
-    },
-    {
-      id: "t2",
-      category: "Freelance",
-      amount: 400,
-      type: "income",
-      date: "2023-06-15",
-      description: "Website design project"
-    },
-    {
-      id: "t3",
-      category: "Rent",
-      amount: 450,
-      type: "expense",
-      date: "2023-06-02",
-      description: "Monthly rent"
-    },
-    {
-      id: "t4",
-      category: "Groceries",
-      amount: 120,
-      type: "expense",
-      date: "2023-06-08",
-      description: "Weekly groceries"
-    },
-    {
-      id: "t5",
-      category: "Utilities",
-      amount: 80,
-      type: "expense",
-      date: "2023-06-10",
-      description: "Electricity and water bill"
-    },
-    {
-      id: "t6",
-      category: "Transportation",
-      amount: 60,
-      type: "expense",
-      date: "2023-06-12",
-      description: "Bus pass"
-    },
-    {
-      id: "t7",
-      category: "Entertainment",
-      amount: 50,
-      type: "expense",
-      date: "2023-06-18",
-      description: "Movie night"
-    },
-    {
-      id: "t8",
-      category: "Books",
-      amount: 90,
-      type: "expense",
-      date: "2023-06-20",
-      description: "Textbooks for class"
-    }
-  ]
-};
-
-export const mockSavingsGoals: SavingsGoal[] = [
+export const MOCK_FINANCIAL_TASKS: FinancialTask[] = [
   {
-    id: "s1",
-    name: "Emergency Fund",
-    targetAmount: 1000,
-    currentAmount: 450,
-    deadline: "2023-12-31",
-    description: "Build an emergency fund for unexpected expenses",
-    category: "emergency"
+    id: "1",
+    title: "Freelance Web Development",
+    description: "Building a responsive website for a local business",
+    amount: 750,
+    completed: true,
+    dateCompleted: "2023-06-12",
+    category: "Income"
   },
   {
-    id: "s2",
-    name: "Laptop Upgrade",
-    targetAmount: 800,
-    currentAmount: 350,
-    deadline: "2023-09-15",
-    description: "Save for a new laptop for school projects",
-    category: "tech"
+    id: "2",
+    title: "Graphic Design Project",
+    description: "Logo design for a startup",
+    amount: 350,
+    completed: true,
+    dateCompleted: "2023-06-15",
+    category: "Income"
   },
   {
-    id: "s3",
-    name: "Spring Break Trip",
-    targetAmount: 500,
-    currentAmount: 200,
-    deadline: "2024-03-01",
-    description: "Save for spring break travel expenses",
-    category: "travel"
-  }
-];
-
-export const mockInvestments: Investment[] = [
-  {
-    id: "i1",
-    name: "Tech Growth ETF",
-    type: "etf",
+    id: "3",
+    title: "Content Writing Gig",
+    description: "Writing blog posts for a marketing agency",
     amount: 200,
-    shares: 2.5,
-    purchasePrice: 80,
-    currentPrice: 85,
-    purchaseDate: "2023-05-10",
-    description: "ETF focused on technology growth companies"
+    completed: false,
+    dateCompleted: null,
+    category: "Income"
   },
   {
-    id: "i2",
-    name: "Green Energy Fund",
-    type: "mutual-fund",
-    amount: 150,
-    shares: 6,
-    purchasePrice: 25,
-    currentPrice: 27,
-    purchaseDate: "2023-04-22",
-    description: "Mutual fund investing in renewable energy companies"
+    id: "4",
+    title: "Monthly Rent",
+    description: "Apartment rent payment",
+    amount: 800,
+    completed: true,
+    dateCompleted: "2023-06-01",
+    category: "Expense"
   },
   {
-    id: "i3",
-    name: "Student Micro-Index",
-    type: "etf",
-    amount: 100,
-    shares: 4,
-    purchasePrice: 25,
-    currentPrice: 26,
-    purchaseDate: "2023-06-05",
-    description: "Diversified index fund with low minimum investment"
+    id: "5",
+    title: "Groceries",
+    description: "Weekly grocery shopping",
+    amount: 120,
+    completed: true,
+    dateCompleted: "2023-06-05",
+    category: "Expense"
+  },
+  {
+    id: "6",
+    title: "Subscription Services",
+    description: "Netflix, Spotify, and other subscriptions",
+    amount: 45,
+    completed: true,
+    dateCompleted: "2023-06-08",
+    category: "Expense"
   }
 ];
 
-export const mockTaskPosts: TaskPost[] = [
+export const MOCK_JOB_POSTS: JobPost[] = [
   {
-    id: "tp1",
-    title: "Website Development for Student Club",
-    description: "Need help building a simple website for our chess club using React",
-    budget: 150,
-    deadline: "2023-07-15",
-    status: "open",
-    skills: ["React", "JavaScript", "HTML/CSS"],
-    applicants: 3
+    id: "1",
+    title: "Frontend Developer Needed",
+    description: "Looking for someone to build a responsive website",
+    budget: 500,
+    skills: ["React", "CSS", "JavaScript"],
+    datePosted: "2023-06-01",
+    deadline: "2023-06-30",
+    poster: {
+      id: "user123",
+      name: "Jane Smith",
+      avatar: "/placeholder.svg"
+    }
   },
   {
-    id: "tp2",
-    title: "Graphic Design for Event Posters",
-    description: "Looking for someone to design promotional posters for campus event",
-    budget: 80,
-    deadline: "2023-06-28",
-    status: "in-progress",
-    skills: ["Graphic Design", "Illustrator", "Photoshop"],
-    applicants: 5
+    id: "2",
+    title: "Logo Design for Startup",
+    description: "Need a modern logo for a tech startup",
+    budget: 300,
+    skills: ["Graphic Design", "Illustrator", "Branding"],
+    datePosted: "2023-06-03",
+    deadline: "2023-06-25",
+    poster: {
+      id: "user456",
+      name: "John Doe",
+      avatar: "/placeholder.svg"
+    }
   },
   {
-    id: "tp3",
-    title: "Research Assistant for Economics Project",
-    description: "Need help gathering and analyzing data for research project",
+    id: "3",
+    title: "Blog Writer for Marketing Agency",
+    description: "Looking for someone to write 5 blog posts about digital marketing",
     budget: 200,
-    deadline: "2023-07-30",
-    status: "open",
-    skills: ["Research", "Data Analysis", "Excel"],
-    applicants: 2
-  },
-  {
-    id: "tp4",
-    title: "Math Tutoring for Calculus",
-    description: "Looking for a tutor to help with Calculus II topics",
-    budget: 120,
-    deadline: "2023-08-15",
-    status: "completed",
-    skills: ["Mathematics", "Calculus", "Teaching"],
-    applicants: 4
+    skills: ["Content Writing", "SEO", "Marketing"],
+    datePosted: "2023-06-05",
+    deadline: "2023-06-20",
+    poster: {
+      id: "user789",
+      name: "Emily Johnson",
+      avatar: "/placeholder.svg"
+    }
   }
 ];
