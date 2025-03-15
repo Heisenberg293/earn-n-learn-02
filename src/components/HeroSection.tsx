@@ -1,7 +1,10 @@
 
 import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 const HeroSection = () => {
+  const { isAuthenticated } = useAuth();
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-secondary to-white -z-10" />
@@ -18,26 +21,43 @@ const HeroSection = () => {
             grow your skills, and build your portfolio.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up delay-200">
-            <Link
-              to="/tasks"
-              className="w-full sm:w-auto px-8 py-3 rounded-full bg-accent text-white font-medium hover:bg-accent/90 transition-colors"
-            >
-              Browse Jobs
-            </Link>
-            <Link
-              to="/post-task"
-              className="w-full sm:w-auto px-8 py-3 rounded-full bg-white text-gray-900 font-medium border border-gray-200 hover:bg-gray-50 transition-colors"
-            >
-              Post a Job
-            </Link>
-            <Link
-              to="/microfinance"
-              className="w-full sm:w-auto px-8 py-3 rounded-full bg-secondary text-gray-900 font-medium border border-gray-200 hover:bg-accent/10 transition-colors"
-            >
-              Get Funding
-            </Link>
-          </div>
+          {isAuthenticated ? (
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up delay-200">
+              <Link
+                to="/task-hub"
+                className="w-full sm:w-auto px-8 py-3 rounded-full bg-accent text-white font-medium hover:bg-accent/90 transition-colors"
+              >
+                Browse Jobs
+              </Link>
+              <Link
+                to="/task-hub?tab=post"
+                className="w-full sm:w-auto px-8 py-3 rounded-full bg-white text-gray-900 font-medium border border-gray-200 hover:bg-gray-50 transition-colors"
+              >
+                Post a Job
+              </Link>
+              <Link
+                to="/microfinance"
+                className="w-full sm:w-auto px-8 py-3 rounded-full bg-secondary text-gray-900 font-medium border border-gray-200 hover:bg-accent/10 transition-colors"
+              >
+                Get Funding
+              </Link>
+            </div>
+          ) : (
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up delay-200">
+              <Link
+                to="/login"
+                className="w-full sm:w-auto px-8 py-3 rounded-full bg-accent text-white font-medium hover:bg-accent/90 transition-colors"
+              >
+                Log In
+              </Link>
+              <Link
+                to="/signup"
+                className="w-full sm:w-auto px-8 py-3 rounded-full bg-white text-gray-900 font-medium border border-gray-200 hover:bg-gray-50 transition-colors"
+              >
+                Sign Up
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </section>
