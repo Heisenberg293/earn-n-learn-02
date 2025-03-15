@@ -1,6 +1,6 @@
 
 import { useState, useEffect, useContext } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +17,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const { isAuthenticated, logout, user } = useContext(AuthContext);
   const isHomePage = location.pathname === "/";
 
@@ -41,6 +42,10 @@ const Navigation = () => {
   ];
 
   const links = isAuthenticated ? authenticatedLinks : unauthenticatedLinks;
+
+  const handleMessageClick = () => {
+    navigate("/communications");
+  };
 
   return (
     <nav
@@ -83,7 +88,7 @@ const Navigation = () => {
                   <span className="absolute top-1 right-1 bg-red-500 w-2 h-2 rounded-full"></span>
                 </Button>
                 
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" onClick={handleMessageClick}>
                   <Mail className="h-5 w-5" />
                 </Button>
                 

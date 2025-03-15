@@ -126,8 +126,8 @@ export const JobDetailView = ({ job, onClose, onUpdateJobStatus }: JobDetailView
               </div>
               
               <Link 
-                to="/microfinance" 
-                state={{ activeTab: "communication", initialChatType: job.status === "available" ? "available" : job.status }}
+                to="/communications" 
+                state={{ activeTab: "messages", initialChatType: job.status === "available" ? "available" : job.status }}
                 className="flex items-center justify-center text-sm text-primary hover:underline cursor-pointer w-full"
               >
                 <MessageCircle className="h-4 w-4 mr-1" />
@@ -145,8 +145,8 @@ export const JobDetailView = ({ job, onClose, onUpdateJobStatus }: JobDetailView
               </div>
               
               <Link 
-                to="/microfinance" 
-                state={{ activeTab: "communication", initialChatType: job.status }}
+                to="/communications" 
+                state={{ activeTab: "messages", initialChatType: job.status }}
                 className="flex items-center justify-center text-sm text-primary hover:underline cursor-pointer w-full"
               >
                 <MessageCircle className="h-4 w-4 mr-1" />

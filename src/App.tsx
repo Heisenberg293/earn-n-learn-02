@@ -14,6 +14,7 @@ import MicrofinanceSystem from "./pages/MicrofinanceSystem";
 import Newsfeed from "./pages/Newsfeed";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Communications from "./pages/Communications";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,11 @@ const App = () => (
             <Route path="/newsfeed" element={
               <ProtectedRoute>
                 <Newsfeed />
+              </ProtectedRoute>
+            } />
+            <Route path="/communications" element={
+              <ProtectedRoute>
+                <Communications />
               </ProtectedRoute>
             } />
             
