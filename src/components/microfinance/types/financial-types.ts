@@ -1,86 +1,51 @@
-
-export interface BudgetItem {
-  id: string;
-  category: string;
-  amount: number;
-  type: "income" | "expense";
-  date: string;
-  description: string;
-}
-
-export interface Budget {
-  income: number;
-  expenses: number;
-  balance: number;
-  transactions: BudgetItem[];
-}
-
-export interface SavingsGoal {
+export interface FinancialProduct {
   id: string;
   name: string;
-  targetAmount: number;
-  currentAmount: number;
-  deadline: string;
   description: string;
-  category: "emergency" | "education" | "travel" | "tech" | "other";
+  interestRate: number;
+  loanTerm: number;
+  maxAmount: number;
+  applicationProcess: string;
+  eligibilityCriteria: string;
+  feesAndCharges: string;
+  faq: string;
+  providerId: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-export interface Investment {
+export interface LoanApplication {
   id: string;
-  name: string;
-  type: "stock" | "mutual-fund" | "etf" | "crypto";
-  amount: number;
-  shares: number;
-  purchasePrice: number;
-  currentPrice: number;
-  purchaseDate: string;
-  description: string;
+  applicantName: string;
+  contactEmail: string;
+  loanAmount: number;
+  financialProductId: string;
+  status: 'pending' | 'approved' | 'rejected';
+  createdAt: string;
+  updatedAt: string;
 }
 
-export interface TaskPost {
+export interface JobPost {
   id: string;
   title: string;
   description: string;
   budget: number;
-  deadline: string;
-  status: "open" | "in-progress" | "completed";
+  category: string;
   skills: string[];
-  applicants: number;
-}
-
-// New gamification types
-export interface UserBadge {
-  id: string;
-  name: string;
-  description: string;
-  icon: string;
-  dateEarned: string;
-  category: "skills" | "financial" | "community" | "achievements";
-}
-
-export interface LeaderboardEntry {
-  id: string;
+  deadline: string;
+  createdAt: string;
+  status: 'open' | 'in_progress' | 'completed';
   userId: string;
-  name: string;
-  avatarUrl?: string;
-  points: number;
-  rank: number;
-  taskCompleted: number;
-  skillsShared: number;
 }
 
-export interface UserPoints {
-  total: number;
-  breakdown: {
-    tasksCompleted: number;
-    skillsShared: number;
-    communityParticipation: number;
-    lending: number;
-  };
-  history: {
-    date: string;
-    amount: number;
-    description: string;
-    category: "tasks" | "skills" | "community" | "lending";
-  }[];
+export interface SkillsExchange {
+  id: string;
+  title: string;
+  description: string;
+  skillsOffered: string[];
+  skillsDesired: string[];
+  contactEmail: string;
+  userId: string;
+  createdAt: string;
+  updatedAt: string;
 }

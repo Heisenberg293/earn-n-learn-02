@@ -10,6 +10,7 @@ const Navigation = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
   const { isAuthenticated, user, logout } = useAuth();
+  const isHomePage = location.pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -43,7 +44,7 @@ const Navigation = () => {
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-16">
           <Link
-            to="/"
+            to={isAuthenticated ? "/task-hub" : "/"}
             className="text-xl font-bold tracking-tight hover:opacity-80 transition-opacity"
           >
             earn-n-learn
@@ -53,7 +54,7 @@ const Navigation = () => {
             {links.map((link) => (
               <Link
                 key={link.path}
-                to={link.path}
+                to={!isAuthenticated && link.path !== "/" ? "/login" : link.path}
                 className={`text-sm font-medium transition-colors hover:text-accent ${
                   location.pathname === link.path
                     ? "text-accent"
@@ -85,7 +86,7 @@ const Navigation = () => {
                   Log out
                 </Button>
               </>
-            ) : (
+            ) : isHomePage ? (
               <>
                 <Link
                   to="/login"
@@ -100,7 +101,7 @@ const Navigation = () => {
                   Sign up
                 </Link>
               </>
-            )}
+            ) : null}
           </div>
 
           <button
@@ -123,7 +124,7 @@ const Navigation = () => {
             {links.map((link) => (
               <Link
                 key={link.path}
-                to={link.path}
+                to={!isAuthenticated && link.path !== "/" ? "/login" : link.path}
                 className={`block py-2 text-sm font-medium transition-colors hover:text-accent ${
                   location.pathname === link.path
                     ? "text-accent"
@@ -151,7 +152,7 @@ const Navigation = () => {
                     Log out
                   </button>
                 </>
-              ) : (
+              ) : isHomePage ? (
                 <>
                   <Link
                     to="/login"
@@ -168,7 +169,7 @@ const Navigation = () => {
                     Sign up
                   </Link>
                 </>
-              )}
+              ) : null}
             </div>
           </div>
         </div>
