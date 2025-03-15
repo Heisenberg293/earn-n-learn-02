@@ -1,10 +1,24 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { AuthContext } from "@/context/AuthContext";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { User, LogOut, BellRing, Mail, Settings } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const { isAuthenticated, logout, user } = useContext(AuthContext);
+  const isHomePage = location.pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -15,13 +29,18 @@ const Navigation = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const links = [
+  const unauthenticatedLinks = [
     { name: "Home", path: "/" },
-    { name: "Task Hub", path: "/task-hub" },
+  ];
+
+  const authenticatedLinks = [
+    { name: "Home", path: "/task-hub" },
+    { name: "Job Hub", path: "/task-hub" },
     { name: "Microfinance", path: "/microfinance" },
     { name: "Newsfeed", path: "/newsfeed" },
-    { name: "Profile", path: "/profile" },
   ];
+
+  const links = isAuthenticated ? authenticatedLinks : unauthenticatedLinks;
 
   return (
     <nav
@@ -34,7 +53,7 @@ const Navigation = () => {
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-16">
           <Link
-            to="/"
+            to={isAuthenticated ? "/task-hub" : "/"}
             className="text-xl font-bold tracking-tight hover:opacity-80 transition-opacity"
           >
             earn-n-learn
@@ -45,9 +64,9 @@ const Navigation = () => {
               <Link
                 key={link.path}
                 to={link.path}
-                className={`text-sm font-medium transition-colors hover:text-accent ${
+                className={`text-sm font-medium transition-colors hover:text-green-600 ${
                   location.pathname === link.path
-                    ? "text-accent"
+                    ? "text-green-600"
                     : "text-gray-600"
                 }`}
               >
@@ -57,18 +76,67 @@ const Navigation = () => {
           </div>
 
           <div className="hidden md:flex items-center gap-4">
-            <Link
-              to="/login"
-              className="text-sm font-medium text-gray-600 hover:text-accent transition-colors"
-            >
-              Log in
-            </Link>
-            <Link
-              to="/signup"
-              className="text-sm font-medium px-4 py-2 rounded-full bg-accent text-white hover:bg-accent/90 transition-colors"
-            >
-              Sign up
-            </Link>
+            {isAuthenticated ? (
+              <div className="flex items-center gap-4">
+                <Button variant="ghost" size="icon" className="relative">
+                  <BellRing className="h-5 w-5" />
+                  <span className="absolute top-1 right-1 bg-red-500 w-2 h-2 rounded-full"></span>
+                </Button>
+                
+                <Button variant="ghost" size="icon">
+                  <Mail className="h-5 w-5" />
+                </Button>
+                
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="rounded-full w-10 h-10 p-0">
+                      <Avatar>
+                        <AvatarImage src="/placeholder.svg" alt={user?.name || "User"} />
+                        <AvatarFallback>{user?.name?.charAt(0) || "U"}</AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link to="/profile" className="flex items-center cursor-pointer">
+                        <User className="mr-2 h-4 w-4" />
+                        <span>Profile</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/profile/settings" className="flex items-center cursor-pointer">
+                        <Settings className="mr-2 h-4 w-4" />
+                        <span>Settings</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={logout} className="flex items-center cursor-pointer">
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Log out</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            ) : (
+              isHomePage && (
+                <>
+                  <Link
+                    to="/login"
+                    className="text-sm font-medium text-gray-600 hover:text-green-600 transition-colors"
+                  >
+                    Log in
+                  </Link>
+                  <Link
+                    to="/signup"
+                    className="text-sm font-medium px-4 py-2 rounded-full bg-green-600 text-white hover:bg-green-700 transition-colors"
+                  >
+                    Sign up
+                  </Link>
+                </>
+              )
+            )}
           </div>
 
           <button className="md:hidden p-2">

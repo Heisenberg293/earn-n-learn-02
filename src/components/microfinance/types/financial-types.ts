@@ -37,18 +37,21 @@ export interface Investment {
   description: string;
 }
 
-export interface TaskPost {
+export interface JobPost {
   id: string;
   title: string;
   description: string;
   budget: number;
   deadline: string;
-  status: "open" | "in-progress" | "completed";
+  status: "open" | "in_progress" | "completed";
   skills: string[];
-  applicants: number;
+  applicants?: number;
+  category?: string;
+  createdAt?: string;
+  userId?: string;
 }
 
-// New gamification types
+// Gamification types
 export interface UserBadge {
   id: string;
   name: string;
