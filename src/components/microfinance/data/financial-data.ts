@@ -1,7 +1,7 @@
 
-import { JobPost } from "../types/financial-types";
+import { FinancialTask, JobPost } from "../types/financial-types";
 
-export const MOCK_FINANCIAL_TASKS = [
+export const MOCK_FINANCIAL_TASKS: FinancialTask[] = [
   {
     id: "1",
     title: "Freelance Web Development",
@@ -65,12 +65,13 @@ export const MOCK_JOB_POSTS: JobPost[] = [
     description: "Looking for someone to build a responsive website",
     budget: 500,
     skills: ["React", "CSS", "JavaScript"],
+    datePosted: "2023-06-01",
     deadline: "2023-06-30",
-    status: "open",
-    createdAt: "2023-06-01",
-    category: "Web Development",
-    creator: "Jane Smith",
-    bids: []
+    poster: {
+      id: "user123",
+      name: "Jane Smith",
+      avatar: "/placeholder.svg"
+    }
   },
   {
     id: "2",
@@ -78,12 +79,13 @@ export const MOCK_JOB_POSTS: JobPost[] = [
     description: "Need a modern logo for a tech startup",
     budget: 300,
     skills: ["Graphic Design", "Illustrator", "Branding"],
+    datePosted: "2023-06-03",
     deadline: "2023-06-25",
-    status: "open",
-    createdAt: "2023-06-03",
-    category: "Design",
-    creator: "John Doe",
-    bids: []
+    poster: {
+      id: "user456",
+      name: "John Doe",
+      avatar: "/placeholder.svg"
+    }
   },
   {
     id: "3",
@@ -91,47 +93,12 @@ export const MOCK_JOB_POSTS: JobPost[] = [
     description: "Looking for someone to write 5 blog posts about digital marketing",
     budget: 200,
     skills: ["Content Writing", "SEO", "Marketing"],
+    datePosted: "2023-06-05",
     deadline: "2023-06-20",
-    status: "open",
-    createdAt: "2023-06-05",
-    category: "Marketing",
-    creator: "Emily Johnson",
-    bids: []
+    poster: {
+      id: "user789",
+      name: "Emily Johnson",
+      avatar: "/placeholder.svg"
+    }
   }
 ];
-
-// Add mock data to support existing imports from other components
-export const mockBudgetData = {
-  income: 1500,
-  expenses: 950,
-  balance: 550,
-  transactions: []
-};
-
-export const mockSavingsGoals = [
-  {
-    id: "1",
-    name: "Emergency Fund",
-    targetAmount: 1000,
-    currentAmount: 500,
-    deadline: "2023-12-31",
-    description: "Saving for unexpected expenses",
-    category: "emergency"
-  }
-];
-
-export const mockInvestments = [
-  {
-    id: "1",
-    name: "Tech Stock",
-    type: "stock",
-    amount: 1000,
-    shares: 10,
-    purchasePrice: 100,
-    currentPrice: 110,
-    purchaseDate: "2023-01-15",
-    description: "Investment in a tech company"
-  }
-];
-
-export const mockTaskPosts = MOCK_JOB_POSTS;
