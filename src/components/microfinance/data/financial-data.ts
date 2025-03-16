@@ -1,5 +1,5 @@
 
-import { Budget, SavingsGoal, Investment, TaskPost } from "../types/financial-types";
+import { Budget, SavingsGoal, Investment, JobPost } from "../types/financial-types";
 
 export const mockBudgetData: Budget = {
   income: 1200,
@@ -139,7 +139,7 @@ export const mockInvestments: Investment[] = [
   }
 ];
 
-export const mockTaskPosts: TaskPost[] = [
+export const mockTaskPosts: JobPost[] = [
   {
     id: "tp1",
     title: "Website Development for Student Club",
@@ -156,7 +156,7 @@ export const mockTaskPosts: TaskPost[] = [
     description: "Looking for someone to design promotional posters for campus event",
     budget: 80,
     deadline: "2023-06-28",
-    status: "in-progress",
+    status: "in_progress",
     skills: ["Graphic Design", "Illustrator", "Photoshop"],
     applicants: 5
   },
@@ -179,5 +179,76 @@ export const mockTaskPosts: TaskPost[] = [
     status: "completed",
     skills: ["Mathematics", "Calculus", "Teaching"],
     applicants: 4
+  }
+];
+
+// Mock loan completion data for timeline
+export interface LoanCompletionData {
+  id: string;
+  borrower: string;
+  lender: string;
+  amount: number;
+  completedDate: string;
+  duration: string;
+  category: "textbooks" | "tuition" | "housing" | "emergency" | "technology" | "other";
+  status: "completed" | "in-progress" | "defaulted";
+  description: string;
+}
+
+export const mockLoanCompletions: LoanCompletionData[] = [
+  {
+    id: "loan1",
+    borrower: "Alex Chen",
+    lender: "Jamie Smith",
+    amount: 250,
+    completedDate: "2023-06-10T14:30:00",
+    duration: "45 days",
+    category: "textbooks",
+    status: "completed",
+    description: "Loan for calculus and physics textbooks fully repaid on time."
+  },
+  {
+    id: "loan2",
+    borrower: "Taylor Wilson",
+    lender: "Jordan Park",
+    amount: 500,
+    completedDate: "2023-06-05T09:15:00",
+    duration: "60 days",
+    category: "technology",
+    status: "completed",
+    description: "Loan for laptop repair paid back two weeks early."
+  },
+  {
+    id: "loan3",
+    borrower: "Morgan Lee",
+    lender: "Riley Johnson",
+    amount: 175,
+    completedDate: "2023-05-28T16:45:00",
+    duration: "30 days",
+    category: "emergency",
+    status: "completed",
+    description: "Emergency car repair loan repaid with interest."
+  },
+  {
+    id: "loan4",
+    borrower: "Casey Brown",
+    lender: "Avery Williams",
+    amount: 350,
+    completedDate: "2023-05-15T11:20:00",
+    duration: "90 days",
+    category: "housing",
+    status: "completed",
+    description: "Security deposit loan for new apartment fully repaid."
+  },
+  {
+    id: "loan5",
+    borrower: "Sam Taylor",
+    lender: "Jordan White",
+    amount: 120,
+    completedDate: "2023-06-12T10:00:00",
+    duration: "14 days",
+    category: "other",
+    status: "completed",
+    description: "Short-term loan for conference registration fee repaid."
   }
 ];

@@ -1,12 +1,16 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { MessageSquare, ThumbsUp, Share2 } from "lucide-react";
+import { LoanTimeline } from "@/components/microfinance/newsfeed/LoanTimeline";
+import { LoanNotification } from "@/components/microfinance/newsfeed/LoanNotification";
+import { mockLoanCompletions } from "@/components/microfinance/data/financial-data";
 
 // Define the structure of a post
 interface Post {
@@ -139,73 +143,123 @@ const Newsfeed = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       <div className="container pt-24 pb-16 mx-auto px-4">
-        <div className="max-w-3xl mx-auto">
-          <h1 className="text-3xl font-bold tracking-tight mb-2">SkillSwap Newsfeed</h1>
-          <p className="text-muted-foreground mb-8">
-            Stay updated with the latest happenings in the SkillSwap community
-          </p>
+        {/* Render the LoanNotification component to handle toast notifications */}
+        <LoanNotification loanCompletions={mockLoanCompletions} />
+        
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          {/* Left column - Create Post and Feed */}
+          <div className="lg:col-span-2 space-y-6">
+            <h1 className="text-3xl font-bold tracking-tight mb-2">SkillSwap Newsfeed</h1>
+            <p className="text-muted-foreground mb-6">
+              Stay updated with the latest happenings in the SkillSwap community
+            </p>
 
-          {/* Create Post Card */}
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle className="text-xl">Share an update</CardTitle>
-              <CardDescription>
-                Share your successes, milestones, or just say hello to the community!
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <Textarea
-                  placeholder="What's happening in your SkillSwap journey?"
-                  value={newPost}
-                  onChange={(e) => setNewPost(e.target.value)}
-                  className="min-h-[100px]"
-                />
-                <div className="flex justify-end">
-                  <Button onClick={handlePostSubmit}>Post Update</Button>
+            {/* Create Post Card */}
+            <Card className="mb-6">
+              <CardHeader>
+                <CardTitle className="text-xl">Share an update</CardTitle>
+                <CardDescription>
+                  Share your successes, milestones, or just say hello to the community!
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <Textarea
+                    placeholder="What's happening in your SkillSwap journey?"
+                    value={newPost}
+                    onChange={(e) => setNewPost(e.target.value)}
+                    className="min-h-[100px]"
+                  />
+                  <div className="flex justify-end">
+                    <Button onClick={handlePostSubmit}>Post Update</Button>
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
 
-          {/* Posts Feed */}
-          <div className="space-y-6">
-            {posts.map((post) => (
-              <Card key={post.id} className="overflow-hidden">
-                <CardContent className="p-0">
-                  <div className="p-6">
-                    <div className="flex items-start gap-4 mb-4">
-                      <Avatar>
-                        <AvatarImage src={post.author.avatar} alt={post.author.name} />
-                        <AvatarFallback>{post.author.initials}</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <h3 className="font-semibold">{post.author.name}</h3>
-                        <p className="text-sm text-muted-foreground">{post.timestamp}</p>
+            {/* Posts Feed */}
+            <div className="space-y-6">
+              {posts.map((post) => (
+                <Card key={post.id} className="overflow-hidden">
+                  <CardContent className="p-0">
+                    <div className="p-6">
+                      <div className="flex items-start gap-4 mb-4">
+                        <Avatar>
+                          <AvatarImage src={post.author.avatar} alt={post.author.name} />
+                          <AvatarFallback>{post.author.initials}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <h3 className="font-semibold">{post.author.name}</h3>
+                          <p className="text-sm text-muted-foreground">{post.timestamp}</p>
+                        </div>
+                      </div>
+                      <p className="mb-4 text-gray-700">{post.content}</p>
+                      <div className="flex gap-6 text-sm text-muted-foreground">
+                        <button
+                          className="flex items-center gap-1 hover:text-blue-600 transition-colors"
+                          onClick={() => handleLike(post.id)}
+                        >
+                          <ThumbsUp className="h-4 w-4" />
+                          <span>{post.likes}</span>
+                        </button>
+                        <button className="flex items-center gap-1 hover:text-blue-600 transition-colors">
+                          <MessageSquare className="h-4 w-4" />
+                          <span>{post.comments}</span>
+                        </button>
+                        <button className="flex items-center gap-1 hover:text-blue-600 transition-colors">
+                          <Share2 className="h-4 w-4" />
+                          <span>Share</span>
+                        </button>
                       </div>
                     </div>
-                    <p className="mb-4 text-gray-700">{post.content}</p>
-                    <div className="flex gap-6 text-sm text-muted-foreground">
-                      <button
-                        className="flex items-center gap-1 hover:text-blue-600 transition-colors"
-                        onClick={() => handleLike(post.id)}
-                      >
-                        <ThumbsUp className="h-4 w-4" />
-                        <span>{post.likes}</span>
-                      </button>
-                      <button className="flex items-center gap-1 hover:text-blue-600 transition-colors">
-                        <MessageSquare className="h-4 w-4" />
-                        <span>{post.comments}</span>
-                      </button>
-                      <button className="flex items-center gap-1 hover:text-blue-600 transition-colors">
-                        <Share2 className="h-4 w-4" />
-                        <span>Share</span>
-                      </button>
-                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+          
+          {/* Right column - Loan Timeline */}
+          <div className="space-y-6">
+            <div className="h-12"></div> {/* Spacer to align with content on the left */}
+            <LoanTimeline loanCompletions={mockLoanCompletions} />
+            
+            {/* Recent Activities Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-xl">Recent Activities</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                    <MessageSquare className="h-5 w-5 text-blue-600" />
                   </div>
-                </CardContent>
-              </Card>
-            ))}
+                  <div>
+                    <p className="text-sm font-medium">New message from Tutoring Group</p>
+                    <p className="text-xs text-muted-foreground">15 minutes ago</p>
+                  </div>
+                </div>
+                <Separator />
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
+                    <ThumbsUp className="h-5 w-5 text-green-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">You received 5 likes on your post</p>
+                    <p className="text-xs text-muted-foreground">2 hours ago</p>
+                  </div>
+                </div>
+                <Separator />
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center">
+                    <Share2 className="h-5 w-5 text-purple-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">Sarah shared your Spring Break Trip goal</p>
+                    <p className="text-xs text-muted-foreground">1 day ago</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
