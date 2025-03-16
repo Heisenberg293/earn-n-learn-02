@@ -1,5 +1,10 @@
 
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+
 const FeaturedJobs = () => {
+  const navigate = useNavigate();
+  
   const jobs = [
     {
       id: 1,
@@ -24,14 +29,28 @@ const FeaturedJobs = () => {
     },
   ];
 
+  const handleViewDetails = (jobId: number) => {
+    navigate(`/task-hub?job=${jobId}`);
+  };
+
+  const handlePostJob = () => {
+    navigate("/task-hub?post=true");
+  };
+
   return (
     <section className="py-20 bg-white">
       <div className="container mx-auto px-6">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">Featured Jobs</h2>
-          <p className="text-gray-600">
+          <p className="text-gray-600 mb-8">
             Discover popular jobs that match your skills
           </p>
+          <Button 
+            onClick={handlePostJob}
+            className="bg-primary hover:bg-primary/90"
+          >
+            Post a Job
+          </Button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -52,9 +71,13 @@ const FeaturedJobs = () => {
                 {job.title}
               </h3>
               <p className="text-gray-600 mb-4">Budget: {job.budget}</p>
-              <button className="w-full px-4 py-2 rounded-lg bg-secondary text-gray-900 font-medium hover:bg-accent hover:text-white transition-colors">
+              <Button 
+                className="w-full"
+                variant="secondary"
+                onClick={() => handleViewDetails(job.id)}
+              >
                 View Details
-              </button>
+              </Button>
             </div>
           ))}
         </div>
