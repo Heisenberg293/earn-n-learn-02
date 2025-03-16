@@ -3,12 +3,12 @@ import { useContext } from "react";
 import { AuthContext } from "@/context/AuthContext";
 import { Navigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
-import HeroSection from "@/components/HeroSection";
-import FeaturedTasks from "@/components/FeaturedTasks";
-import HowItWorks from "@/components/HowItWorks";
+import HomeHeroSection from "@/components/home/HomeHeroSection";
+import HomeFeatureHighlights from "@/components/home/HomeFeatureHighlights";
+import HomeActivitySummary from "@/components/home/HomeActivitySummary";
+import HomeSuccessStories from "@/components/home/HomeSuccessStories";
+import HomeCategories from "@/components/home/HomeCategories";
 import Footer from "@/components/Footer";
-import TestimonialsSection from "@/components/TestimonialsSection";
-import FeatureHighlights from "@/components/FeatureHighlights";
 
 const Index = () => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -21,11 +21,11 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       <Navigation />
-      <HeroSection />
-      <FeatureHighlights />
-      <FeaturedTasks />
-      <TestimonialsSection />
-      <HowItWorks />
+      <HomeHeroSection />
+      <HomeFeatureHighlights />
+      <HomeActivitySummary />
+      <HomeSuccessStories />
+      <HomeCategories />
       <Footer />
     </div>
   );

@@ -24,7 +24,7 @@ export const LoanNotification: React.FC<LoanNotificationProps> = ({ loanCompleti
               <Bell className="h-5 w-5 text-green-500 animate-pulse" />
               <span>Loan Completed!</span>
             </div>
-          ),
+          ) as React.ReactNode,
           description: (
             <div className="pt-1">
               <p className="font-medium">{mostRecent.borrower} just repaid a ${mostRecent.amount} loan</p>
@@ -33,7 +33,7 @@ export const LoanNotification: React.FC<LoanNotificationProps> = ({ loanCompleti
                 <span>Building trust in the SkillSwap community</span>
               </div>
             </div>
-          ),
+          ) as React.ReactNode,
           duration: 5000,
         });
       }
@@ -47,7 +47,7 @@ export const LoanNotification: React.FC<LoanNotificationProps> = ({ loanCompleti
             <DollarSign className="h-5 w-5 text-green-500 animate-pulse" />
             <span>5 Loans Completed Today!</span>
           </div>
-        ),
+        ) as React.ReactNode,
         description: (
           <div className="pt-1">
             <p>The SkillSwap community has successfully completed 5 peer loans today!</p>
@@ -56,7 +56,7 @@ export const LoanNotification: React.FC<LoanNotificationProps> = ({ loanCompleti
               <span>$1,395 exchanged within our community</span>
             </div>
           </div>
-        ),
+        ) as React.ReactNode,
         duration: 5000,
       });
     }, 10000);
