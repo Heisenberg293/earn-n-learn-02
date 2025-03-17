@@ -30,12 +30,9 @@ const Navigation = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const unauthenticatedLinks = [
-    { name: "Home", path: "/" },
-  ];
+  const unauthenticatedLinks = [];
 
   const authenticatedLinks = [
-    { name: "Home", path: "/task-hub" },
     { name: "Job Hub", path: "/task-hub" },
     { name: "Microfinance", path: "/microfinance" },
     { name: "Newsfeed", path: "/newsfeed" },

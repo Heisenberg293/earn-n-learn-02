@@ -1,71 +1,102 @@
 
-import React from "react";
-import { useToast } from "@/hooks/use-toast";
-import { DollarSign, ThumbsUp, Bell } from "lucide-react";
-import { LoanCompletionData } from "../data/financial-data";
+import React from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Link } from 'react-router-dom';
+import { ArrowUpRight, MessageCircle, ThumbsUp } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
-interface LoanNotificationProps {
-  loanCompletions: LoanCompletionData[];
+type LoanNotificationProps = {
+  type: 'application' | 'approved' | 'payment' | 'reminder';
+  user: {
+    name: string;
+    avatar?: string;
+  };
+  time: string;
+  amount?: number;
+  dueDate?: string;
+  loanId: string;
 }
 
-export const LoanNotification: React.FC<LoanNotificationProps> = ({ loanCompletions }) => {
-  const { toast } = useToast();
-
-  React.useEffect(() => {
-    // Simulate new loan completions after a delay
-    const timeout = setTimeout(() => {
-      // Show notification for the most recent loan completion
-      if (loanCompletions.length > 0) {
-        const mostRecent = loanCompletions[0];
-        
-        toast({
-          title: (
-            <div className="flex items-center gap-2">
-              <Bell className="h-5 w-5 text-green-500 animate-pulse" />
-              <span>Loan Completed!</span>
-            </div>
-          ),
-          description: (
-            <div className="pt-1">
-              <p className="font-medium">{mostRecent.borrower} just repaid a ${mostRecent.amount} loan</p>
-              <div className="flex items-center gap-1 mt-1 text-muted-foreground text-sm">
-                <ThumbsUp className="h-3 w-3" />
-                <span>Building trust in the SkillSwap community</span>
+export const LoanNotification = ({ type, user, time, amount, dueDate, loanId }: LoanNotificationProps) => {
+  const renderContent = () => {
+    switch (type) {
+      case 'application':
+        return (
+          <span>
+            <strong>{user.name}</strong> has applied for a loan of <strong>${amount}</strong>
+          </span>
+        );
+      case 'approved':
+        return (
+          <span>
+            Your loan application for <strong>${amount}</strong> has been approved
+          </span>
+        );
+      case 'payment':
+        return (
+          <span>
+            <strong>{user.name}</strong> has made a payment of <strong>${amount}</strong> for their loan
+          </span>
+        );
+      case 'reminder':
+        return (
+          <span>
+            Payment of <strong>${amount}</strong> is due on <strong>{dueDate}</strong>
+          </span>
+        );
+      default:
+        return null;
+    }
+  };
+  
+  return (
+    <Card className="mb-4 hover:bg-gray-50 transition-colors cursor-pointer">
+      <CardContent className="p-4">
+        <div className="flex items-start gap-3">
+          <Avatar className="h-10 w-10">
+            <AvatarImage src={user.avatar || '/placeholder.svg'} alt={user.name} />
+            <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+          </Avatar>
+          
+          <div className="flex-1">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-sm mb-1">
+                  {renderContent()}
+                </p>
+                <p className="text-xs text-gray-500">{time}</p>
               </div>
+              
+              <Badge variant={
+                type === 'approved' ? 'success' :
+                type === 'payment' ? 'outline' :
+                type === 'reminder' ? 'destructive' : 'secondary'
+              }>
+                {type}
+              </Badge>
             </div>
-          ),
-          duration: 5000,
-        });
-      }
-    }, 3000);
-
-    // Simulate another loan completion notification after a longer delay
-    const secondTimeout = setTimeout(() => {
-      toast({
-        title: (
-          <div className="flex items-center gap-2">
-            <DollarSign className="h-5 w-5 text-green-500 animate-pulse" />
-            <span>5 Loans Completed Today!</span>
-          </div>
-        ),
-        description: (
-          <div className="pt-1">
-            <p>The SkillSwap community has successfully completed 5 peer loans today!</p>
-            <div className="flex items-center gap-1 mt-1 text-muted-foreground text-sm">
-              <ThumbsUp className="h-3 w-3" />
-              <span>$1,395 exchanged within our community</span>
+            
+            <div className="flex gap-2 mt-3">
+              <Button variant="ghost" size="sm" className="h-8 px-2">
+                <ThumbsUp className="h-4 w-4 mr-1" />
+                <span className="text-xs">Like</span>
+              </Button>
+              <Button variant="ghost" size="sm" className="h-8 px-2">
+                <MessageCircle className="h-4 w-4 mr-1" />
+                <span className="text-xs">Comment</span>
+              </Button>
+              <Button variant="outline" size="sm" className="h-8 px-2 ml-auto" asChild>
+                <Link to={`/microfinance/loans/${loanId}`}>
+                  <span className="text-xs">View Details</span>
+                  <ArrowUpRight className="h-4 w-4 ml-1" />
+                </Link>
+              </Button>
             </div>
           </div>
-        ),
-        duration: 5000,
-      });
-    }, 10000);
-
-    return () => {
-      clearTimeout(timeout);
-      clearTimeout(secondTimeout);
-    };
-  }, [loanCompletions, toast]);
-
-  return null; // This component doesn't render anything, it just shows toast notifications
+        </div>
+      </CardContent>
+    </Card>
+  );
 };
