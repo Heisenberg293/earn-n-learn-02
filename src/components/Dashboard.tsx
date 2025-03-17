@@ -1,12 +1,13 @@
 
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "@/context/AuthContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Briefcase, BarChart3, BookmarkCheck, CreditCard, PlusCircle } from "lucide-react";
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const dashboardCards = [
     {
@@ -33,9 +34,10 @@ const Dashboard = () => {
     {
       title: "Post a Job",
       description: "Create a new job listing",
-      icon: <PlusCircle className="h-5 w-5 text-green-600" />,
       path: "/task-hub",
+      action: () => navigate("/task-hub", { state: { activeTab: "post" }}),
       stats: "New",
+      icon: <PlusCircle className="h-5 w-5 text-green-600" />,
     },
   ];
 
@@ -75,7 +77,7 @@ const Dashboard = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
         {dashboardCards.map((card, index) => (
-          <Link to={card.path} key={index}>
+          <div key={index} onClick={card.action ? card.action : () => navigate(card.path)}>
             <Card className="h-full hover:shadow-md transition-shadow cursor-pointer">
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                 <CardTitle className="text-lg font-medium">{card.title}</CardTitle>
@@ -86,7 +88,7 @@ const Dashboard = () => {
                 <p className="text-lg font-semibold text-green-600">{card.stats}</p>
               </CardContent>
             </Card>
-          </Link>
+          </div>
         ))}
       </div>
 
@@ -109,12 +111,15 @@ const Dashboard = () => {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="font-medium text-green-600">{job.budget}</span>
-                    <Link
-                      to={`/jobs/${job.id}`}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/jobs/${job.id}`);
+                      }}
                       className="text-sm font-medium px-3 py-1.5 rounded-lg border border-green-600 text-green-600 hover:bg-green-600 hover:text-white transition-colors"
                     >
                       View Details
-                    </Link>
+                    </button>
                   </div>
                 </CardContent>
               </Card>
@@ -135,15 +140,24 @@ const Dashboard = () => {
           <Card>
             <CardContent className="p-6">
               <div className="space-y-6">
-                <div className="flex justify-between items-center">
+                <div 
+                  className="flex justify-between items-center cursor-pointer hover:bg-gray-50 p-2 rounded-md transition-colors"
+                  onClick={() => navigate("/profile/earnings/history")}
+                >
                   <span className="text-gray-600">Total Earnings</span>
                   <span className="font-semibold">$1,250</span>
                 </div>
-                <div className="flex justify-between items-center">
+                <div 
+                  className="flex justify-between items-center cursor-pointer hover:bg-gray-50 p-2 rounded-md transition-colors"
+                  onClick={() => navigate("/profile/earnings/pending")}
+                >
                   <span className="text-gray-600">Pending</span>
                   <span className="font-semibold">$350</span>
                 </div>
-                <div className="flex justify-between items-center">
+                <div 
+                  className="flex justify-between items-center cursor-pointer hover:bg-gray-50 p-2 rounded-md transition-colors"
+                  onClick={() => navigate("/profile/earnings/withdrawn")}
+                >
                   <span className="text-gray-600">Withdrawn</span>
                   <span className="font-semibold">$900</span>
                 </div>

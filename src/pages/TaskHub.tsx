@@ -1,5 +1,6 @@
 
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -13,6 +14,14 @@ const JobHub = () => {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("browse");
   const { isAuthenticated } = useContext(AuthContext);
+  const location = useLocation();
+  
+  useEffect(() => {
+    // Check if location state contains activeTab
+    if (location.state && location.state.activeTab) {
+      setActiveTab(location.state.activeTab);
+    }
+  }, [location]);
   
   return (
     <div className="min-h-screen bg-gray-50">

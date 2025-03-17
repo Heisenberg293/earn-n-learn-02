@@ -15,6 +15,10 @@ import Newsfeed from "./pages/Newsfeed";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Communications from "./pages/Communications";
+import MyJobs from "./pages/MyJobs";
+import AppliedJobs from "./pages/AppliedJobs";
+import Earnings from "./pages/Earnings";
+import JobDetail from "./pages/JobDetail";
 
 const queryClient = new QueryClient();
 
@@ -54,6 +58,26 @@ const App = () => (
             <Route path="/communications" element={
               <ProtectedRoute>
                 <Communications />
+              </ProtectedRoute>
+            } />
+            <Route path="/my-jobs" element={
+              <ProtectedRoute>
+                <MyJobs />
+              </ProtectedRoute>
+            } />
+            <Route path="/applied-jobs" element={
+              <ProtectedRoute>
+                <AppliedJobs />
+              </ProtectedRoute>
+            } />
+            <Route path="/profile/earnings" element={
+              <ProtectedRoute>
+                <Earnings />
+              </ProtectedRoute>
+            } />
+            <Route path="/jobs/:id" element={
+              <ProtectedRoute>
+                <JobDetail />
               </ProtectedRoute>
             } />
             
