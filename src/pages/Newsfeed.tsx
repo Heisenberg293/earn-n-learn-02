@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -9,7 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { MessageSquare, ThumbsUp, Share2 } from "lucide-react";
 import { LoanTimeline } from "@/components/microfinance/newsfeed/LoanTimeline";
-import { LoanNotification } from "@/components/microfinance/newsfeed/LoanNotification";
+import { LoanNotificationsList } from "@/components/microfinance/newsfeed/LoanNotification";
 import { mockLoanCompletions } from "@/components/microfinance/data/financial-data";
 
 // Define the structure of a post
@@ -143,9 +142,6 @@ const Newsfeed = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       <div className="container pt-24 pb-16 mx-auto px-4">
-        {/* Render the LoanNotification component to handle toast notifications */}
-        <LoanNotification loanCompletions={mockLoanCompletions} />
-        
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {/* Left column - Create Post and Feed */}
           <div className="lg:col-span-2 space-y-6">
@@ -174,6 +170,19 @@ const Newsfeed = () => {
                     <Button onClick={handlePostSubmit}>Post Update</Button>
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* Loan Notifications Section */}
+            <Card className="mb-6">
+              <CardHeader>
+                <CardTitle className="text-xl">Recent Loan Activities</CardTitle>
+                <CardDescription>
+                  Stay updated with recent loan transactions in the community
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <LoanNotificationsList loanCompletions={mockLoanCompletions} />
               </CardContent>
             </Card>
 

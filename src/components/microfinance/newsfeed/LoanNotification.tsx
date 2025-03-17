@@ -70,9 +70,9 @@ export const LoanNotification = ({ type, user, time, amount, dueDate, loanId }: 
               </div>
               
               <Badge variant={
-                type === 'approved' ? 'success' :
+                type === 'approved' ? 'secondary' :
                 type === 'payment' ? 'outline' :
-                type === 'reminder' ? 'destructive' : 'secondary'
+                type === 'reminder' ? 'destructive' : 'default'
               }>
                 {type}
               </Badge>
@@ -98,5 +98,34 @@ export const LoanNotification = ({ type, user, time, amount, dueDate, loanId }: 
         </div>
       </CardContent>
     </Card>
+  );
+};
+
+// Add a separate component for the loan notifications list that accepts loanCompletions
+import { LoanCompletionData } from "../data/financial-data";
+
+type LoanNotificationsListProps = {
+  loanCompletions: LoanCompletionData[];
+}
+
+export const LoanNotificationsList: React.FC<LoanNotificationsListProps> = ({ loanCompletions }) => {
+  // Convert loan completions to notification format
+  const notifications = loanCompletions.slice(0, 3).map(loan => ({
+    type: 'payment' as const,
+    user: {
+      name: loan.borrower,
+      avatar: '',
+    },
+    time: new Date(loan.completedDate).toLocaleDateString(),
+    amount: loan.amount,
+    loanId: loan.id,
+  }));
+
+  return (
+    <div className="space-y-4">
+      {notifications.map((notification, index) => (
+        <LoanNotification key={index} {...notification} />
+      ))}
+    </div>
   );
 };
