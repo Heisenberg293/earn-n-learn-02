@@ -14,7 +14,10 @@ import {
   SidebarProvider,
   SidebarTrigger,
   SidebarInset,
-  useSidebar
+  useSidebar,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem
 } from '@/components/ui/sidebar';
 import { 
   Briefcase, 
@@ -25,12 +28,18 @@ import {
   CreditCard, 
   Settings, 
   PanelLeft,
-  LogOut
+  LogOut,
+  ChevronDown,
+  ChevronUp,
+  Search,
+  Plus,
+  RefreshCw
 } from 'lucide-react';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext } from '@/context/AuthContext';
 import { Button } from './ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
 
 export const SidebarNavigation = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -45,13 +54,153 @@ export const SidebarNavigation = ({ children }: { children: React.ReactNode }) =
   );
 };
 
+interface SubMenuItemProps {
+  title: string;
+  path: string;
+  isActive: (path: string) => boolean;
+}
+
+interface MenuItemProps {
+  title: string;
+  icon: React.ReactNode;
+  path?: string;
+  tooltip?: string;
+  subItems?: SubMenuItemProps[];
+  isActive: (path: string) => boolean;
+}
+
 const AppSidebar = () => {
   const location = useLocation();
   const { user, logout } = useContext(AuthContext);
-  const { toggleSidebar } = useSidebar();
+  const { toggleSidebar, state } = useSidebar();
+
+  const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({
+    'job-hub': true,
+    'browse-job': true,
+    'microfinance': true
+  });
 
   const isActive = (path: string) => {
     return location.pathname === path || location.pathname.startsWith(`${path}/`);
+  };
+
+  const toggleMenu = (menu: string) => {
+    setOpenMenus(prev => ({
+      ...prev,
+      [menu]: !prev[menu]
+    }));
+  };
+
+  const jobHubItems: MenuItemProps = {
+    title: "Job Hub",
+    icon: <Briefcase />,
+    tooltip: "Job Hub",
+    isActive,
+    subItems: [
+      { title: "My Jobs", path: "/my-jobs", isActive },
+      { title: "Applied Jobs", path: "/applied-jobs", isActive },
+      { title: "Earnings", path: "/profile/earnings", isActive }
+    ]
+  };
+
+  const browseJobItems: MenuItemProps = {
+    title: "Browse Job",
+    icon: <Search />,
+    tooltip: "Browse Job",
+    isActive,
+    subItems: [
+      { title: "Browse Jobs", path: "/task-hub", isActive },
+      { title: "Post Job", path: "/post-task", isActive },
+      { title: "Skill Exchange", path: "/skills-matching", isActive }
+    ]
+  };
+
+  const microfinanceItems: MenuItemProps = {
+    title: "Microfinance",
+    icon: <CreditCard />,
+    tooltip: "Microfinance",
+    isActive,
+    subItems: [
+      { title: "Peer-to-Peer Lending", path: "/microfinance?tab=peer-lending", isActive },
+      { title: "Crowdfunding", path: "/microfinance?tab=crowdfunding", isActive },
+      { title: "Escrow", path: "/microfinance?tab=escrow", isActive },
+      { title: "Bidding System", path: "/microfinance?tab=bidding", isActive }
+    ]
+  };
+
+  const socialItems = [
+    {
+      title: "Newsfeed",
+      icon: <Users />,
+      path: "/newsfeed",
+      tooltip: "Newsfeed",
+      isActive
+    },
+    {
+      title: "Communications",
+      icon: <MessageSquare />,
+      path: "/communications",
+      tooltip: "Communications",
+      isActive
+    }
+  ];
+
+  const renderSubMenuItems = (subItems: SubMenuItemProps[]) => {
+    return subItems.map((item) => (
+      <SidebarMenuSubItem key={item.title}>
+        <SidebarMenuSubButton 
+          asChild 
+          isActive={isActive(item.path)}
+        >
+          <Link to={item.path}>
+            <span>{item.title}</span>
+          </Link>
+        </SidebarMenuSubButton>
+      </SidebarMenuSubItem>
+    ));
+  };
+
+  const renderMenuItem = (item: MenuItemProps) => {
+    if (item.subItems && item.subItems.length > 0) {
+      const isOpen = openMenus[item.title.toLowerCase().replace(/\s+/g, '-')];
+      
+      return (
+        <SidebarMenuItem key={item.title}>
+          <SidebarMenuButton 
+            tooltip={item.tooltip}
+            onClick={() => toggleMenu(item.title.toLowerCase().replace(/\s+/g, '-'))}
+            className="flex justify-between w-full"
+          >
+            <div className="flex items-center">
+              {item.icon}
+              <span>{item.title}</span>
+            </div>
+            {isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </SidebarMenuButton>
+          
+          {isOpen && (
+            <SidebarMenuSub>
+              {renderSubMenuItems(item.subItems)}
+            </SidebarMenuSub>
+          )}
+        </SidebarMenuItem>
+      );
+    } else {
+      return (
+        <SidebarMenuItem key={item.title}>
+          <SidebarMenuButton 
+            asChild 
+            isActive={item.path ? isActive(item.path) : false}
+            tooltip={item.tooltip}
+          >
+            <Link to={item.path || "#"}>
+              {item.icon}
+              <span>{item.title}</span>
+            </Link>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      );
+    }
   };
 
   return (
@@ -72,57 +221,9 @@ const AppSidebar = () => {
           <SidebarGroupLabel>Main</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/task-hub')} tooltip="Job Hub">
-                  <Link to="/task-hub">
-                    <Briefcase />
-                    <span>Job Hub</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/my-jobs')} tooltip="My Jobs">
-                  <Link to="/my-jobs">
-                    <Briefcase />
-                    <span>My Jobs</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/applied-jobs')} tooltip="Applied Jobs">
-                  <Link to="/applied-jobs">
-                    <Briefcase />
-                    <span>Applied Jobs</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/profile/earnings')} tooltip="Earnings">
-                  <Link to="/profile/earnings">
-                    <BarChart4 />
-                    <span>Earnings</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        <SidebarGroup>
-          <SidebarGroupLabel>Financial</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/microfinance')} tooltip="Microfinance">
-                  <Link to="/microfinance">
-                    <CreditCard />
-                    <span>Microfinance</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              {renderMenuItem(jobHubItems)}
+              {renderMenuItem(browseJobItems)}
+              {renderMenuItem(microfinanceItems)}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -131,23 +232,7 @@ const AppSidebar = () => {
           <SidebarGroupLabel>Social</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/newsfeed')} tooltip="Newsfeed">
-                  <Link to="/newsfeed">
-                    <Users />
-                    <span>Newsfeed</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/communications')} tooltip="Communications">
-                  <Link to="/communications">
-                    <MessageSquare />
-                    <span>Communications</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              {socialItems.map(item => renderMenuItem(item))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
