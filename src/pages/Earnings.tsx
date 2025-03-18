@@ -1,533 +1,170 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import Navigation from "@/components/Navigation";
+
+import { useState } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-  Tabs, 
-  TabsContent, 
-  TabsList, 
-  TabsTrigger 
-} from "@/components/ui/tabs";
-import { 
-  ArrowUpRight, 
-  ArrowDownRight, 
-  DollarSign, 
-  CreditCard, 
-  Calendar, 
-  Filter, 
-  Clock, 
-  ChevronRight,
-  Download,
-  ArrowLeft
-} from "lucide-react";
-import { 
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { BarChart, BarChart2, Clock, DollarSign, LineChart, PieChart, TrendingUp } from "lucide-react";
 import FinancialTools from "@/components/microfinance/FinancialTools";
 
-const data = [
-  { name: "Jan", amount: 400 },
-  { name: "Feb", amount: 300 },
-  { name: "Mar", amount: 500 },
-  { name: "Apr", amount: 200 },
-  { name: "May", amount: 700 },
-  { name: "Jun", amount: 400 },
-  { name: "Jul", amount: 500 },
-  { name: "Aug", amount: 600 },
-  { name: "Sep", amount: 800 },
-  { name: "Oct", amount: 0 },
-  { name: "Nov", amount: 0 },
-  { name: "Dec", amount: 0 },
-];
-
-const transactions = [
-  {
-    id: "t1",
-    title: "Website Development",
-    date: "Oct 20, 2023",
-    amount: 750,
-    status: "completed",
-    type: "income",
-  },
-  {
-    id: "t2",
-    title: "Logo Design Project",
-    date: "Oct 15, 2023",
-    amount: 250,
-    status: "completed",
-    type: "income",
-  },
-  {
-    id: "t3",
-    title: "Content Writing",
-    date: "Oct 10, 2023",
-    amount: 180,
-    status: "processing",
-    type: "income",
-  },
-  {
-    id: "t4",
-    title: "Withdrawal to Bank Account",
-    date: "Oct 5, 2023",
-    amount: 500,
-    status: "completed",
-    type: "withdrawal",
-  },
-  {
-    id: "t5",
-    title: "Mobile App UI Design",
-    date: "Sep 28, 2023",
-    amount: 400,
-    status: "completed",
-    type: "income",
-  },
-  {
-    id: "t6",
-    title: "Withdrawal to PayPal",
-    date: "Sep 20, 2023",
-    amount: 350,
-    status: "completed",
-    type: "withdrawal",
-  },
-];
-
 const Earnings = () => {
-  const [activeTab, setActiveTab] = useState("overview");
-  const navigate = useNavigate();
-  
+  const [activeTab, setActiveTab] = useState("summary");
+
+  // Sample data
+  const recentEarnings = [
+    {
+      job: "Website Development",
+      amount: "$450",
+      date: "Oct 15, 2023",
+      status: "Paid"
+    },
+    {
+      job: "Logo Design",
+      amount: "$120",
+      date: "Oct 10, 2023",
+      status: "Paid"
+    },
+    {
+      job: "Content Writing",
+      amount: "$85",
+      date: "Oct 5, 2023",
+      status: "Paid"
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navigation />
-      
-      <main className="container mx-auto px-6 pt-24 pb-16">
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">Earnings Dashboard</h1>
-            <p className="text-gray-600 mt-1">
-              Track your income, withdrawals, and pending payments
-            </p>
+    <div className="min-h-screen bg-background">
+      <div className="container py-8 px-4 mx-auto">
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-8">
+            <div className="flex items-center">
+              <DollarSign className="h-8 w-8 text-green-600 mr-3" />
+              <div>
+                <h1 className="text-3xl font-bold">Earnings & Financial Tools</h1>
+                <p className="text-gray-600 mt-1">Track your income and manage your finances</p>
+              </div>
+            </div>
           </div>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={() => navigate(-1)}
-            className="gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" /> Back
-          </Button>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium">
-                Total Balance
-              </CardTitle>
-              <DollarSign className="h-4 w-4 text-gray-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">$1,250.00</div>
-              <p className="text-xs text-gray-500">
-                +2.5% from last month
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium">
-                Pending
-              </CardTitle>
-              <Clock className="h-4 w-4 text-gray-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">$350.00</div>
-              <p className="text-xs text-gray-500">
-                3 pending payments
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium">
-                This Month
-              </CardTitle>
-              <Calendar className="h-4 w-4 text-gray-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">$430.00</div>
-              <p className="text-xs text-gray-500">
-                +5.2% from last month
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium">
-                Total Withdrawn
-              </CardTitle>
-              <CreditCard className="h-4 w-4 text-gray-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">$900.00</div>
-              <p className="text-xs text-gray-500">
-                Last: Oct 5, 2023
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-        
-        <Tabs 
-          value={activeTab} 
-          onValueChange={setActiveTab}
-          className="space-y-4"
-        >
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-            <TabsList>
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="transactions">Transactions</TabsTrigger>
-              <TabsTrigger value="withdrawals">Withdrawals</TabsTrigger>
-              <TabsTrigger value="tools">Financial Tools</TabsTrigger>
+
+          <Tabs defaultValue="summary" onValueChange={setActiveTab} value={activeTab} className="w-full">
+            <TabsList className="mb-8 grid grid-cols-3 w-full max-w-lg">
+              <TabsTrigger value="summary">Summary</TabsTrigger>
+              <TabsTrigger value="history">History</TabsTrigger>
+              <TabsTrigger value="financial-tools">Financial Tools</TabsTrigger>
             </TabsList>
             
-            <div className="flex items-center space-x-2 mt-4 md:mt-0">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="h-8">
-                    <Filter className="h-3.5 w-3.5 mr-2" />
-                    Filter
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                      Date Range
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      Status
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      Amount
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>
+            <TabsContent value="summary">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium text-muted-foreground">
+                      Total Earnings
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center gap-4">
+                      <DollarSign className="h-6 w-6 text-green-600" />
+                      <div className="text-2xl font-bold">$1,250.00</div>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      +12% from last month
+                    </p>
+                  </CardContent>
+                </Card>
+                
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium text-muted-foreground">
+                      Pending Payments
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center gap-4">
+                      <Clock className="h-6 w-6 text-amber-600" />
+                      <div className="text-2xl font-bold">$320.00</div>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      From 3 ongoing jobs
+                    </p>
+                  </CardContent>
+                </Card>
+                
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium text-muted-foreground">
+                      Jobs Completed
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center gap-4">
+                      <BarChart className="h-6 w-6 text-blue-600" />
+                      <div className="text-2xl font-bold">15</div>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      5 in the last 30 days
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
               
-              <Button variant="outline" size="sm" className="h-8">
-                <Download className="h-3.5 w-3.5 mr-2" />
-                Export
-              </Button>
-            </div>
-          </div>
-          
-          <TabsContent value="overview" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Earnings Overview</CardTitle>
-                <CardDescription>
-                  Your earnings over the last 12 months
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="pl-2">
-                <ResponsiveContainer width="100%" height={350}>
-                  <AreaChart data={data}>
-                    <defs>
-                      <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
-                        <stop
-                          offset="5%"
-                          stopColor="#16a34a"
-                          stopOpacity={0.8}
-                        />
-                        <stop
-                          offset="95%"
-                          stopColor="#16a34a"
-                          stopOpacity={0}
-                        />
-                      </linearGradient>
-                    </defs>
-                    <XAxis
-                      dataKey="name"
-                      stroke="#888888"
-                      fontSize={12}
-                      tickLine={false}
-                      axisLine={false}
-                    />
-                    <YAxis
-                      stroke="#888888"
-                      fontSize={12}
-                      tickLine={false}
-                      axisLine={false}
-                      tickFormatter={(value) => `$${value}`}
-                    />
-                    <CartesianGrid
-                      strokeDasharray="3 3"
-                      className="stroke-gray-200"
-                    />
-                    <Tooltip formatter={(value) => [`$${value}`, "Amount"]} />
-                    <Area
-                      type="monotone"
-                      dataKey="amount"
-                      stroke="#16a34a"
-                      fillOpacity={1}
-                      fill="url(#colorAmount)"
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Recent Transactions</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-8">
-                    {transactions.slice(0, 3).map((transaction) => (
-                      <div className="flex items-center" key={transaction.id}>
-                        <div className={`mr-4 rounded-full p-2 ${
-                          transaction.type === 'income'
-                            ? 'bg-green-100'
-                            : 'bg-gray-100'
-                        }`}>
-                          {transaction.type === 'income' ? (
-                            <ArrowUpRight className="h-4 w-4 text-green-600" />
-                          ) : (
-                            <ArrowDownRight className="h-4 w-4 text-gray-600" />
-                          )}
-                        </div>
-                        <div className="flex-1 space-y-1">
-                          <p className="text-sm font-medium leading-none">
-                            {transaction.title}
-                          </p>
-                          <p className="text-xs text-gray-500">
-                            {transaction.date}
-                          </p>
-                        </div>
-                        <div className={`font-medium ${
-                          transaction.type === 'income'
-                            ? 'text-green-600'
-                            : 'text-gray-600'
-                        }`}>
-                          {transaction.type === 'income' ? '+' : '-'}${transaction.amount}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-4 text-center">
-                    <Button
-                      variant="link"
-                      onClick={() => setActiveTab("transactions")}
-                      className="text-green-600 hover:text-green-700"
-                    >
-                      View All Transactions
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Pending Payments</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-8">
-                    {transactions
-                      .filter(t => t.status === 'processing')
-                      .map((transaction) => (
-                        <div className="flex items-center" key={transaction.id}>
-                          <div className="mr-4 rounded-full p-2 bg-yellow-100">
-                            <Clock className="h-4 w-4 text-yellow-600" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card className="md:col-span-1">
+                  <CardHeader>
+                    <CardTitle>Recent Earnings</CardTitle>
+                    <CardDescription>Your most recent completed jobs</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {recentEarnings.map((earning, i) => (
+                        <div key={i} className="flex items-center justify-between py-2 border-b last:border-0">
+                          <div>
+                            <div className="font-medium">{earning.job}</div>
+                            <div className="text-sm text-muted-foreground">{earning.date}</div>
                           </div>
-                          <div className="flex-1 space-y-1">
-                            <p className="text-sm font-medium leading-none">
-                              {transaction.title}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {transaction.date}
-                            </p>
-                          </div>
-                          <div className="font-medium text-yellow-600">
-                            +${transaction.amount}
-                          </div>
+                          <div className="font-semibold text-green-600">{earning.amount}</div>
                         </div>
                       ))}
-                    {transactions.filter(t => t.status === 'processing').length === 0 && (
-                      <div className="text-center py-4">
-                        <p className="text-gray-500 text-sm">No pending payments</p>
-                      </div>
-                    )}
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card className="md:col-span-1">
+                  <CardHeader>
+                    <CardTitle>Earnings Breakdown</CardTitle>
+                    <CardDescription>By category</CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex flex-col items-center justify-center h-[250px]">
+                    <PieChart className="h-16 w-16 text-gray-300 mb-4" />
+                    <p className="text-sm text-muted-foreground text-center">
+                      Visualization of your earnings by job category will appear here
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="history">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Earnings History</CardTitle>
+                  <CardDescription>Complete record of your earnings</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-[400px] flex flex-col items-center justify-center">
+                    <LineChart className="h-16 w-16 text-gray-300 mb-4" />
+                    <h3 className="text-xl font-semibold text-gray-700 mb-2">Earnings Over Time</h3>
+                    <p className="text-sm text-muted-foreground text-center max-w-md">
+                      Visualizations and detailed history of your earnings will appear here as you complete more jobs.
+                    </p>
                   </div>
                 </CardContent>
               </Card>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="transactions" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>All Transactions</CardTitle>
-                <CardDescription>
-                  View your complete transaction history
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  {transactions.map((transaction) => (
-                    <div key={transaction.id}>
-                      <div className="flex items-center">
-                        <div className={`mr-4 rounded-full p-2 ${
-                          transaction.type === 'income'
-                            ? 'bg-green-100'
-                            : 'bg-gray-100'
-                        }`}>
-                          {transaction.type === 'income' ? (
-                            <ArrowUpRight className="h-4 w-4 text-green-600" />
-                          ) : (
-                            <ArrowDownRight className="h-4 w-4 text-gray-600" />
-                          )}
-                        </div>
-                        <div className="flex-1 space-y-1">
-                          <p className="text-sm font-medium leading-none">
-                            {transaction.title}
-                          </p>
-                          <p className="text-xs text-gray-500">
-                            {transaction.date} • {transaction.status}
-                          </p>
-                        </div>
-                        <div className={`font-medium ${
-                          transaction.type === 'income'
-                            ? 'text-green-600'
-                            : 'text-gray-600'
-                        }`}>
-                          {transaction.type === 'income' ? '+' : '-'}${transaction.amount}
-                        </div>
-                        <Button variant="ghost" size="sm" className="ml-2">
-                          <ChevronRight className="h-4 w-4" />
-                        </Button>
-                      </div>
-                      <Separator className="my-4" />
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-          
-          <TabsContent value="withdrawals" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Withdrawal Methods</CardTitle>
-                <CardDescription>
-                  Manage your withdrawal options
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center">
-                      <CreditCard className="h-5 w-5 mr-4" />
-                      <div>
-                        <p className="font-medium">Bank Account</p>
-                        <p className="text-sm text-gray-500">**** 1234</p>
-                      </div>
-                    </div>
-                    <Button variant="outline" size="sm">Withdraw</Button>
-                  </div>
-                  
-                  <div className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center">
-                      <CreditCard className="h-5 w-5 mr-4" />
-                      <div>
-                        <p className="font-medium">PayPal</p>
-                        <p className="text-sm text-gray-500">user@example.com</p>
-                      </div>
-                    </div>
-                    <Button variant="outline" size="sm">Withdraw</Button>
-                  </div>
-                  
-                  <div className="text-center mt-6">
-                    <Link
-                      to="/profile/payment-methods"
-                      className="text-green-600 hover:text-green-700 text-sm font-medium"
-                    >
-                      + Add Payment Method
-                    </Link>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            </TabsContent>
             
-            <Card>
-              <CardHeader>
-                <CardTitle>Withdrawal History</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  {transactions
-                    .filter(t => t.type === 'withdrawal')
-                    .map((transaction) => (
-                      <div key={transaction.id}>
-                        <div className="flex items-center">
-                          <div className="mr-4 rounded-full p-2 bg-gray-100">
-                            <ArrowDownRight className="h-4 w-4 text-gray-600" />
-                          </div>
-                          <div className="flex-1 space-y-1">
-                            <p className="text-sm font-medium leading-none">
-                              {transaction.title}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {transaction.date} • {transaction.status}
-                            </p>
-                          </div>
-                          <div className="font-medium text-gray-600">
-                            -${transaction.amount}
-                          </div>
-                        </div>
-                        <Separator className="my-4" />
-                      </div>
-                    ))}
-                  {transactions.filter(t => t.type === 'withdrawal').length === 0 && (
-                    <div className="text-center py-4">
-                      <p className="text-gray-500 text-sm">No withdrawal history</p>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-          
-          <TabsContent value="tools" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Financial Tools</CardTitle>
-                <CardDescription>
-                  Tools to help you manage your finances and plan for the future
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <FinancialTools />
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </main>
+            <TabsContent value="financial-tools">
+              <FinancialTools />
+            </TabsContent>
+          </Tabs>
+        </div>
+      </div>
     </div>
   );
 };

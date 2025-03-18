@@ -19,6 +19,7 @@ import MyJobs from "./pages/MyJobs";
 import AppliedJobs from "./pages/AppliedJobs";
 import Earnings from "./pages/Earnings";
 import JobDetail from "./pages/JobDetail";
+import { SidebarNavigation } from "./components/SidebarNav";
 
 const queryClient = new QueryClient();
 
@@ -37,47 +38,65 @@ const App = () => (
             {/* Protected Routes */}
             <Route path="/task-hub" element={
               <ProtectedRoute>
-                <TaskHub />
+                <SidebarNavigation>
+                  <TaskHub />
+                </SidebarNavigation>
               </ProtectedRoute>
             } />
             <Route path="/profile" element={
               <ProtectedRoute>
-                <Profile />
+                <SidebarNavigation>
+                  <Profile />
+                </SidebarNavigation>
               </ProtectedRoute>
             } />
             <Route path="/microfinance" element={
               <ProtectedRoute>
-                <MicrofinanceSystem />
+                <SidebarNavigation>
+                  <MicrofinanceSystem />
+                </SidebarNavigation>
               </ProtectedRoute>
             } />
             <Route path="/newsfeed" element={
               <ProtectedRoute>
-                <Newsfeed />
+                <SidebarNavigation>
+                  <Newsfeed />
+                </SidebarNavigation>
               </ProtectedRoute>
             } />
             <Route path="/communications" element={
               <ProtectedRoute>
-                <Communications />
+                <SidebarNavigation>
+                  <Communications />
+                </SidebarNavigation>
               </ProtectedRoute>
             } />
             <Route path="/my-jobs" element={
               <ProtectedRoute>
-                <MyJobs />
+                <SidebarNavigation>
+                  <MyJobs />
+                </SidebarNavigation>
               </ProtectedRoute>
             } />
             <Route path="/applied-jobs" element={
               <ProtectedRoute>
-                <AppliedJobs />
+                <SidebarNavigation>
+                  <AppliedJobs />
+                </SidebarNavigation>
               </ProtectedRoute>
             } />
             <Route path="/profile/earnings" element={
               <ProtectedRoute>
-                <Earnings />
+                <SidebarNavigation>
+                  <Earnings />
+                </SidebarNavigation>
               </ProtectedRoute>
             } />
             <Route path="/jobs/:id" element={
               <ProtectedRoute>
-                <JobDetail />
+                <SidebarNavigation>
+                  <JobDetail />
+                </SidebarNavigation>
               </ProtectedRoute>
             } />
             
