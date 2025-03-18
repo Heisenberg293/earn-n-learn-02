@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
@@ -18,7 +17,8 @@ import {
   Filter, 
   Clock, 
   ChevronRight,
-  Download 
+  Download,
+  ArrowLeft
 } from "lucide-react";
 import { 
   DropdownMenu,
@@ -40,8 +40,8 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import FinancialTools from "@/components/microfinance/FinancialTools";
 
-// Sample data for the chart
 const data = [
   { name: "Jan", amount: 400 },
   { name: "Feb", amount: 300 },
@@ -57,7 +57,6 @@ const data = [
   { name: "Dec", amount: 0 },
 ];
 
-// Sample transaction data
 const transactions = [
   {
     id: "t1",
@@ -111,17 +110,28 @@ const transactions = [
 
 const Earnings = () => {
   const [activeTab, setActiveTab] = useState("overview");
+  const navigate = useNavigate();
   
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
       
       <main className="container mx-auto px-6 pt-24 pb-16">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight">Earnings Dashboard</h1>
-          <p className="text-gray-600 mt-1">
-            Track your income, withdrawals, and pending payments
-          </p>
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Earnings Dashboard</h1>
+            <p className="text-gray-600 mt-1">
+              Track your income, withdrawals, and pending payments
+            </p>
+          </div>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={() => navigate(-1)}
+            className="gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" /> Back
+          </Button>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -193,6 +203,7 @@ const Earnings = () => {
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="transactions">Transactions</TabsTrigger>
               <TabsTrigger value="withdrawals">Withdrawals</TabsTrigger>
+              <TabsTrigger value="tools">Financial Tools</TabsTrigger>
             </TabsList>
             
             <div className="flex items-center space-x-2 mt-4 md:mt-0">
@@ -498,6 +509,20 @@ const Earnings = () => {
                     </div>
                   )}
                 </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="tools" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Financial Tools</CardTitle>
+                <CardDescription>
+                  Tools to help you manage your finances and plan for the future
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <FinancialTools />
               </CardContent>
             </Card>
           </TabsContent>
