@@ -33,13 +33,15 @@ import {
   ChevronUp,
   Search,
   Plus,
-  RefreshCw
+  RefreshCw,
+  Menu
 } from 'lucide-react';
 import { useContext, useState } from 'react';
 import { AuthContext } from '@/context/AuthContext';
 import { Button } from './ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
+import { motion } from 'framer-motion';
 
 export const SidebarNavigation = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -73,6 +75,7 @@ const AppSidebar = () => {
   const location = useLocation();
   const { user, logout } = useContext(AuthContext);
   const { toggleSidebar, state } = useSidebar();
+  const isCollapsed = state === 'collapsed';
 
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({
     'job-hub': true,
@@ -175,13 +178,26 @@ const AppSidebar = () => {
               {item.icon}
               <span>{item.title}</span>
             </div>
-            {isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            <motion.div
+              initial={false}
+              animate={{ rotate: isOpen ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <ChevronDown className="h-4 w-4" />
+            </motion.div>
           </SidebarMenuButton>
           
           {isOpen && (
-            <SidebarMenuSub>
-              {renderSubMenuItems(item.subItems)}
-            </SidebarMenuSub>
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <SidebarMenuSub>
+                {renderSubMenuItems(item.subItems)}
+              </SidebarMenuSub>
+            </motion.div>
           )}
         </SidebarMenuItem>
       );
@@ -207,11 +223,20 @@ const AppSidebar = () => {
     <Sidebar>
       <SidebarHeader>
         <div className="flex items-center justify-between p-2">
-          <div className="flex items-center">
+          <motion.div 
+            className="flex items-center"
+            animate={{ opacity: isCollapsed ? 0 : 1 }}
+            transition={{ duration: 0.2 }}
+          >
             <h1 className="text-xl font-bold">earn-n-learn</h1>
-          </div>
-          <Button variant="ghost" size="icon" onClick={toggleSidebar}>
-            <PanelLeft className="h-4 w-4" />
+          </motion.div>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={toggleSidebar}
+            className="transition-all duration-300 hover:bg-accent hover:text-accent-foreground"
+          >
+            {isCollapsed ? <Menu className="h-4 w-4" /> : <PanelLeft className="h-4 w-4" />}
           </Button>
         </div>
       </SidebarHeader>
@@ -247,7 +272,7 @@ const AppSidebar = () => {
                   <Link to="/profile" className="flex items-center justify-between w-full">
                     <div className="flex items-center">
                       <User className="mr-2" />
-                      <span>Profile</span>
+                      <span>{user?.name || "Profile"}</span>
                     </div>
                     <Avatar className="h-6 w-6">
                       <AvatarImage src="/placeholder.svg" alt={user?.name || "User"} />
@@ -279,3 +304,4 @@ const AppSidebar = () => {
     </Sidebar>
   );
 };
+

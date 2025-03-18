@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { SidebarNavigation } from "@/components/SidebarNav";
 import Index from "./pages/Index";
 import TaskHub from "./pages/TaskHub";
 import NotFound from "./pages/NotFound";
@@ -19,7 +20,8 @@ import MyJobs from "./pages/MyJobs";
 import AppliedJobs from "./pages/AppliedJobs";
 import Earnings from "./pages/Earnings";
 import JobDetail from "./pages/JobDetail";
-import { SidebarNavigation } from "./components/SidebarNav";
+import PostTask from "./pages/PostTask";
+import SkillsMatching from "./pages/SkillsMatching";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +42,20 @@ const App = () => (
               <ProtectedRoute>
                 <SidebarNavigation>
                   <TaskHub />
+                </SidebarNavigation>
+              </ProtectedRoute>
+            } />
+            <Route path="/post-task" element={
+              <ProtectedRoute>
+                <SidebarNavigation>
+                  <PostTask />
+                </SidebarNavigation>
+              </ProtectedRoute>
+            } />
+            <Route path="/skills-matching" element={
+              <ProtectedRoute>
+                <SidebarNavigation>
+                  <SkillsMatching />
                 </SidebarNavigation>
               </ProtectedRoute>
             } />
