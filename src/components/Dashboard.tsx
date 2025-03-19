@@ -1,4 +1,3 @@
-
 import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "@/context/AuthContext";
@@ -6,64 +5,53 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Briefcase, BarChart2, BookmarkCheck, DollarSign, ChevronRight, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-
 const Dashboard = () => {
-  const { user } = useContext(AuthContext);
+  const {
+    user
+  } = useContext(AuthContext);
   const navigate = useNavigate();
-
-  const dashboardCards = [
-    {
-      title: "My Jobs",
-      description: "Manage your active and completed jobs",
-      icon: <Briefcase className="h-5 w-5 text-green-600" />,
-      path: "/my-jobs",
-      stats: "2 Active",
-    },
-    {
-      title: "Applied Jobs",
-      description: "Track your job applications",
-      icon: <BookmarkCheck className="h-5 w-5 text-green-600" />,
-      path: "/applied-jobs",
-      stats: "5 Pending",
-    },
-    {
-      title: "Earnings",
-      description: "View your financial summary",
-      icon: <DollarSign className="h-5 w-5 text-green-600" />,
-      path: "/profile/earnings",
-      stats: "$1,250",
-    },
-  ];
-
-  const recentJobs = [
-    {
-      id: 1,
-      title: "Website Development for E-commerce",
-      category: "Web Development",
-      status: "new",
-      postedAt: "2 hours ago",
-      budget: "$500-750",
-    },
-    {
-      id: 2,
-      title: "Logo Design for Tech Startup",
-      category: "Graphic Design",
-      status: "new",
-      postedAt: "5 hours ago",
-      budget: "$100-200",
-    },
-    {
-      id: 3,
-      title: "Content Writing for Blog",
-      category: "Writing",
-      status: "new",
-      postedAt: "1 day ago",
-      budget: "$50-100",
-    },
-  ];
-
-  return (
-    <div>
+  const dashboardCards = [{
+    title: "My Jobs",
+    description: "Manage your active and completed jobs",
+    icon: <Briefcase className="h-5 w-5 text-green-600" />,
+    path: "/my-jobs",
+    stats: "2 Active"
+  }, {
+    title: "Applied Jobs",
+    description: "Track your job applications",
+    icon: <BookmarkCheck className="h-5 w-5 text-green-600" />,
+    path: "/applied-jobs",
+    stats: "5 Pending"
+  }, {
+    title: "Earnings",
+    description: "View your financial summary",
+    icon: <DollarSign className="h-5 w-5 text-green-600" />,
+    path: "/profile/earnings",
+    stats: "$1,250"
+  }];
+  const recentJobs = [{
+    id: 1,
+    title: "Website Development for E-commerce",
+    category: "Web Development",
+    status: "new",
+    postedAt: "2 hours ago",
+    budget: "$500-750"
+  }, {
+    id: 2,
+    title: "Logo Design for Tech Startup",
+    category: "Graphic Design",
+    status: "new",
+    postedAt: "5 hours ago",
+    budget: "$100-200"
+  }, {
+    id: 3,
+    title: "Content Writing for Blog",
+    category: "Writing",
+    status: "new",
+    postedAt: "1 day ago",
+    budget: "$50-100"
+  }];
+  return <div>
       {/* Dashboard Header */}
       <div className="bg-white border-b mb-6 pb-4">
         <div className="flex items-center justify-between">
@@ -72,28 +60,18 @@ const Dashboard = () => {
             <p className="text-gray-600 text-sm">Welcome back, {user?.name || "User"}!</p>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm">
-              Export
-            </Button>
-            <Button size="sm">New Task</Button>
+            
+            
           </div>
         </div>
       </div>
 
       {/* Featured Alert/Banner */}
-      <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-6 flex items-center justify-between">
-        <div className="flex items-center">
-          <div className="text-blue-600 font-medium">Introducing new dashboard! Download now at <a href="#" className="underline">themeforest.net</a></div>
-        </div>
-        <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-800 p-1 h-auto">
-          <ExternalLink className="h-4 w-4" />
-        </Button>
-      </div>
+      
 
       {/* Dashboard Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        {dashboardCards.map((card, index) => (
-          <Card key={index} onClick={() => navigate(card.path)} className="cursor-pointer hover:shadow-md transition-shadow">
+        {dashboardCards.map((card, index) => <Card key={index} onClick={() => navigate(card.path)} className="cursor-pointer hover:shadow-md transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
               <CardTitle className="text-lg font-medium">{card.title}</CardTitle>
               {card.icon}
@@ -102,8 +80,7 @@ const Dashboard = () => {
               <p className="text-sm text-gray-500 mb-2">{card.description}</p>
               <p className="text-xl font-semibold text-green-600">{card.stats}</p>
             </CardContent>
-          </Card>
-        ))}
+          </Card>)}
       </div>
 
       {/* Main Dashboard Content */}
@@ -119,8 +96,7 @@ const Dashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {recentJobs.map((job) => (
-                  <div key={job.id} className="border-b border-gray-100 pb-4 last:border-b-0 last:pb-0">
+                {recentJobs.map(job => <div key={job.id} className="border-b border-gray-100 pb-4 last:border-b-0 last:pb-0">
                     <div className="flex justify-between items-start mb-1">
                       <h4 className="font-medium">{job.title}</h4>
                       <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 text-xs font-medium">
@@ -133,20 +109,14 @@ const Dashboard = () => {
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-sm font-medium text-green-600">{job.budget}</span>
-                      <Button 
-                        variant="outline"
-                        size="sm"
-                        className="text-xs font-medium border-gray-200 hover:bg-green-50 hover:text-green-700 hover:border-green-200"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          navigate(`/jobs/${job.id}`);
-                        }}
-                      >
+                      <Button variant="outline" size="sm" className="text-xs font-medium border-gray-200 hover:bg-green-50 hover:text-green-700 hover:border-green-200" onClick={e => {
+                    e.stopPropagation();
+                    navigate(`/jobs/${job.id}`);
+                  }}>
                         View Details
                       </Button>
                     </div>
-                  </div>
-                ))}
+                  </div>)}
               </div>
             </CardContent>
           </Card>
@@ -191,10 +161,7 @@ const Dashboard = () => {
                   </div>
                 </div>
                 
-                <Button 
-                  className="w-full mt-4"
-                  onClick={() => navigate("/profile/earnings")}
-                >
+                <Button className="w-full mt-4" onClick={() => navigate("/profile/earnings")}>
                   View Details
                 </Button>
               </div>
@@ -230,8 +197,6 @@ const Dashboard = () => {
           </Card>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Dashboard;
