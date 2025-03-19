@@ -1,7 +1,7 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Navigation from "@/components/Navigation";
 import PeerLending from "@/components/microfinance/PeerLending";
 import Crowdfunding from "@/components/microfinance/Crowdfunding";
@@ -10,7 +10,31 @@ import FinancialTools from "@/components/microfinance/FinancialTools";
 import BiddingSystem from "@/components/microfinance/BiddingSystem";
 
 const MicrofinanceSystem = () => {
-  const [activeTab, setActiveTab] = useState("peer-lending");
+  const location = useLocation();
+  const navigate = useNavigate();
+  
+  // Get tab from URL search params or default to peer-lending
+  const getTabFromUrl = () => {
+    const searchParams = new URLSearchParams(location.search);
+    return searchParams.get("tab") || "peer-lending";
+  };
+  
+  const [activeTab, setActiveTab] = useState(getTabFromUrl());
+  
+  // Update tab when URL changes
+  useEffect(() => {
+    setActiveTab(getTabFromUrl());
+  }, [location.search]);
+  
+  // Update URL when tab changes
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    if (value === "peer-lending") {
+      navigate("/microfinance");
+    } else {
+      navigate(`/microfinance?tab=${value}`);
+    }
+  };
   
   return (
     <div className="min-h-screen bg-background">
@@ -20,7 +44,7 @@ const MicrofinanceSystem = () => {
           <h1 className="text-3xl font-bold tracking-tight mb-2">Microfinance System</h1>
           <p className="text-muted-foreground mb-8">Financial tools to help students support each other</p>
           
-          <Tabs defaultValue="peer-lending" onValueChange={setActiveTab} value={activeTab} className="w-full">
+          <Tabs defaultValue={activeTab} onValueChange={handleTabChange} value={activeTab} className="w-full">
             <TabsList className="grid grid-cols-5 mb-8">
               <TabsTrigger value="peer-lending">Peer-to-Peer Lending</TabsTrigger>
               <TabsTrigger value="crowdfunding">Crowdfunding</TabsTrigger>
