@@ -6,7 +6,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { SidebarNavigation } from "@/components/SidebarNav";
 import Index from "./pages/Index";
 import TaskHub from "./pages/TaskHub";
 import NotFound from "./pages/NotFound";
@@ -20,8 +19,6 @@ import MyJobs from "./pages/MyJobs";
 import AppliedJobs from "./pages/AppliedJobs";
 import Earnings from "./pages/Earnings";
 import JobDetail from "./pages/JobDetail";
-import PostTask from "./pages/PostTask";
-import SkillsMatching from "./pages/SkillsMatching";
 
 const queryClient = new QueryClient();
 
@@ -40,79 +37,47 @@ const App = () => (
             {/* Protected Routes */}
             <Route path="/task-hub" element={
               <ProtectedRoute>
-                <SidebarNavigation>
-                  <TaskHub />
-                </SidebarNavigation>
-              </ProtectedRoute>
-            } />
-            <Route path="/post-task" element={
-              <ProtectedRoute>
-                <SidebarNavigation>
-                  <PostTask />
-                </SidebarNavigation>
-              </ProtectedRoute>
-            } />
-            <Route path="/skills-matching" element={
-              <ProtectedRoute>
-                <SidebarNavigation>
-                  <SkillsMatching />
-                </SidebarNavigation>
+                <TaskHub />
               </ProtectedRoute>
             } />
             <Route path="/profile" element={
               <ProtectedRoute>
-                <SidebarNavigation>
-                  <Profile />
-                </SidebarNavigation>
+                <Profile />
               </ProtectedRoute>
             } />
             <Route path="/microfinance" element={
               <ProtectedRoute>
-                <SidebarNavigation>
-                  <MicrofinanceSystem />
-                </SidebarNavigation>
+                <MicrofinanceSystem />
               </ProtectedRoute>
             } />
             <Route path="/newsfeed" element={
               <ProtectedRoute>
-                <SidebarNavigation>
-                  <Newsfeed />
-                </SidebarNavigation>
+                <Newsfeed />
               </ProtectedRoute>
             } />
             <Route path="/communications" element={
               <ProtectedRoute>
-                <SidebarNavigation>
-                  <Communications />
-                </SidebarNavigation>
+                <Communications />
               </ProtectedRoute>
             } />
             <Route path="/my-jobs" element={
               <ProtectedRoute>
-                <SidebarNavigation>
-                  <MyJobs />
-                </SidebarNavigation>
+                <MyJobs />
               </ProtectedRoute>
             } />
             <Route path="/applied-jobs" element={
               <ProtectedRoute>
-                <SidebarNavigation>
-                  <AppliedJobs />
-                </SidebarNavigation>
+                <AppliedJobs />
               </ProtectedRoute>
             } />
             <Route path="/profile/earnings" element={
               <ProtectedRoute>
-                <SidebarNavigation>
-                  <Earnings />
-                </SidebarNavigation>
+                <Earnings />
               </ProtectedRoute>
             } />
             <Route path="/jobs/:id" element={
               <ProtectedRoute>
-                <SidebarNavigation>
-                  <JobDetail />
-                </SidebarNavigation>
+                <JobDetail />
               </ProtectedRoute>
             } />
             

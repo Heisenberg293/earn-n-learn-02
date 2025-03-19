@@ -1,13 +1,15 @@
 import { useState } from "react";
+import Navigation from "@/components/Navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Briefcase, ChevronRight, Clock, DollarSign } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Briefcase, ChevronRight, Clock, DollarSign, ArrowLeft } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 
 const MyJobs = () => {
   const [activeTab, setActiveTab] = useState("active");
+  const navigate = useNavigate();
   
   const activeJobs = [
     {
@@ -70,9 +72,11 @@ const MyJobs = () => {
   
   return (
     <div className="min-h-screen bg-gray-50">
-      <main className="container mx-auto px-6 py-8">
+      <Navigation />
+      
+      <main className="container mx-auto px-6 pt-24 pb-16">
         <div className="max-w-6xl mx-auto">
-          <div className="mb-8">
+          <div className="mb-8 flex items-center justify-between">
             <div className="flex items-center">
               <Briefcase className="h-8 w-8 text-green-600 mr-3" />
               <div>
@@ -80,6 +84,14 @@ const MyJobs = () => {
                 <p className="text-gray-600 mt-1">Manage your active and completed jobs</p>
               </div>
             </div>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => navigate(-1)}
+              className="gap-2"
+            >
+              <ArrowLeft className="h-4 w-4" /> Back
+            </Button>
           </div>
           
           <Tabs 
