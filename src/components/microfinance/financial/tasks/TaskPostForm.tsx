@@ -83,9 +83,9 @@ const JobPostForm = ({ setJobPosts, jobPosts }: JobPostFormProps) => {
   };
 
   return (
-    <Card>
+    <Card className="border-0 shadow-sm">
       <CardHeader>
-        <CardTitle>Post a New Job</CardTitle>
+        <CardTitle className="text-xl">Post a New Job</CardTitle>
         <CardDescription>Describe what you need help with</CardDescription>
       </CardHeader>
       <CardContent>
@@ -97,6 +97,7 @@ const JobPostForm = ({ setJobPosts, jobPosts }: JobPostFormProps) => {
               placeholder="e.g., Website Development for Student Club"
               value={newJob.title || ""}
               onChange={(e) => setNewJob({ ...newJob, title: e.target.value })}
+              className="border-gray-200"
             />
           </div>
           
@@ -108,6 +109,7 @@ const JobPostForm = ({ setJobPosts, jobPosts }: JobPostFormProps) => {
               rows={4}
               value={newJob.description || ""}
               onChange={(e) => setNewJob({ ...newJob, description: e.target.value })}
+              className="border-gray-200"
             />
           </div>
           
@@ -120,6 +122,7 @@ const JobPostForm = ({ setJobPosts, jobPosts }: JobPostFormProps) => {
                 placeholder="150"
                 value={newJob.budget || ""}
                 onChange={(e) => setNewJob({ ...newJob, budget: parseFloat(e.target.value) })}
+                className="border-gray-200"
               />
             </div>
             
@@ -130,6 +133,7 @@ const JobPostForm = ({ setJobPosts, jobPosts }: JobPostFormProps) => {
                 type="date"
                 value={newJob.deadline || ""}
                 onChange={(e) => setNewJob({ ...newJob, deadline: e.target.value })}
+                className="border-gray-200"
               />
             </div>
           </div>
@@ -142,8 +146,9 @@ const JobPostForm = ({ setJobPosts, jobPosts }: JobPostFormProps) => {
                 placeholder="e.g., React, Design, Writing"
                 value={skillInput}
                 onChange={(e) => setSkillInput(e.target.value)}
+                className="border-gray-200"
               />
-              <Button type="button" onClick={handleAddSkill}>
+              <Button type="button" onClick={handleAddSkill} className="bg-green-600 hover:bg-green-700">
                 Add
               </Button>
             </div>
@@ -151,12 +156,12 @@ const JobPostForm = ({ setJobPosts, jobPosts }: JobPostFormProps) => {
               {newJob.skills?.map((skill, index) => (
                 <span 
                   key={index} 
-                  className="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-sm flex items-center gap-1"
+                  className="bg-green-50 text-green-800 px-2 py-1 rounded-full text-sm flex items-center gap-1"
                 >
                   {skill}
                   <button 
                     type="button" 
-                    className="ml-1 text-gray-600 hover:text-gray-900"
+                    className="ml-1 text-green-600 hover:text-green-900"
                     onClick={() => handleRemoveSkill(skill)}
                   >
                     &times;
@@ -166,7 +171,7 @@ const JobPostForm = ({ setJobPosts, jobPosts }: JobPostFormProps) => {
             </div>
           </div>
           
-          <Button onClick={handleAddJob} className="w-full">
+          <Button onClick={handleAddJob} className="w-full bg-green-600 hover:bg-green-700">
             Post Job
           </Button>
         </div>

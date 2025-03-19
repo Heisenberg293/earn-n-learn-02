@@ -10,7 +10,7 @@ const ProfileTab = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <ProfileImage profileImage={profileImage} setProfileImage={setProfileImage} />
       <BasicInformation />
       <SkillsSection />

@@ -128,7 +128,7 @@ export const SidebarMenuItems: MenuItem[] = [
       },
       {
         title: 'Settings',
-        path: '/profile/settings',
+        path: '/profile?tab=settings',
         icon: Settings
       },
     ],

@@ -18,6 +18,8 @@ const Profile = () => {
     const tab = searchParams.get('tab');
     if (tab) {
       setActiveTab(tab);
+    } else {
+      setActiveTab("profile");
     }
   }, [location]);
   
@@ -28,13 +30,13 @@ const Profile = () => {
   };
   
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <main className="container mx-auto max-w-4xl">
-        <h1 className="text-3xl font-bold mb-8">Your Profile</h1>
+    <div className="container mx-auto p-4 min-h-screen">
+      <div className="max-w-5xl mx-auto">
+        <h1 className="text-2xl font-bold mb-6">Your Profile</h1>
         
         {/* Profile Tabs */}
         <Tabs value={activeTab} onValueChange={handleTabChange} className="mb-8">
-          <TabsList className="mb-4 w-full justify-start">
+          <TabsList className="mb-6 w-full justify-start flex-wrap">
             <TabsTrigger value="profile">Profile Info</TabsTrigger>
             <TabsTrigger value="tasks">My Tasks</TabsTrigger>
             <TabsTrigger value="leaderboard">Leaderboard</TabsTrigger>
@@ -57,7 +59,7 @@ const Profile = () => {
             <SettingsTab />
           </TabsContent>
         </Tabs>
-      </main>
+      </div>
     </div>
   );
 };

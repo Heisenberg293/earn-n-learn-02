@@ -43,7 +43,7 @@ const JobList = ({ filteredJobs, setJobPosts, jobPosts }: JobListProps) => {
 
   if (filteredJobs.length === 0) {
     return (
-      <Card>
+      <Card className="border-0 shadow-sm">
         <CardContent className="flex flex-col items-center justify-center py-8">
           <ClipboardList className="h-12 w-12 text-muted-foreground mb-4" />
           <p className="text-muted-foreground text-center">
@@ -57,7 +57,7 @@ const JobList = ({ filteredJobs, setJobPosts, jobPosts }: JobListProps) => {
   return (
     <div className="grid grid-cols-1 gap-4">
       {filteredJobs.map((job) => (
-        <Card key={job.id}>
+        <Card key={job.id} className="border-0 shadow-sm">
           <CardHeader className="pb-2">
             <div className="flex justify-between items-start">
               <div>
@@ -66,7 +66,7 @@ const JobList = ({ filteredJobs, setJobPosts, jobPosts }: JobListProps) => {
                   {job.status.charAt(0).toUpperCase() + job.status.slice(1).replace('_', ' ')}
                 </span>
               </div>
-              <div className="flex items-center gap-1 text-lg font-bold">
+              <div className="flex items-center gap-1 text-lg font-bold text-green-600">
                 <DollarSign className="h-4 w-4" />
                 {job.budget.toFixed(2)}
               </div>
@@ -90,7 +90,7 @@ const JobList = ({ filteredJobs, setJobPosts, jobPosts }: JobListProps) => {
               {job.skills.map((skill, index) => (
                 <span 
                   key={index} 
-                  className="bg-blue-50 text-blue-700 px-2 py-1 rounded-full text-xs flex items-center gap-1"
+                  className="bg-green-50 text-green-700 px-2 py-1 rounded-full text-xs flex items-center gap-1"
                 >
                   <Tag className="h-3 w-3" />
                   {skill}
@@ -104,6 +104,7 @@ const JobList = ({ filteredJobs, setJobPosts, jobPosts }: JobListProps) => {
                 size="sm"
                 onClick={() => handleUpdateStatus(job.id, "open")}
                 disabled={job.status === "open"}
+                className={job.status === "open" ? "bg-green-600 hover:bg-green-700" : ""}
               >
                 Open
               </Button>
@@ -112,6 +113,7 @@ const JobList = ({ filteredJobs, setJobPosts, jobPosts }: JobListProps) => {
                 size="sm"
                 onClick={() => handleUpdateStatus(job.id, "in_progress")}
                 disabled={job.status === "in_progress"}
+                className={job.status === "in_progress" ? "bg-green-600 hover:bg-green-700" : ""}
               >
                 In Progress
               </Button>
@@ -120,6 +122,7 @@ const JobList = ({ filteredJobs, setJobPosts, jobPosts }: JobListProps) => {
                 size="sm"
                 onClick={() => handleUpdateStatus(job.id, "completed")}
                 disabled={job.status === "completed"}
+                className={job.status === "completed" ? "bg-green-600 hover:bg-green-700" : ""}
               >
                 Completed
               </Button>

@@ -41,9 +41,9 @@ const BasicInformation = () => {
   };
 
   return (
-    <Card className="mb-8">
-      <CardHeader>
-        <CardTitle>Basic Information</CardTitle>
+    <Card className="mb-8 shadow-sm border-0">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-xl">Basic Information</CardTitle>
         <CardDescription>Tell us about yourself</CardDescription>
       </CardHeader>
       <CardContent>
@@ -56,7 +56,7 @@ const BasicInformation = () => {
                 <FormItem>
                   <FormLabel>Full Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Your name" {...field} />
+                    <Input placeholder="Your name" {...field} className="border-gray-200" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -72,7 +72,7 @@ const BasicInformation = () => {
                   <FormControl>
                     <Textarea 
                       placeholder="Write a short bio about yourself" 
-                      className="min-h-[120px]" 
+                      className="min-h-[120px] border-gray-200" 
                       {...field} 
                     />
                   </FormControl>
@@ -92,7 +92,7 @@ const BasicInformation = () => {
                   <FormItem>
                     <FormLabel>Location</FormLabel>
                     <FormControl>
-                      <Input placeholder="City, Country" {...field} />
+                      <Input placeholder="City, Country" {...field} className="border-gray-200" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -106,7 +106,7 @@ const BasicInformation = () => {
                   <FormItem>
                     <FormLabel>Education</FormLabel>
                     <FormControl>
-                      <Input placeholder="Your education background" {...field} />
+                      <Input placeholder="Your education background" {...field} className="border-gray-200" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -121,14 +121,14 @@ const BasicInformation = () => {
                 <FormItem>
                   <FormLabel>Website</FormLabel>
                   <FormControl>
-                    <Input placeholder="https://yourwebsite.com" {...field} />
+                    <Input placeholder="https://yourwebsite.com" {...field} className="border-gray-200" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             
-            <Button type="submit">Save Profile</Button>
+            <Button type="submit" className="bg-green-600 hover:bg-green-700">Save Profile</Button>
           </form>
         </Form>
       </CardContent>

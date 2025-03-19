@@ -83,7 +83,7 @@ const BidForm = ({ job, onSubmitBid }: BidFormProps) => {
   };
 
   return (
-    <Card>
+    <Card className="border-0 shadow-sm">
       <CardHeader>
         <CardTitle className="text-xl">Place Your Bid</CardTitle>
       </CardHeader>
@@ -142,7 +142,7 @@ const BidForm = ({ job, onSubmitBid }: BidFormProps) => {
                           type="number" 
                           placeholder="0.00" 
                           {...field} 
-                          className="pl-10"
+                          className="pl-10 border-gray-200"
                         />
                       </div>
                     </FormControl>
@@ -158,7 +158,7 @@ const BidForm = ({ job, onSubmitBid }: BidFormProps) => {
                   <FormItem>
                     <FormLabel>Skill Offered in Exchange</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., Web Design, Content Writing" {...field} />
+                      <Input placeholder="e.g., Web Design, Content Writing" {...field} className="border-gray-200" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -173,7 +173,7 @@ const BidForm = ({ job, onSubmitBid }: BidFormProps) => {
                 <FormItem>
                   <FormLabel>Proposed Timeframe</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., 5 days, 2 weeks" {...field} />
+                    <Input placeholder="e.g., 5 days, 2 weeks" {...field} className="border-gray-200" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -189,7 +189,7 @@ const BidForm = ({ job, onSubmitBid }: BidFormProps) => {
                   <FormControl>
                     <Textarea 
                       placeholder="Describe why you're the best fit for this job..."
-                      className="min-h-[120px]"
+                      className="min-h-[120px] border-gray-200"
                       {...field}
                     />
                   </FormControl>
@@ -199,7 +199,7 @@ const BidForm = ({ job, onSubmitBid }: BidFormProps) => {
             />
 
             <div className="pt-2">
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full bg-green-600 hover:bg-green-700">
                 <Send className="h-4 w-4 mr-2" />
                 Submit Bid
               </Button>
