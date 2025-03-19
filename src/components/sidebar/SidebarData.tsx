@@ -96,10 +96,6 @@ export const SidebarMenuItems: MenuItem[] = [
         path: '/profile',
       },
       {
-        title: 'Earnings',
-        path: '/profile/earnings',
-      },
-      {
         title: 'Settings',
         path: '/profile/settings',
       },

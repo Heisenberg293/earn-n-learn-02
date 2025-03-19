@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { ChevronLeft, ChevronDown, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 import { SidebarMenuItems } from './SidebarData';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -14,7 +14,7 @@ const AppSidebar: React.FC = () => {
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
   const location = useLocation();
   
-  // Initialize expanded state from cookie when component mounts
+  // Initialize expanded state from localStorage when component mounts
   useEffect(() => {
     const savedState = localStorage.getItem(SIDEBAR_COOKIE_KEY);
     if (savedState !== null) {
@@ -35,9 +35,12 @@ const AppSidebar: React.FC = () => {
     setOpenMenus(initialOpenMenus);
   }, [location.pathname]);
 
-  // Save expanded state to cookie when it changes
+  // Save expanded state to localStorage when it changes
   useEffect(() => {
     localStorage.setItem(SIDEBAR_COOKIE_KEY, expanded.toString());
+    // Add a custom event to notify other components about sidebar state change
+    const event = new CustomEvent('sidebarStateChange', { detail: { expanded } });
+    window.dispatchEvent(event);
   }, [expanded]);
 
   const toggleSidebar = () => {
@@ -67,7 +70,7 @@ const AppSidebar: React.FC = () => {
     <TooltipProvider delayDuration={300}>
       <aside 
         className={cn(
-          "h-screen fixed top-0 left-0 z-40 pt-16 flex flex-col transition-all duration-300 ease-in-out border-r border-gray-200 bg-white",
+          "h-screen fixed top-0 left-0 z-40 flex flex-col transition-all duration-300 ease-in-out border-r border-gray-200 bg-white",
           expanded ? "w-64" : "w-16",
         )}
       >

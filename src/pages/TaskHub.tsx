@@ -1,7 +1,6 @@
 
 import { useState, useContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import Navigation from "@/components/Navigation";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { JobBrowser } from "@/components/tasks/TaskBrowser";
@@ -25,9 +24,7 @@ const JobHub = () => {
   
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navigation />
-      
-      <main className="container mx-auto px-6 pt-24 pb-16">
+      <main className="container mx-auto px-6">
         {isAuthenticated && <Dashboard />}
         
         <div className="max-w-6xl mx-auto mt-10">

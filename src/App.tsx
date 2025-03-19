@@ -3,9 +3,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { useEffect, useState } from "react";
 import AppSidebar from "./components/sidebar/AppSidebar";
 import MobileSidebar from "./components/sidebar/MobileSidebar";
 import Index from "./pages/Index";
@@ -28,6 +29,26 @@ const queryClient = new QueryClient();
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   const isPublicPage = ["/", "/login", "/signup"].includes(location.pathname);
+  const [sidebarExpanded, setSidebarExpanded] = useState<boolean>(true);
+  
+  // Listen for sidebar state changes
+  useEffect(() => {
+    const handleSidebarChange = (event: any) => {
+      setSidebarExpanded(event.detail.expanded);
+    };
+    
+    window.addEventListener('sidebarStateChange', handleSidebarChange);
+    
+    // Initialize sidebar state from localStorage
+    const savedState = localStorage.getItem('sidebar-expanded');
+    if (savedState !== null) {
+      setSidebarExpanded(savedState === 'true');
+    }
+    
+    return () => {
+      window.removeEventListener('sidebarStateChange', handleSidebarChange);
+    };
+  }, []);
   
   if (isPublicPage) {
     return <>{children}</>;
@@ -39,7 +60,11 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
         <AppSidebar />
       </div>
       <MobileSidebar />
-      <div className="md:ml-16 flex-1 transition-all duration-300">
+      <div 
+        className={`transition-all duration-300 pt-6 ${
+          sidebarExpanded ? 'md:ml-64' : 'md:ml-16'
+        }`}
+      >
         {children}
       </div>
     </>

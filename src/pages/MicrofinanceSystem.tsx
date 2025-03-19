@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Navigation from "@/components/Navigation";
 import PeerLending from "@/components/microfinance/PeerLending";
 import Crowdfunding from "@/components/microfinance/Crowdfunding";
 import EscrowSystem from "@/components/microfinance/EscrowSystem";
@@ -37,8 +36,7 @@ const MicrofinanceSystem = () => {
   
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
-      <div className="container pt-24 pb-16 mx-auto px-4">
+      <div className="container pb-16 mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-3xl font-bold tracking-tight mb-2">Microfinance System</h1>
           <p className="text-muted-foreground mb-8">Financial tools to help students support each other</p>
