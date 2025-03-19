@@ -56,7 +56,7 @@ const Dashboard = () => {
       <div className="bg-white border-b mb-6 pb-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-semibold">Dashboard</h1>
+            <h1 className="text-2xl font-semibold">Browse Jobs</h1>
             <p className="text-gray-600 text-sm">Welcome back, {user?.name || "User"}!</p>
           </div>
           <div className="flex items-center gap-2">
