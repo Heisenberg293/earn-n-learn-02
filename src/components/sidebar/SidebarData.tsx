@@ -16,11 +16,6 @@ export type MenuItem = {
 
 export const SidebarMenuItems: MenuItem[] = [
   {
-    title: 'Dashboard',
-    path: '/task-hub',
-    icon: LayoutDashboard,
-  },
-  {
     title: 'Job Hub',
     path: '/task-hub',
     icon: BriefcaseBusiness,
