@@ -1,5 +1,5 @@
 
-import { Home, BookOpen, CreditCard, User, FileText, Users, Settings, Mail, BriefcaseBusiness, Search } from 'lucide-react';
+import { Home, BookOpen, CreditCard, User, FileText, Users, Settings, Mail, BriefcaseBusiness, Search, DollarSign } from 'lucide-react';
 
 export type SubMenuItem = {
   title: string;
@@ -37,6 +37,10 @@ export const SidebarMenuItems: MenuItem[] = [
         title: 'Applied Jobs',
         path: '/applied-jobs',
       },
+      {
+        title: 'Earnings',
+        path: '/profile/earnings',
+      },
     ],
   },
   {
@@ -59,10 +63,6 @@ export const SidebarMenuItems: MenuItem[] = [
       {
         title: 'Bidding System',
         path: '/microfinance?tab=bidding',
-      },
-      {
-        title: 'Financial Tools',
-        path: '/microfinance?tab=financial-tools',
       },
     ],
   },

@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "@/context/AuthContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Briefcase, BarChart3, BookmarkCheck, CreditCard, PlusCircle } from "lucide-react";
+import { Briefcase, BarChart3, BookmarkCheck, CreditCard } from "lucide-react";
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
@@ -30,14 +30,6 @@ const Dashboard = () => {
       icon: <CreditCard className="h-5 w-5 text-green-600" />,
       path: "/profile/earnings",
       stats: "$1,250",
-    },
-    {
-      title: "Post a Job",
-      description: "Create a new job listing",
-      path: "/task-hub",
-      action: () => navigate("/task-hub", { state: { activeTab: "post" }}),
-      stats: "New",
-      icon: <PlusCircle className="h-5 w-5 text-green-600" />,
     },
   ];
 
@@ -75,9 +67,9 @@ const Dashboard = () => {
         <p className="text-gray-600">Here's what's happening with your jobs and opportunities</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
         {dashboardCards.map((card, index) => (
-          <div key={index} onClick={card.action ? card.action : () => navigate(card.path)}>
+          <div key={index} onClick={() => navigate(card.path)}>
             <Card className="h-full hover:shadow-md transition-shadow cursor-pointer">
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                 <CardTitle className="text-lg font-medium">{card.title}</CardTitle>

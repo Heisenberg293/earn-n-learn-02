@@ -20,7 +20,20 @@ const AppSidebar: React.FC = () => {
     if (savedState !== null) {
       setExpanded(savedState === 'true');
     }
-  }, []);
+    
+    // Initialize open states based on the current path
+    const initialOpenMenus: Record<string, boolean> = {};
+    SidebarMenuItems.forEach(item => {
+      if (item.subMenus && item.subMenus.length > 0) {
+        const isActive = item.subMenus.some(subItem => 
+          location.pathname === subItem.path || 
+          (subItem.path.includes('?') && location.pathname === subItem.path.split('?')[0])
+        );
+        initialOpenMenus[item.title] = isActive;
+      }
+    });
+    setOpenMenus(initialOpenMenus);
+  }, [location.pathname]);
 
   // Save expanded state to cookie when it changes
   useEffect(() => {
@@ -62,6 +75,7 @@ const AppSidebar: React.FC = () => {
           <button
             onClick={toggleSidebar}
             className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+            aria-label={expanded ? "Collapse sidebar" : "Expand sidebar"}
           >
             {expanded ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
           </button>
