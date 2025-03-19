@@ -6,10 +6,11 @@ import DirectMessages from "./communication/DirectMessages";
 import GroupChats from "./communication/GroupChats";
 import Notifications from "./communication/Notifications";
 import { MOCK_NOTIFICATIONS } from "./data/mock-data";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Communication = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("messages");
   
   // Count unread notifications
@@ -23,11 +24,28 @@ const Communication = () => {
       // Could use initialChatType here for further customization
       // const chatType = location.state.initialChatType; // "accepted" or "declined"
     }
+    
+    // Extract tab from search params
+    const searchParams = new URLSearchParams(location.search);
+    const tab = searchParams.get('tab');
+    if (tab === 'groups') {
+      setActiveTab('groups');
+    } else if (tab === 'notifications') {
+      setActiveTab('notifications');
+    } else if (location.pathname === '/communications') {
+      setActiveTab('messages');
+    }
   }, [location]);
+  
+  // Update URL when tab changes
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    navigate(`/communications${value !== "messages" ? `?tab=${value}` : ""}`, { replace: true });
+  };
   
   return (
     <div className="space-y-6">
-      <Tabs defaultValue="messages" value={activeTab} onValueChange={setActiveTab} className="w-full">
+      <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
         <TabsList className="grid grid-cols-3 w-full md:w-auto">
           <TabsTrigger value="messages" className="flex items-center gap-2">
             <MessageCircle className="h-4 w-4" /> 

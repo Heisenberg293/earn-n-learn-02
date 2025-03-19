@@ -53,7 +53,7 @@ const AppSidebar = () => {
 
   return (
     <div 
-      className={`fixed top-0 left-0 h-screen bg-primary text-white transition-all duration-300 z-50 ${
+      className={`fixed top-0 left-0 h-screen bg-primary text-primary-foreground transition-all duration-300 z-50 ${
         expanded ? 'w-64' : 'w-16'
       }`}
     >
@@ -69,7 +69,7 @@ const AppSidebar = () => {
             variant="ghost" 
             size="icon" 
             onClick={toggleSidebar}
-            className="text-white hover:bg-white/10"
+            className="text-primary-foreground hover:bg-white/10"
           >
             <Menu className="h-5 w-5" />
           </Button>
@@ -87,7 +87,7 @@ const AppSidebar = () => {
                       onClick={() => toggleSubmenu(item.title)}
                       className={`flex items-center w-full p-3 rounded-md transition-colors ${
                         isActiveParent(item) 
-                          ? 'bg-white/20 text-white' 
+                          ? 'bg-white/20 text-primary-foreground' 
                           : 'hover:bg-white/10'
                       } ${expanded ? 'justify-between' : 'justify-center'}`}
                     >
@@ -115,7 +115,7 @@ const AppSidebar = () => {
                               to={subItem.path}
                               className={`flex items-center p-2 rounded-md transition-colors ${
                                 isActiveRoute(subItem.path)
-                                  ? 'bg-white/20 text-white'
+                                  ? 'bg-white/20 text-primary-foreground'
                                   : 'hover:bg-white/10 text-white/80'
                               }`}
                             >
@@ -144,7 +144,7 @@ const AppSidebar = () => {
                                       to={subItem.path}
                                       className={`flex items-center p-2 px-3 rounded-sm text-sm transition-colors ${
                                         isActiveRoute(subItem.path)
-                                          ? 'bg-white/20 text-white'
+                                          ? 'bg-white/20 text-primary-foreground'
                                           : 'hover:bg-white/10 text-white/80'
                                       }`}
                                     >
@@ -169,7 +169,7 @@ const AppSidebar = () => {
                           to={item.path}
                           className={`flex items-center p-3 rounded-md transition-colors ${
                             isActiveRoute(item.path)
-                              ? 'bg-white/20 text-white'
+                              ? 'bg-white/20 text-primary-foreground'
                               : 'hover:bg-white/10'
                           } ${expanded ? '' : 'justify-center'}`}
                         >
@@ -202,7 +202,7 @@ const AppSidebar = () => {
               variant="ghost" 
               size="sm" 
               onClick={toggleSidebar}
-              className="text-white hover:bg-white/10"
+              className="text-primary-foreground hover:bg-white/10"
             >
               {expanded ? <ChevronRight className="h-4 w-4" /> : <ChevronRight className="h-4 w-4 rotate-180" />}
             </Button>

@@ -59,24 +59,13 @@ const JobHub = () => {
                 onValueChange={setActiveTab}
                 className="w-full"
               >
-                <TabsList className="mb-6 grid grid-cols-3 w-full max-w-md">
+                <TabsList className="mb-6 grid grid-cols-2 w-full max-w-md">
                   <TabsTrigger value="browse">Browse Jobs</TabsTrigger>
-                  <TabsTrigger value="post">Post Job</TabsTrigger>
                   <TabsTrigger value="match">Skills Exchange</TabsTrigger>
                 </TabsList>
                 
                 <TabsContent value="browse">
                   <JobBrowser />
-                </TabsContent>
-                
-                <TabsContent value="post">
-                  <JobPostForm onSuccess={() => {
-                    toast({
-                      title: "Job Posted Successfully",
-                      description: "Your job has been created and is now live!",
-                    });
-                    setActiveTab("browse");
-                  }}/>
                 </TabsContent>
                 
                 <TabsContent value="match">

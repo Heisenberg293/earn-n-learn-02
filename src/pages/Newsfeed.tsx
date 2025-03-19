@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import Navigation from "@/components/Navigation";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -139,9 +138,8 @@ const Newsfeed = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navigation />
-      <div className="container pt-24 pb-16 mx-auto px-4">
+    <div className="min-h-screen bg-background p-6">
+      <div className="container mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {/* Left column - Create Post and Feed */}
           <div className="lg:col-span-2 space-y-6">
@@ -229,10 +227,9 @@ const Newsfeed = () => {
           
           {/* Right column - Loan Timeline */}
           <div className="space-y-6">
-            <div className="h-12"></div> {/* Spacer to align with content on the left */}
+            {/* Recent Activities Card */}
             <LoanTimeline loanCompletions={mockLoanCompletions} />
             
-            {/* Recent Activities Card */}
             <Card>
               <CardHeader>
                 <CardTitle className="text-xl">Recent Activities</CardTitle>

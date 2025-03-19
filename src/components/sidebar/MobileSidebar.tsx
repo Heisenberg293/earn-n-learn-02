@@ -17,7 +17,7 @@ const MobileSidebar = () => {
           <Menu className="h-5 w-5" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="p-0 w-64 border-r">
+      <SheetContent side="left" className="p-0 w-64 border-r bg-primary">
         <div className="h-screen overflow-hidden">
           <AppSidebar />
         </div>

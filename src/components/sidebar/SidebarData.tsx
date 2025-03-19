@@ -1,5 +1,5 @@
 
-import { Home, BookOpen, CreditCard, User, FileText, Users, Settings, Mail, BriefcaseBusiness, Search, DollarSign, BarChart2, LayoutDashboard, MessageSquare, CalendarDays, Bell } from 'lucide-react';
+import { Home, BookOpen, CreditCard, User, FileText, Users, Settings, Mail, BriefcaseBusiness, Search, DollarSign, BarChart2, LayoutDashboard, MessageSquare, CalendarDays, Bell, Trophy, CheckSquare } from 'lucide-react';
 
 export type SubMenuItem = {
   title: string;
@@ -85,9 +85,14 @@ export const SidebarMenuItems: MenuItem[] = [
     icon: MessageSquare,
     subMenus: [
       {
-        title: 'Inbox',
+        title: 'Direct Messages',
         path: '/communications',
         icon: Mail
+      },
+      {
+        title: 'Group Chats',
+        path: '/communications?tab=groups',
+        icon: Users
       },
       {
         title: 'Notifications',
@@ -110,6 +115,16 @@ export const SidebarMenuItems: MenuItem[] = [
         title: 'My Profile',
         path: '/profile',
         icon: User
+      },
+      {
+        title: 'My Tasks',
+        path: '/profile?tab=tasks',
+        icon: CheckSquare
+      },
+      {
+        title: 'Leaderboard',
+        path: '/profile?tab=leaderboard',
+        icon: Trophy
       },
       {
         title: 'Settings',
