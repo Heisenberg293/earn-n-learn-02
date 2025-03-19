@@ -22,6 +22,7 @@ import MyJobs from "./pages/MyJobs";
 import AppliedJobs from "./pages/AppliedJobs";
 import Earnings from "./pages/Earnings";
 import JobDetail from "./pages/JobDetail";
+import Calendar from "./pages/Calendar";
 
 const queryClient = new QueryClient();
 
@@ -138,6 +139,13 @@ const App = () => (
               <ProtectedRoute>
                 <AppLayout>
                   <JobDetail />
+                </AppLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/calendar" element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <Calendar />
                 </AppLayout>
               </ProtectedRoute>
             } />

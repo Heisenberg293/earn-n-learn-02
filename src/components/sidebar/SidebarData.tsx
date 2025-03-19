@@ -1,5 +1,5 @@
 
-import { Home, BookOpen, CreditCard, User, FileText, Users, Settings, Mail, BriefcaseBusiness, Search, DollarSign, BarChart2, LayoutDashboard, MessageSquare, CalendarDays, Bell, Trophy, CheckSquare } from 'lucide-react';
+import { BookOpen, CreditCard, User, FileText, Users, Settings, Mail, BriefcaseBusiness, Search, DollarSign, BarChart2, MessageSquare, CalendarDays, Bell, Trophy } from 'lucide-react';
 
 export type SubMenuItem = {
   title: string;
@@ -110,11 +110,6 @@ export const SidebarMenuItems: MenuItem[] = [
         title: 'My Profile',
         path: '/profile',
         icon: User
-      },
-      {
-        title: 'My Tasks',
-        path: '/profile?tab=tasks',
-        icon: CheckSquare
       },
       {
         title: 'Leaderboard',
