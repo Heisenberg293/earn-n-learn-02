@@ -2,8 +2,10 @@
 import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "@/context/AuthContext";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Briefcase, BarChart3, BookmarkCheck, CreditCard } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Briefcase, BarChart2, BookmarkCheck, DollarSign, ChevronRight, ExternalLink } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
@@ -27,7 +29,7 @@ const Dashboard = () => {
     {
       title: "Earnings",
       description: "View your financial summary",
-      icon: <CreditCard className="h-5 w-5 text-green-600" />,
+      icon: <DollarSign className="h-5 w-5 text-green-600" />,
       path: "/profile/earnings",
       stats: "$1,250",
     },
@@ -61,107 +63,168 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="container mx-auto px-6 py-8">
-      <div className="mb-8">
-        <h2 className="text-3xl font-bold mb-2">Welcome back, {user?.name || "User"}!</h2>
-        <p className="text-gray-600">Here's what's happening with your jobs and opportunities</p>
+    <div>
+      {/* Dashboard Header */}
+      <div className="bg-white border-b mb-6 pb-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-semibold">Dashboard</h1>
+            <p className="text-gray-600 text-sm">Welcome back, {user?.name || "User"}!</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm">
+              Export
+            </Button>
+            <Button size="sm">New Task</Button>
+          </div>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+      {/* Featured Alert/Banner */}
+      <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-6 flex items-center justify-between">
+        <div className="flex items-center">
+          <div className="text-blue-600 font-medium">Introducing new dashboard! Download now at <a href="#" className="underline">themeforest.net</a></div>
+        </div>
+        <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-800 p-1 h-auto">
+          <ExternalLink className="h-4 w-4" />
+        </Button>
+      </div>
+
+      {/* Dashboard Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         {dashboardCards.map((card, index) => (
-          <div key={index} onClick={() => navigate(card.path)}>
-            <Card className="h-full hover:shadow-md transition-shadow cursor-pointer">
-              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-lg font-medium">{card.title}</CardTitle>
-                {card.icon}
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="mb-2">{card.description}</CardDescription>
-                <p className="text-lg font-semibold text-green-600">{card.stats}</p>
-              </CardContent>
-            </Card>
-          </div>
+          <Card key={index} onClick={() => navigate(card.path)} className="cursor-pointer hover:shadow-md transition-shadow">
+            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+              <CardTitle className="text-lg font-medium">{card.title}</CardTitle>
+              {card.icon}
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-500 mb-2">{card.description}</p>
+              <p className="text-xl font-semibold text-green-600">{card.stats}</p>
+            </CardContent>
+          </Card>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      {/* Main Dashboard Content */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Recent Jobs */}
         <div className="lg:col-span-2">
-          <h3 className="text-xl font-semibold mb-6">Jobs For You</h3>
-          <div className="space-y-4">
-            {recentJobs.map((job) => (
-              <Card key={job.id} className="hover:shadow-md transition-shadow">
-                <CardContent className="p-6">
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-semibold text-lg">{job.title}</h4>
-                    <span className="text-sm font-medium px-2 py-1 bg-green-100 text-green-800 rounded-full">
-                      {job.status}
-                    </span>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-3">
+              <CardTitle className="text-lg font-medium">Recent Jobs</CardTitle>
+              <Button variant="ghost" size="sm" className="text-green-600 hover:text-green-700 p-0 h-auto flex items-center gap-1">
+                View all <ChevronRight className="h-4 w-4" />
+              </Button>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {recentJobs.map((job) => (
+                  <div key={job.id} className="border-b border-gray-100 pb-4 last:border-b-0 last:pb-0">
+                    <div className="flex justify-between items-start mb-1">
+                      <h4 className="font-medium">{job.title}</h4>
+                      <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 text-xs font-medium">
+                        {job.status}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center text-gray-500 text-xs mb-2">
+                      <span className="mr-3">{job.category}</span>
+                      <span>{job.postedAt}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-medium text-green-600">{job.budget}</span>
+                      <Button 
+                        variant="outline"
+                        size="sm"
+                        className="text-xs font-medium border-gray-200 hover:bg-green-50 hover:text-green-700 hover:border-green-200"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/jobs/${job.id}`);
+                        }}
+                      >
+                        View Details
+                      </Button>
+                    </div>
                   </div>
-                  <div className="flex items-center text-gray-600 text-sm mb-4">
-                    <span className="mr-4">{job.category}</span>
-                    <span>{job.postedAt}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium text-green-600">{job.budget}</span>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        navigate(`/jobs/${job.id}`);
-                      }}
-                      className="text-sm font-medium px-3 py-1.5 rounded-lg border border-green-600 text-green-600 hover:bg-green-600 hover:text-white transition-colors"
-                    >
-                      View Details
-                    </button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-          <div className="mt-5 text-center">
-            <Link
-              to="/task-hub"
-              className="text-green-600 font-medium hover:text-green-700 transition-colors"
-            >
-              View all jobs →
-            </Link>
-          </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
+        {/* Earnings Summary */}
         <div>
-          <h3 className="text-xl font-semibold mb-6">Earnings Summary</h3>
           <Card>
-            <CardContent className="p-6">
-              <div className="space-y-6">
-                <div 
-                  className="flex justify-between items-center cursor-pointer hover:bg-gray-50 p-2 rounded-md transition-colors"
-                  onClick={() => navigate("/profile/earnings/history")}
-                >
+            <CardHeader className="flex flex-row items-center justify-between pb-3">
+              <CardTitle className="text-lg font-medium">Earnings Summary</CardTitle>
+              <Button variant="ghost" size="sm" className="text-green-600 hover:text-green-700 p-0 h-auto">
+                <BarChart2 className="h-4 w-4" />
+              </Button>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center p-2 rounded-md hover:bg-gray-50 transition-colors">
                   <span className="text-gray-600">Total Earnings</span>
                   <span className="font-semibold">$1,250</span>
                 </div>
-                <div 
-                  className="flex justify-between items-center cursor-pointer hover:bg-gray-50 p-2 rounded-md transition-colors"
-                  onClick={() => navigate("/profile/earnings/pending")}
-                >
+                <div className="flex justify-between items-center p-2 rounded-md hover:bg-gray-50 transition-colors">
                   <span className="text-gray-600">Pending</span>
                   <span className="font-semibold">$350</span>
                 </div>
-                <div 
-                  className="flex justify-between items-center cursor-pointer hover:bg-gray-50 p-2 rounded-md transition-colors"
-                  onClick={() => navigate("/profile/earnings/withdrawn")}
-                >
+                <div className="flex justify-between items-center p-2 rounded-md hover:bg-gray-50 transition-colors">
                   <span className="text-gray-600">Withdrawn</span>
                   <span className="font-semibold">$900</span>
                 </div>
-                <div className="h-40 flex items-center justify-center">
-                  <BarChart3 className="h-32 w-32 text-gray-300" />
+                
+                <div className="mt-4 flex items-center justify-center">
+                  <div className="relative h-32 w-32">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="text-2xl font-bold">$1,250</div>
+                        <div className="text-xs text-gray-500">Total Earnings</div>
+                      </div>
+                    </div>
+                    <svg className="h-32 w-32" viewBox="0 0 36 36">
+                      <circle cx="18" cy="18" r="16" fill="none" className="stroke-gray-200" strokeWidth="2"></circle>
+                      <circle cx="18" cy="18" r="16" fill="none" className="stroke-green-500" strokeWidth="2" strokeDasharray="100" strokeDashoffset="30"></circle>
+                    </svg>
+                  </div>
                 </div>
-                <Link
-                  to="/profile/earnings"
-                  className="block w-full text-center px-4 py-2 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-colors"
+                
+                <Button 
+                  className="w-full mt-4"
+                  onClick={() => navigate("/profile/earnings")}
                 >
                   View Details
-                </Link>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="mt-6">
+            <CardHeader className="flex flex-row items-center justify-between pb-3">
+              <CardTitle className="text-lg font-medium">Recent Activity</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="bg-blue-100 text-blue-700 rounded-full w-8 h-8 flex items-center justify-center shrink-0">
+                    <Briefcase className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">New job posted</p>
+                    <p className="text-xs text-gray-500">2 hours ago</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="bg-green-100 text-green-700 rounded-full w-8 h-8 flex items-center justify-center shrink-0">
+                    <DollarSign className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">Payment received</p>
+                    <p className="text-xs text-gray-500">Yesterday</p>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>

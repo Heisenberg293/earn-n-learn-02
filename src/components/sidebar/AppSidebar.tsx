@@ -1,235 +1,215 @@
 
-import React, { useState, useEffect } from 'react';
-import { useLocation, Link } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
-import { SidebarMenuItems } from './SidebarData';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { cn } from '@/lib/utils';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { ChevronDown, ChevronUp, ChevronRight, Menu } from 'lucide-react';
+import { SidebarMenuItems, MenuItem, SubMenuItem } from './SidebarData';
+import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
-const SIDEBAR_COOKIE_KEY = 'sidebar-expanded';
-
-const AppSidebar: React.FC = () => {
-  const [expanded, setExpanded] = useState<boolean>(true);
-  const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
+const AppSidebar = () => {
   const location = useLocation();
+  const [expanded, setExpanded] = useState(true);
+  const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   
-  // Initialize expanded state from localStorage when component mounts
+  // Initialize expanded state from localStorage
   useEffect(() => {
-    const savedState = localStorage.getItem(SIDEBAR_COOKIE_KEY);
+    const savedState = localStorage.getItem('sidebar-expanded');
     if (savedState !== null) {
       setExpanded(savedState === 'true');
     }
-    
-    // Initialize open states based on the current path
-    const initialOpenMenus: Record<string, boolean> = {};
-    SidebarMenuItems.forEach(item => {
-      if (item.subMenus && item.subMenus.length > 0) {
-        const isActive = item.subMenus.some(subItem => 
-          location.pathname === subItem.path || 
-          (subItem.path.includes('?') && location.pathname === subItem.path.split('?')[0])
-        );
-        initialOpenMenus[item.title] = isActive;
-      }
-    });
-    setOpenMenus(initialOpenMenus);
-  }, [location.pathname]);
-
-  // Save expanded state to localStorage when it changes
-  useEffect(() => {
-    localStorage.setItem(SIDEBAR_COOKIE_KEY, expanded.toString());
-    // Add a custom event to notify other components about sidebar state change
-    const event = new CustomEvent('sidebarStateChange', { detail: { expanded } });
-    window.dispatchEvent(event);
-  }, [expanded]);
-
+  }, []);
+  
+  // Save expanded state to localStorage and dispatch event
   const toggleSidebar = () => {
-    setExpanded(!expanded);
+    const newExpandedState = !expanded;
+    setExpanded(newExpandedState);
+    localStorage.setItem('sidebar-expanded', String(newExpandedState));
+    
+    // Dispatch event for other components to listen to
+    window.dispatchEvent(
+      new CustomEvent('sidebarStateChange', { detail: { expanded: newExpandedState } })
+    );
+  };
+  
+  const toggleSubmenu = (title: string) => {
+    if (openSubmenu === title) {
+      setOpenSubmenu(null);
+    } else {
+      setOpenSubmenu(title);
+    }
   };
 
-  const toggleSubMenu = (title: string) => {
-    setOpenMenus(prev => ({
-      ...prev,
-      [title]: !prev[title]
-    }));
+  const isActiveRoute = (path: string) => {
+    return location.pathname === path || location.pathname.startsWith(path + '/');
   };
-
-  // Check if a menu item is active (either direct path or subdirectory)
-  const isMenuActive = (path: string) => {
-    return location.pathname === path || 
-      (path !== '/' && location.pathname.startsWith(path));
-  };
-
-  // Calculate active tab for microfinance
-  const getActiveTabFromPath = () => {
-    const searchParams = new URLSearchParams(location.search);
-    return searchParams.get('tab') || 'peer-lending';
+  
+  const isActiveParent = (item: MenuItem) => {
+    if (isActiveRoute(item.path)) return true;
+    if (item.subMenus) {
+      return item.subMenus.some(subMenu => isActiveRoute(subMenu.path));
+    }
+    return false;
   };
 
   return (
-    <TooltipProvider delayDuration={300}>
-      <aside 
-        className={cn(
-          "h-screen fixed top-0 left-0 z-40 flex flex-col transition-all duration-300 ease-in-out border-r border-gray-200 bg-white",
-          expanded ? "w-64" : "w-16",
-        )}
-      >
-        <div className="flex justify-end p-2">
-          <button
+    <div 
+      className={`fixed top-0 left-0 h-screen bg-primary text-white transition-all duration-300 z-50 ${
+        expanded ? 'w-64' : 'w-16'
+      }`}
+    >
+      <div className="flex flex-col h-full">
+        {/* Sidebar Header */}
+        <div className="p-4 flex items-center justify-between border-b border-white/10 h-16">
+          {expanded ? (
+            <Link to="/" className="text-xl font-bold tracking-tight">earn-n-learn</Link>
+          ) : (
+            <span className="w-full text-center text-xl font-bold">e</span>
+          )}
+          <Button 
+            variant="ghost" 
+            size="icon" 
             onClick={toggleSidebar}
-            className="p-2 rounded-full hover:bg-gray-100 transition-colors"
-            aria-label={expanded ? "Collapse sidebar" : "Expand sidebar"}
+            className="text-white hover:bg-white/10"
           >
-            {expanded ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
-          </button>
+            <Menu className="h-5 w-5" />
+          </Button>
         </div>
-
-        <div className="overflow-y-auto py-2 px-3 flex-grow">
-          {SidebarMenuItems.map((item) => {
-            const isActive = isMenuActive(item.path);
-            const hasSubMenu = item.subMenus && item.subMenus.length > 0;
-            const isOpen = openMenus[item.title] || false;
-            
-            // For microfinance, check the active tab
-            const activeTab = location.pathname === '/microfinance' ? getActiveTabFromPath() : null;
-
-            return (
-              <div key={item.title} className="mb-1">
-                {hasSubMenu ? (
-                  <Collapsible
-                    open={expanded ? isOpen : false}
-                    onOpenChange={() => {
-                      if (expanded) {
-                        toggleSubMenu(item.title);
-                      }
-                    }}
-                  >
-                    <div 
-                      className={cn(
-                        "flex items-center rounded-md px-3 py-2 cursor-pointer transition-all",
-                        isActive ? "bg-green-100 text-green-600" : "hover:bg-gray-100"
-                      )}
+        
+        {/* Sidebar Content - Menu Items */}
+        <div className="flex-1 overflow-y-auto py-4 px-2">
+          <ul className="space-y-1">
+            {SidebarMenuItems.map((item) => (
+              <li key={item.title}>
+                {item.subMenus ? (
+                  /* Parent item with submenu */
+                  <div className="relative">
+                    <button
+                      onClick={() => toggleSubmenu(item.title)}
+                      className={`flex items-center w-full p-3 rounded-md transition-colors ${
+                        isActiveParent(item) 
+                          ? 'bg-white/20 text-white' 
+                          : 'hover:bg-white/10'
+                      } ${expanded ? 'justify-between' : 'justify-center'}`}
                     >
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <div 
-                            className={cn(
-                              "flex items-center w-full",
-                              !expanded && "justify-center"
-                            )}
-                            onClick={() => {
-                              if (expanded) {
-                                toggleSubMenu(item.title);
-                              }
-                            }}
-                          >
-                            <item.icon className={cn("h-5 w-5", isActive ? "text-green-600" : "text-gray-500")} />
-                            {expanded && (
-                              <>
-                                <span className="ml-3 text-sm font-medium flex-grow">{item.title}</span>
-                                <CollapsibleTrigger asChild>
-                                  <ChevronDown 
-                                    className={cn(
-                                      "h-4 w-4 transition-transform duration-200",
-                                      isOpen ? "rotate-180" : "rotate-0"
-                                    )}
-                                  />
-                                </CollapsibleTrigger>
-                              </>
-                            )}
-                          </div>
-                        </TooltipTrigger>
-                        {!expanded && (
-                          <TooltipContent side="right">
-                            {item.title}
-                          </TooltipContent>
-                        )}
-                      </Tooltip>
-                    </div>
-
-                    {/* Hover submenu for collapsed state */}
-                    {!expanded && (
-                      <div className="relative">
-                        <div className="group">
-                          <div className="invisible absolute left-full top-0 ml-1 w-48 rounded-md bg-white shadow-lg border border-gray-200 opacity-0 transition-opacity group-hover:visible group-hover:opacity-100 z-50">
-                            {item.subMenus.map((subItem) => {
-                              // Special handling for microfinance tabs
-                              const subItemActive = item.path === '/microfinance' 
-                                ? (subItem.path.includes(activeTab || '')) 
-                                : location.pathname === subItem.path;
-                              
-                              return (
-                                <Link
-                                  key={subItem.title}
-                                  to={subItem.path}
-                                  className={cn(
-                                    "block px-4 py-2 text-sm hover:bg-gray-100",
-                                    subItemActive ? "bg-green-50 text-green-600" : "text-gray-700"
-                                  )}
-                                >
-                                  {subItem.title}
-                                </Link>
-                              );
-                            })}
-                          </div>
-                        </div>
+                      <div className="flex items-center">
+                        <item.icon className={`h-5 w-5 ${expanded ? 'mr-3' : ''}`} />
+                        {expanded && <span>{item.title}</span>}
                       </div>
-                    )}
-
-                    {/* Expanded submenu */}
-                    {expanded && (
-                      <CollapsibleContent className="animate-accordion-down ml-6 mt-1 space-y-1">
-                        {item.subMenus.map((subItem) => {
-                          // Special handling for microfinance tabs
-                          const subItemActive = item.path === '/microfinance' 
-                            ? (subItem.path.includes(activeTab || '')) 
-                            : location.pathname === subItem.path;
-                          
-                          return (
+                      {expanded && (
+                        <>
+                          {openSubmenu === item.title ? (
+                            <ChevronUp className="h-4 w-4" />
+                          ) : (
+                            <ChevronDown className="h-4 w-4" />
+                          )}
+                        </>
+                      )}
+                    </button>
+                    
+                    {/* Submenu items for expanded state */}
+                    {expanded && openSubmenu === item.title && (
+                      <ul className="pl-7 mt-1 space-y-1 animate-accordion-down">
+                        {item.subMenus.map((subItem) => (
+                          <li key={subItem.title}>
                             <Link
-                              key={subItem.title}
                               to={subItem.path}
-                              className={cn(
-                                "flex items-center rounded-md px-3 py-2 text-sm transition-colors",
-                                subItemActive ? "bg-green-50 text-green-600" : "hover:bg-gray-100 text-gray-700"
-                              )}
+                              className={`flex items-center p-2 rounded-md transition-colors ${
+                                isActiveRoute(subItem.path)
+                                  ? 'bg-white/20 text-white'
+                                  : 'hover:bg-white/10 text-white/80'
+                              }`}
                             >
-                              <div className="w-1.5 h-1.5 rounded-full bg-gray-300 mr-2"></div>
-                              {subItem.title}
+                              {subItem.icon && <subItem.icon className="h-4 w-4 mr-3" />}
+                              <span>{subItem.title}</span>
                             </Link>
-                          );
-                        })}
-                      </CollapsibleContent>
+                          </li>
+                        ))}
+                      </ul>
                     )}
-                  </Collapsible>
+                    
+                    {/* Tooltip submenu for collapsed state */}
+                    {!expanded && item.subMenus && (
+                      <TooltipProvider>
+                        <Tooltip delayDuration={0}>
+                          <TooltipTrigger asChild>
+                            <div className="absolute inset-0"></div>
+                          </TooltipTrigger>
+                          <TooltipContent side="right" className="ml-2 p-0 border-none bg-primary rounded-md shadow-lg">
+                            <div className="py-2 px-1 min-w-[180px]">
+                              <div className="px-3 py-2 text-sm font-medium border-b border-white/10">{item.title}</div>
+                              <ul className="mt-1">
+                                {item.subMenus.map((subItem) => (
+                                  <li key={subItem.title}>
+                                    <Link
+                                      to={subItem.path}
+                                      className={`flex items-center p-2 px-3 rounded-sm text-sm transition-colors ${
+                                        isActiveRoute(subItem.path)
+                                          ? 'bg-white/20 text-white'
+                                          : 'hover:bg-white/10 text-white/80'
+                                      }`}
+                                    >
+                                      {subItem.icon && <subItem.icon className="h-4 w-4 mr-2" />}
+                                      <span>{subItem.title}</span>
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    )}
+                  </div>
                 ) : (
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Link
-                        to={item.path}
-                        className={cn(
-                          "flex items-center rounded-md px-3 py-2 transition-colors",
-                          isActive ? "bg-green-100 text-green-600" : "hover:bg-gray-100",
-                          !expanded && "justify-center"
-                        )}
-                      >
-                        <item.icon className={cn("h-5 w-5", isActive ? "text-green-600" : "text-gray-500")} />
-                        {expanded && <span className="ml-3 text-sm font-medium">{item.title}</span>}
-                      </Link>
-                    </TooltipTrigger>
-                    {!expanded && (
-                      <TooltipContent side="right">
-                        {item.title}
-                      </TooltipContent>
-                    )}
-                  </Tooltip>
+                  /* Single menu item without submenu */
+                  <TooltipProvider>
+                    <Tooltip delayDuration={300}>
+                      <TooltipTrigger asChild>
+                        <Link
+                          to={item.path}
+                          className={`flex items-center p-3 rounded-md transition-colors ${
+                            isActiveRoute(item.path)
+                              ? 'bg-white/20 text-white'
+                              : 'hover:bg-white/10'
+                          } ${expanded ? '' : 'justify-center'}`}
+                        >
+                          <item.icon className={`h-5 w-5 ${expanded ? 'mr-3' : ''}`} />
+                          {expanded && <span>{item.title}</span>}
+                        </Link>
+                      </TooltipTrigger>
+                      {!expanded && (
+                        <TooltipContent side="right" className="ml-2">
+                          {item.title}
+                        </TooltipContent>
+                      )}
+                    </Tooltip>
+                  </TooltipProvider>
                 )}
-              </div>
-            );
-          })}
+              </li>
+            ))}
+          </ul>
         </div>
-      </aside>
-    </TooltipProvider>
+        
+        {/* Sidebar Footer */}
+        <div className="p-4 border-t border-white/10">
+          <div className={`flex ${expanded ? 'justify-between' : 'justify-center'} items-center`}>
+            {expanded && (
+              <div className="text-xs text-white/60">
+                Version 1.0.0
+              </div>
+            )}
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={toggleSidebar}
+              className="text-white hover:bg-white/10"
+            >
+              {expanded ? <ChevronRight className="h-4 w-4" /> : <ChevronRight className="h-4 w-4 rotate-180" />}
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -1,5 +1,5 @@
 
-import { Home, BookOpen, CreditCard, User, FileText, Users, Settings, Mail, BriefcaseBusiness, Search, DollarSign } from 'lucide-react';
+import { Home, BookOpen, CreditCard, User, FileText, Users, Settings, Mail, BriefcaseBusiness, Search, DollarSign, BarChart2, LayoutDashboard, MessageSquare, CalendarDays, Bell } from 'lucide-react';
 
 export type SubMenuItem = {
   title: string;
@@ -16,9 +16,9 @@ export type MenuItem = {
 
 export const SidebarMenuItems: MenuItem[] = [
   {
-    title: 'Home',
+    title: 'Dashboard',
     path: '/task-hub',
-    icon: Home,
+    icon: LayoutDashboard,
   },
   {
     title: 'Job Hub',
@@ -28,18 +28,22 @@ export const SidebarMenuItems: MenuItem[] = [
       {
         title: 'Browse Jobs',
         path: '/task-hub',
+        icon: Search
       },
       {
         title: 'My Jobs',
         path: '/my-jobs',
+        icon: FileText
       },
       {
         title: 'Applied Jobs',
         path: '/applied-jobs',
+        icon: Users
       },
       {
         title: 'Earnings',
         path: '/profile/earnings',
+        icon: DollarSign
       },
     ],
   },
@@ -51,18 +55,22 @@ export const SidebarMenuItems: MenuItem[] = [
       {
         title: 'Peer Lending',
         path: '/microfinance',
+        icon: Users
       },
       {
         title: 'Crowdfunding',
         path: '/microfinance?tab=crowdfunding',
+        icon: BarChart2
       },
       {
         title: 'Escrow System',
         path: '/microfinance?tab=escrow',
+        icon: CreditCard
       },
       {
         title: 'Bidding System',
         path: '/microfinance?tab=bidding',
+        icon: DollarSign
       },
     ],
   },
@@ -74,17 +82,24 @@ export const SidebarMenuItems: MenuItem[] = [
   {
     title: 'Messages',
     path: '/communications',
-    icon: Mail,
+    icon: MessageSquare,
     subMenus: [
       {
         title: 'Inbox',
         path: '/communications',
+        icon: Mail
       },
       {
         title: 'Notifications',
         path: '/communications?tab=notifications',
+        icon: Bell
       },
     ],
+  },
+  {
+    title: 'Calendar',
+    path: '/calendar',
+    icon: CalendarDays,
   },
   {
     title: 'Profile',
@@ -94,10 +109,12 @@ export const SidebarMenuItems: MenuItem[] = [
       {
         title: 'My Profile',
         path: '/profile',
+        icon: User
       },
       {
         title: 'Settings',
         path: '/profile/settings',
+        icon: Settings
       },
     ],
   },

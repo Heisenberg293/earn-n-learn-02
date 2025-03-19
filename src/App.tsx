@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { useEffect, useState } from "react";
@@ -27,8 +27,6 @@ const queryClient = new QueryClient();
 
 // Wrapper component to conditionally render the sidebar
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
-  const location = useLocation();
-  const isPublicPage = ["/", "/login", "/signup"].includes(location.pathname);
   const [sidebarExpanded, setSidebarExpanded] = useState<boolean>(true);
   
   // Listen for sidebar state changes
@@ -50,24 +48,20 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
     };
   }, []);
   
-  if (isPublicPage) {
-    return <>{children}</>;
-  }
-  
   return (
-    <>
+    <div className="flex min-h-screen bg-gray-50">
       <div className="hidden md:block">
         <AppSidebar />
       </div>
       <MobileSidebar />
       <div 
-        className={`transition-all duration-300 pt-6 ${
+        className={`flex-1 transition-all duration-300 ${
           sidebarExpanded ? 'md:ml-64' : 'md:ml-16'
         }`}
       >
         {children}
       </div>
-    </>
+    </div>
   );
 };
 
@@ -86,83 +80,65 @@ const App = () => (
             {/* Protected Routes */}
             <Route path="/task-hub" element={
               <ProtectedRoute>
-                <div className="flex min-h-screen">
-                  <AppLayout>
-                    <TaskHub />
-                  </AppLayout>
-                </div>
+                <AppLayout>
+                  <TaskHub />
+                </AppLayout>
               </ProtectedRoute>
             } />
             <Route path="/profile" element={
               <ProtectedRoute>
-                <div className="flex min-h-screen">
-                  <AppLayout>
-                    <Profile />
-                  </AppLayout>
-                </div>
+                <AppLayout>
+                  <Profile />
+                </AppLayout>
               </ProtectedRoute>
             } />
             <Route path="/microfinance" element={
               <ProtectedRoute>
-                <div className="flex min-h-screen">
-                  <AppLayout>
-                    <MicrofinanceSystem />
-                  </AppLayout>
-                </div>
+                <AppLayout>
+                  <MicrofinanceSystem />
+                </AppLayout>
               </ProtectedRoute>
             } />
             <Route path="/newsfeed" element={
               <ProtectedRoute>
-                <div className="flex min-h-screen">
-                  <AppLayout>
-                    <Newsfeed />
-                  </AppLayout>
-                </div>
+                <AppLayout>
+                  <Newsfeed />
+                </AppLayout>
               </ProtectedRoute>
             } />
             <Route path="/communications" element={
               <ProtectedRoute>
-                <div className="flex min-h-screen">
-                  <AppLayout>
-                    <Communications />
-                  </AppLayout>
-                </div>
+                <AppLayout>
+                  <Communications />
+                </AppLayout>
               </ProtectedRoute>
             } />
             <Route path="/my-jobs" element={
               <ProtectedRoute>
-                <div className="flex min-h-screen">
-                  <AppLayout>
-                    <MyJobs />
-                  </AppLayout>
-                </div>
+                <AppLayout>
+                  <MyJobs />
+                </AppLayout>
               </ProtectedRoute>
             } />
             <Route path="/applied-jobs" element={
               <ProtectedRoute>
-                <div className="flex min-h-screen">
-                  <AppLayout>
-                    <AppliedJobs />
-                  </AppLayout>
-                </div>
+                <AppLayout>
+                  <AppliedJobs />
+                </AppLayout>
               </ProtectedRoute>
             } />
             <Route path="/profile/earnings" element={
               <ProtectedRoute>
-                <div className="flex min-h-screen">
-                  <AppLayout>
-                    <Earnings />
-                  </AppLayout>
-                </div>
+                <AppLayout>
+                  <Earnings />
+                </AppLayout>
               </ProtectedRoute>
             } />
             <Route path="/jobs/:id" element={
               <ProtectedRoute>
-                <div className="flex min-h-screen">
-                  <AppLayout>
-                    <JobDetail />
-                  </AppLayout>
-                </div>
+                <AppLayout>
+                  <JobDetail />
+                </AppLayout>
               </ProtectedRoute>
             } />
             

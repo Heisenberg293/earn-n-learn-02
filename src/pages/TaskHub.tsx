@@ -8,11 +8,15 @@ import { JobPostForm } from "@/components/tasks/TaskPostForm";
 import { SkillsMatcher } from "@/components/tasks/SkillsMatcher";
 import { AuthContext } from "@/context/AuthContext";
 import Dashboard from "@/components/Dashboard";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Bell, Filter, Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const JobHub = () => {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("browse");
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated, user } = useContext(AuthContext);
   const location = useLocation();
   
   useEffect(() => {
@@ -23,46 +27,64 @@ const JobHub = () => {
   }, [location]);
   
   return (
-    <div className="min-h-screen bg-gray-50">
-      <main className="container mx-auto px-6">
+    <div className="min-h-screen bg-gray-50 p-6">
+      <main>
         {isAuthenticated && <Dashboard />}
         
-        <div className="max-w-6xl mx-auto mt-10">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold">Skill & Job Hub</h1>
-            <p className="text-gray-600 mt-2">Find jobs, post your own, or exchange skills and materials with others</p>
-          </div>
-          
-          <Tabs 
-            defaultValue="browse" 
-            value={activeTab}
-            onValueChange={setActiveTab}
-            className="w-full"
-          >
-            <TabsList className="mb-8 grid grid-cols-3 w-full md:w-auto">
-              <TabsTrigger value="browse">Browse Jobs</TabsTrigger>
-              <TabsTrigger value="post">Post Job</TabsTrigger>
-              <TabsTrigger value="match">Skills Exchange</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="browse">
-              <JobBrowser />
-            </TabsContent>
-            
-            <TabsContent value="post">
-              <JobPostForm onSuccess={() => {
-                toast({
-                  title: "Job Posted Successfully",
-                  description: "Your job has been created and is now live!",
-                });
-                setActiveTab("browse");
-              }}/>
-            </TabsContent>
-            
-            <TabsContent value="match">
-              <SkillsMatcher />
-            </TabsContent>
-          </Tabs>
+        <div className="mt-8">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-lg font-medium">Skill & Job Hub</CardTitle>
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Input 
+                    placeholder="Search..." 
+                    className="h-9 w-[200px] md:w-[300px] pl-10 pr-4 rounded-md bg-gray-50 border-gray-200"
+                  />
+                </div>
+                <Button variant="ghost" size="icon" className="h-9 w-9 relative">
+                  <Bell className="h-5 w-5" />
+                  <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">3</span>
+                </Button>
+                <Button variant="ghost" size="icon" className="h-9 w-9">
+                  <Filter className="h-5 w-5" />
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <Tabs 
+                defaultValue="browse" 
+                value={activeTab}
+                onValueChange={setActiveTab}
+                className="w-full"
+              >
+                <TabsList className="mb-6 grid grid-cols-3 w-full max-w-md">
+                  <TabsTrigger value="browse">Browse Jobs</TabsTrigger>
+                  <TabsTrigger value="post">Post Job</TabsTrigger>
+                  <TabsTrigger value="match">Skills Exchange</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="browse">
+                  <JobBrowser />
+                </TabsContent>
+                
+                <TabsContent value="post">
+                  <JobPostForm onSuccess={() => {
+                    toast({
+                      title: "Job Posted Successfully",
+                      description: "Your job has been created and is now live!",
+                    });
+                    setActiveTab("browse");
+                  }}/>
+                </TabsContent>
+                
+                <TabsContent value="match">
+                  <SkillsMatcher />
+                </TabsContent>
+              </Tabs>
+            </CardContent>
+          </Card>
         </div>
       </main>
     </div>

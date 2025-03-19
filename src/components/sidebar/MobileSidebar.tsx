@@ -11,13 +11,13 @@ const MobileSidebar = () => {
         <Button 
           variant="ghost" 
           size="icon" 
-          className="md:hidden fixed bottom-4 right-4 z-50 rounded-full shadow-lg bg-green-600 text-white hover:bg-green-700"
+          className="md:hidden fixed top-4 left-4 z-50 bg-white border shadow-sm"
           aria-label="Open menu"
         >
-          <Menu className="h-6 w-6" />
+          <Menu className="h-5 w-5" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="p-0 w-64">
+      <SheetContent side="left" className="p-0 w-64 border-r">
         <div className="h-screen overflow-hidden">
           <AppSidebar />
         </div>
