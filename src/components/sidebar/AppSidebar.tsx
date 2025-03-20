@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useContext } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ChevronDown, ChevronUp, ChevronRight, Menu, LogOut } from 'lucide-react';
@@ -6,13 +5,14 @@ import { SidebarMenuItems, MenuItem, SubMenuItem } from './SidebarData';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { AuthContext } from '@/context/AuthContext';
-
 const AppSidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(true);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
-  const { logout } = useContext(AuthContext);
+  const {
+    logout
+  } = useContext(AuthContext);
 
   // Initialize expanded state from localStorage
   useEffect(() => {
@@ -35,7 +35,6 @@ const AppSidebar = () => {
       }
     }));
   };
-  
   const toggleSubmenu = (title: string) => {
     if (openSubmenu === title) {
       setOpenSubmenu(null);
@@ -43,11 +42,9 @@ const AppSidebar = () => {
       setOpenSubmenu(title);
     }
   };
-  
   const isActiveRoute = (path: string) => {
     return location.pathname === path || location.pathname.startsWith(path + '/');
   };
-  
   const isActiveParent = (item: MenuItem) => {
     if (isActiveRoute(item.path)) return true;
     if (item.subMenus) {
@@ -55,12 +52,10 @@ const AppSidebar = () => {
     }
     return false;
   };
-
   const handleLogout = () => {
     logout();
     navigate('/');
   };
-  
   return <div className={`fixed top-0 left-0 h-screen bg-primary text-primary-foreground transition-all duration-300 z-50 ${expanded ? 'w-64' : 'w-16'}`}>
       <div className="flex flex-col h-full">
         {/* Sidebar Header */}
@@ -92,7 +87,7 @@ const AppSidebar = () => {
                         {item.subMenus.map(subItem => <li key={subItem.title}>
                             <Link to={subItem.path} className={`flex items-center p-2 rounded-md transition-colors ${isActiveRoute(subItem.path) ? 'bg-white/20 text-primary-foreground' : 'hover:bg-white/10 text-white/80'}`}>
                               {subItem.icon && <subItem.icon className="h-4 w-4 mr-3" />}
-                              <span>{subItem.title}</span>
+                              <span className="text-green-600">{subItem.title}</span>
                             </Link>
                           </li>)}
                       </ul>}
@@ -141,11 +136,7 @@ const AppSidebar = () => {
           <TooltipProvider>
             <Tooltip delayDuration={300}>
               <TooltipTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  onClick={handleLogout}
-                  className={`w-full flex items-center p-2 rounded-md transition-colors text-white/80 hover:bg-white/10 hover:text-white ${expanded ? 'justify-start' : 'justify-center'}`}
-                >
+                <Button variant="ghost" onClick={handleLogout} className={`w-full flex items-center p-2 rounded-md transition-colors text-white/80 hover:bg-white/10 hover:text-white ${expanded ? 'justify-start' : 'justify-center'}`}>
                   <LogOut className={`h-5 w-5 ${expanded ? 'mr-3' : ''}`} />
                   {expanded && <span>Logout</span>}
                 </Button>
@@ -157,5 +148,4 @@ const AppSidebar = () => {
       </div>
     </div>;
 };
-
 export default AppSidebar;
