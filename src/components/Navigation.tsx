@@ -1,50 +1,62 @@
-import { useState, useEffect, useContext } from "react";
+
+import { useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { User, LogOut, BellRing, Mail, Settings } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 const Navigation = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const {
-    isAuthenticated,
-    logout,
-    user
-  } = useContext(AuthContext);
-  const isHomePage = location.pathname === "/";
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-  const unauthenticatedLinks = [];
-  const authenticatedLinks = [{
-    name: "Job Hub",
-    path: "/task-hub"
-  }, {
-    name: "Microfinance",
-    path: "/microfinance"
-  }, {
-    name: "Newsfeed",
-    path: "/newsfeed"
-  }];
-  const links = isAuthenticated ? authenticatedLinks : unauthenticatedLinks;
-  const handleMessageClick = () => {
-    navigate("/communications");
-  };
-  const handleLogout = () => {
-    logout();
-    navigate("/");
-  };
-  return <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "bg-white/80 backdrop-blur-lg shadow-sm" : "bg-transparent"}`}>
-      <div className="container mx-auto px-6">
+  const { isAuthenticated, logout } = useContext(AuthContext);
+
+  return (
+    <nav className="bg-white py-4 px-6">
+      <div className="container mx-auto flex items-center justify-between">
+        <div className="flex items-center">
+          <Link to="/" className="text-2xl font-bold">
+            earn-n-learn
+          </Link>
+          
+          <div className="hidden md:flex ml-12 space-x-8">
+            <Link to="/" className="text-green-600 font-medium">
+              Home
+            </Link>
+            <Link to="/task-hub" className="text-gray-600 hover:text-gray-900 font-medium">
+              Task Hub
+            </Link>
+            <Link to="/microfinance" className="text-gray-600 hover:text-gray-900 font-medium">
+              Microfinance
+            </Link>
+            <Link to="/newsfeed" className="text-gray-600 hover:text-gray-900 font-medium">
+              Newsfeed
+            </Link>
+            <Link to="/profile" className="text-gray-600 hover:text-gray-900 font-medium">
+              Profile
+            </Link>
+          </div>
+        </div>
         
+        <div className="flex items-center gap-4">
+          {isAuthenticated ? (
+            <Button variant="ghost" onClick={logout}>
+              Log out
+            </Button>
+          ) : (
+            <>
+              <Link to="/login" className="text-gray-600 hover:text-gray-900 font-medium">
+                Log in
+              </Link>
+              <Button asChild className="bg-green-500 hover:bg-green-600 rounded-full">
+                <Link to="/signup">
+                  Sign up
+                </Link>
+              </Button>
+            </>
+          )}
+        </div>
       </div>
-    </nav>;
+    </nav>
+  );
 };
+
 export default Navigation;

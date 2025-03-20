@@ -3,11 +3,7 @@ import { useContext } from "react";
 import { AuthContext } from "@/context/AuthContext";
 import { Navigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
-import HomeHeroSection from "@/components/home/HomeHeroSection";
-import HomeFeatureHighlights from "@/components/home/HomeFeatureHighlights";
-import HomeActivitySummary from "@/components/home/HomeActivitySummary";
-import HomeSuccessStories from "@/components/home/HomeSuccessStories";
-import HomeCategories from "@/components/home/HomeCategories";
+import HeroSection from "@/components/HeroSection";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -19,13 +15,9 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen flex flex-col">
       <Navigation />
-      <HomeHeroSection />
-      <HomeFeatureHighlights />
-      <HomeActivitySummary />
-      <HomeSuccessStories />
-      <HomeCategories />
+      <HeroSection />
       <Footer />
     </div>
   );

@@ -1,189 +1,304 @@
 
-import { useContext, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Calendar } from '@/components/ui/calendar';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { format, addDays, isSameDay } from 'date-fns';
-import { CalendarPlus, Clock, ListTodo } from 'lucide-react';
-import { EventTimeline } from '@/components/calendar/EventTimeline';
-import { DeadlineList } from '@/components/calendar/DeadlineList';
-import { AuthContext } from '@/context/AuthContext';
+import { useState } from "react";
+import { format } from "date-fns";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { toast } from "@/components/ui/use-toast";
+import DeadlineList from "@/components/calendar/DeadlineList";
+import EventTimeline from "@/components/calendar/EventTimeline";
 
-// Mock deadlines data - in a real app this would come from an API/database
-const mockDeadlines = [
-  { id: 1, title: 'Complete Frontend Design', date: addDays(new Date(), 2), status: 'pending' },
-  { id: 2, title: 'Client Meeting', date: addDays(new Date(), 5), status: 'pending' },
-  { id: 3, title: 'Project Submission', date: addDays(new Date(), 10), status: 'pending' },
-  { id: 4, title: 'Review Code', date: addDays(new Date(), 3), status: 'pending' },
-  { id: 5, title: 'Team Standup', date: addDays(new Date(), 1), status: 'pending' },
-];
+// Define types for our data structures
+type DeadlineStatus = "pending" | "completed" | "missed";
 
-const CalendarPage = () => {
-  const { user } = useContext(AuthContext);
-  const [date, setDate] = useState<Date>(new Date());
-  const [deadlines, setDeadlines] = useState(mockDeadlines);
-  const [newDeadline, setNewDeadline] = useState({ title: '', date: new Date() });
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+type Deadline = {
+  id: number;
+  title: string;
+  date: Date;
+  status: DeadlineStatus;
+};
+
+type Event = {
+  id: number;
+  title: string;
+  date: Date;
+  type: "milestone" | "task" | "meeting";
+};
+
+// Helper function to get a random status
+const getRandomStatus = (): DeadlineStatus => {
+  const statuses: DeadlineStatus[] = ["pending", "completed", "missed"];
+  return statuses[Math.floor(Math.random() * statuses.length)];
+};
+
+// Helper function to get random dates
+const getRandomDate = (start: Date, end: Date) => {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+};
+
+const Calendar = () => {
+  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [isAddingDeadline, setIsAddingDeadline] = useState(false);
+  const [newDeadline, setNewDeadline] = useState({
+    title: "",
+    date: new Date(),
+    status: "pending" as DeadlineStatus
+  });
   
-  // Get the deadlines for the currently selected date
-  const selectedDateDeadlines = deadlines.filter(
-    deadline => isSameDay(deadline.date, date)
-  );
+  // Sample deadlines data
+  const [deadlines, setDeadlines] = useState<Deadline[]>([
+    {
+      id: 1,
+      title: "Submit Website Design",
+      date: new Date(new Date().setDate(new Date().getDate() + 3)),
+      status: "pending"
+    },
+    {
+      id: 2,
+      title: "Client Meeting - Project Review",
+      date: new Date(new Date().setDate(new Date().getDate() + 1)),
+      status: "pending"
+    },
+    {
+      id: 3,
+      title: "Complete Frontend Development",
+      date: new Date(new Date().setDate(new Date().getDate() - 2)),
+      status: "completed"
+    },
+    {
+      id: 4,
+      title: "Send Invoice for Logo Design",
+      date: new Date(new Date().setDate(new Date().getDate() - 5)),
+      status: "missed"
+    }
+  ]);
   
-  // Function to highlight dates with deadlines
-  const isDayWithDeadline = (day: Date) => {
-    return deadlines.some(deadline => 
-      isSameDay(day, deadline.date)
+  // Sample timeline events data
+  const [events, setEvents] = useState<Event[]>([
+    {
+      id: 1,
+      title: "Project Kickoff",
+      date: new Date(new Date().setDate(new Date().getDate() - 10)),
+      type: "milestone"
+    },
+    {
+      id: 2,
+      title: "First Prototype",
+      date: new Date(new Date().setDate(new Date().getDate() - 5)),
+      type: "task"
+    },
+    {
+      id: 3,
+      title: "Client Feedback",
+      date: new Date(new Date().setDate(new Date().getDate() - 2)),
+      type: "meeting"
+    },
+    {
+      id: 4,
+      title: "Final Delivery",
+      date: new Date(new Date().setDate(new Date().getDate() + 5)),
+      type: "milestone"
+    }
+  ]);
+  
+  // Get deadlines for selected date
+  const getDateDeadlines = () => {
+    if (!date) return [];
+    
+    return deadlines.filter(deadline => 
+      deadline.date.toDateString() === date.toDateString()
     );
   };
   
-  // Add a new deadline
+  // Check if a date has any deadlines
+  const hasDeadlines = (date: Date) => {
+    return deadlines.some(deadline => 
+      deadline.date.toDateString() === date.toDateString()
+    );
+  };
+  
+  // Handle adding a new deadline
   const handleAddDeadline = () => {
-    if (newDeadline.title.trim() === '') return;
+    if (!newDeadline.title.trim()) {
+      toast({
+        title: "Error",
+        description: "Please enter a deadline title",
+        variant: "destructive"
+      });
+      return;
+    }
     
-    const deadline = {
+    const deadline: Deadline = {
       id: deadlines.length + 1,
       title: newDeadline.title,
       date: newDeadline.date,
-      status: 'pending'
+      status: newDeadline.status
     };
     
     setDeadlines([...deadlines, deadline]);
-    setNewDeadline({ title: '', date: new Date() });
-    setIsDialogOpen(false);
+    setNewDeadline({
+      title: "",
+      date: new Date(),
+      status: "pending"
+    });
+    setIsAddingDeadline(false);
+    
+    toast({
+      title: "Success",
+      description: "Deadline has been added",
+    });
   };
   
-  // Get all upcoming deadlines sorted by date
-  const upcomingDeadlines = [...deadlines]
-    .filter(d => d.date >= new Date())
-    .sort((a, b) => a.date.getTime() - b.date.getTime());
+  // Mark a deadline as completed
+  const markDeadlineComplete = (id: number) => {
+    setDeadlines(deadlines.map(deadline => 
+      deadline.id === id ? { ...deadline, status: "completed" } : deadline
+    ));
+    
+    toast({
+      title: "Success",
+      description: "Deadline marked as completed",
+    });
+  };
   
   return (
-    <div className="container py-6">
-      <h1 className="text-2xl font-semibold mb-6">Calendar & Deadlines</h1>
+    <div className="container mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">Calendar & Deadlines</h1>
       
-      <div className="flex flex-col lg:flex-row gap-6">
-        <Card className="lg:w-1/2">
-          <CardHeader className="pb-2">
-            <div className="flex justify-between items-center">
-              <CardTitle>Calendar</CardTitle>
-              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Calendar Section */}
+        <Card className="lg:col-span-1">
+          <CardContent className="p-4">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold">Calendar</h2>
+              <Dialog open={isAddingDeadline} onOpenChange={setIsAddingDeadline}>
                 <DialogTrigger asChild>
-                  <Button size="sm" className="flex items-center gap-1">
-                    <CalendarPlus className="h-4 w-4" />
-                    Add Deadline
-                  </Button>
+                  <Button>Add Deadline</Button>
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle>Add New Deadline</DialogTitle>
                   </DialogHeader>
-                  <div className="grid gap-4 py-4">
-                    <div className="grid gap-2">
-                      <Label htmlFor="title">Title</Label>
-                      <Input
-                        id="title"
+                  <div className="space-y-4 py-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="title">Deadline Title</Label>
+                      <Input 
+                        id="title" 
                         value={newDeadline.title}
                         onChange={(e) => setNewDeadline({...newDeadline, title: e.target.value})}
                         placeholder="Enter deadline title"
                       />
                     </div>
-                    <div className="grid gap-2">
+                    <div className="space-y-2">
                       <Label>Date</Label>
-                      <Calendar
+                      <CalendarComponent
                         mode="single"
                         selected={newDeadline.date}
                         onSelect={(date) => date && setNewDeadline({...newDeadline, date})}
-                        className="rounded border p-3 pointer-events-auto"
+                        className="rounded-md border"
                       />
                     </div>
+                    <div className="space-y-2">
+                      <Label>Status</Label>
+                      <RadioGroup 
+                        value={newDeadline.status}
+                        onValueChange={(value) => setNewDeadline({...newDeadline, status: value as DeadlineStatus})}
+                      >
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="pending" id="pending" />
+                          <Label htmlFor="pending">Pending</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="completed" id="completed" />
+                          <Label htmlFor="completed">Completed</Label>
+                        </div>
+                      </RadioGroup>
+                    </div>
                   </div>
-                  <Button onClick={handleAddDeadline}>Save Deadline</Button>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setIsAddingDeadline(false)}>Cancel</Button>
+                    <Button onClick={handleAddDeadline}>Add Deadline</Button>
+                  </DialogFooter>
                 </DialogContent>
               </Dialog>
             </div>
-          </CardHeader>
-          <CardContent>
-            <Calendar
+            
+            <CalendarComponent
               mode="single"
               selected={date}
-              onSelect={(date) => date && setDate(date)}
+              onSelect={setDate}
+              className="rounded-md border"
               modifiers={{
-                highlighted: isDayWithDeadline
+                hasDeadline: (date) => hasDeadlines(date),
               }}
               modifiersClassNames={{
-                highlighted: "bg-green-100 font-bold text-green-800 hover:bg-green-200"
+                hasDeadline: "bg-green-100 font-bold text-green-600",
               }}
-              className="pointer-events-auto"
             />
             
-            {/* Show deadlines for selected date */}
-            <div className="mt-4 border-t pt-4">
-              <h3 className="font-medium mb-2 flex items-center gap-2">
-                <Clock className="h-4 w-4 text-green-600" />
-                {format(date, 'MMMM d, yyyy')}
-              </h3>
-              
-              {selectedDateDeadlines.length > 0 ? (
-                <ul className="space-y-2">
-                  {selectedDateDeadlines.map(deadline => (
-                    <li key={deadline.id} className="flex items-center gap-2 bg-gray-50 p-2 rounded">
-                      <ListTodo className="h-4 w-4 text-green-600" />
-                      {deadline.title}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-gray-500 text-sm">No deadlines for this date</p>
-              )}
-            </div>
+            {date && (
+              <div className="mt-6">
+                <h3 className="font-medium">{format(date, "MMMM d, yyyy")}</h3>
+                <div className="mt-2">
+                  {getDateDeadlines().length > 0 ? (
+                    getDateDeadlines().map((deadline) => (
+                      <div key={deadline.id} className="flex items-center justify-between py-2 border-b">
+                        <div>
+                          <p className="font-medium">{deadline.title}</p>
+                          <p className="text-sm text-gray-500">{format(deadline.date, "h:mm a")}</p>
+                        </div>
+                        <div>
+                          <span 
+                            className={`px-2 py-1 rounded-full text-xs ${
+                              deadline.status === "completed" ? "bg-green-100 text-green-800" : 
+                              deadline.status === "missed" ? "bg-red-100 text-red-800" : 
+                              "bg-yellow-100 text-yellow-800"
+                            }`}
+                          >
+                            {deadline.status}
+                          </span>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-gray-500 text-sm">No deadlines for this date</p>
+                  )}
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
         
-        <div className="lg:w-1/2 space-y-6">
-          <Tabs defaultValue="upcoming">
-            <TabsList className="mb-4">
-              <TabsTrigger value="upcoming">Upcoming Deadlines</TabsTrigger>
-              <TabsTrigger value="timeline">Timeline View</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="upcoming">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Upcoming Deadlines</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <DeadlineList 
-                    deadlines={upcomingDeadlines} 
-                    onStatusChange={(id, status) => {
-                      setDeadlines(deadlines.map(d => 
-                        d.id === id ? {...d, status} : d
-                      ));
-                    }}
-                  />
-                </CardContent>
-              </Card>
-            </TabsContent>
-            
-            <TabsContent value="timeline">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Timeline View</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <EventTimeline deadlines={upcomingDeadlines} />
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </div>
+        {/* Deadline & Timeline Section */}
+        <Card className="lg:col-span-2">
+          <CardContent className="p-4">
+            <Tabs defaultValue="deadlines">
+              <TabsList className="mb-4">
+                <TabsTrigger value="deadlines">Upcoming Deadlines</TabsTrigger>
+                <TabsTrigger value="timeline">Timeline</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="deadlines">
+                <DeadlineList 
+                  deadlines={deadlines} 
+                  onMarkComplete={markDeadlineComplete} 
+                />
+              </TabsContent>
+              
+              <TabsContent value="timeline">
+                <EventTimeline events={events} />
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
 };
 
-export default CalendarPage;
+export default Calendar;
