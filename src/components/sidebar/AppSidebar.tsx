@@ -138,7 +138,7 @@ const AppSidebar = () => {
               <TooltipTrigger asChild>
                 <Button variant="ghost" onClick={handleLogout} className={`w-full flex items-center p-2 rounded-md transition-colors text-white/80 hover:bg-white/10 hover:text-white ${expanded ? 'justify-start' : 'justify-center'}`}>
                   <LogOut className={`h-5 w-5 ${expanded ? 'mr-3' : ''}`} />
-                  {expanded && <span>Logout</span>}
+                  {expanded && <span className="text-green-600">Logout</span>}
                 </Button>
               </TooltipTrigger>
               {!expanded && <TooltipContent side="right" className="ml-2">Logout</TooltipContent>}
