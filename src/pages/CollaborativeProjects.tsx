@@ -77,7 +77,7 @@ const CollaborativeProjects = () => {
                       <SelectValue placeholder="Category" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Categories</SelectItem>
+                      <SelectItem value="all-categories">All Categories</SelectItem>
                       <SelectItem value="Web Development">Web Development</SelectItem>
                       <SelectItem value="Mobile Development">Mobile Development</SelectItem>
                       <SelectItem value="Research">Research</SelectItem>
@@ -91,7 +91,7 @@ const CollaborativeProjects = () => {
                       <SelectValue placeholder="Status" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Statuses</SelectItem>
+                      <SelectItem value="all-statuses">All Statuses</SelectItem>
                       <SelectItem value="recruiting">Recruiting</SelectItem>
                       <SelectItem value="in-progress">In Progress</SelectItem>
                       <SelectItem value="completed">Completed</SelectItem>

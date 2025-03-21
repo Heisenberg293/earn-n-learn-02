@@ -71,7 +71,7 @@ const TeamFinder = () => {
                 <SelectValue placeholder="Filter by skill" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Skills</SelectItem>
+                <SelectItem value="all-skills">All Skills</SelectItem>
                 {Array.from(allSkills).sort().map(skill => (
                   <SelectItem key={skill} value={skill}>{skill}</SelectItem>
                 ))}
