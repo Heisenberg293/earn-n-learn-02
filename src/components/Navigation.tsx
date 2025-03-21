@@ -12,20 +12,14 @@ const Navigation = () => {
   return <nav className="bg-white py-4 px-6">
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center">
-          <Link to="/" className="text-2xl font-bold">
-            earn-n-learn
-          </Link>
+          <Link to="/" className="text-2xl font-bold">Earn-n-Learn</Link>
           
           <div className="hidden md:flex ml-12 space-x-8">
             
             
             
-            <Link to="/newsfeed" className="text-gray-600 hover:text-gray-900 font-medium">
-              Newsfeed
-            </Link>
-            <Link to="/profile" className="text-gray-600 hover:text-gray-900 font-medium">
-              Profile
-            </Link>
+            
+            
           </div>
         </div>
         
