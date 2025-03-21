@@ -10,8 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "@/components/ui/use-toast";
-import DeadlineList from "@/components/calendar/DeadlineList";
-import EventTimeline from "@/components/calendar/EventTimeline";
+import { DeadlineList } from "@/components/calendar/DeadlineList";
+import { EventTimeline } from "@/components/calendar/EventTimeline";
 
 // Define types for our data structures
 type DeadlineStatus = "pending" | "completed" | "missed";
