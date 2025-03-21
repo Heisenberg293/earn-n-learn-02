@@ -9,6 +9,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { useEffect, useState } from "react";
 import AppSidebar from "./components/sidebar/AppSidebar";
 import MobileSidebar from "./components/sidebar/MobileSidebar";
+import ChatBot from "./components/chatbot/ChatBot";
 import Index from "./pages/Index";
 import TaskHub from "./pages/TaskHub";
 import NotFound from "./pages/NotFound";
@@ -153,6 +154,9 @@ const App = () => (
             {/* Catch-all route */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          
+          {/* ChatBot component */}
+          <ChatBot />
         </BrowserRouter>
       </TooltipProvider>
     </AuthProvider>
