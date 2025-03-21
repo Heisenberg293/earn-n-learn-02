@@ -2,121 +2,100 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-  Tabs, 
-  TabsContent, 
-  TabsList, 
-  TabsTrigger 
-} from "@/components/ui/tabs";
-import { 
-  ArrowUpRight, 
-  ArrowDownRight, 
-  DollarSign, 
-  CreditCard, 
-  Calendar, 
-  Filter, 
-  Clock, 
-  ChevronRight,
-  Download,
-  ArrowLeft
-} from "lucide-react";
-import { 
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ArrowUpRight, ArrowDownRight, DollarSign, CreditCard, Calendar, Filter, Clock, ChevronRight, Download, ArrowLeft } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import FinancialTools from "@/components/microfinance/FinancialTools";
-
-const data = [
-  { name: "Jan", amount: 400 },
-  { name: "Feb", amount: 300 },
-  { name: "Mar", amount: 500 },
-  { name: "Apr", amount: 200 },
-  { name: "May", amount: 700 },
-  { name: "Jun", amount: 400 },
-  { name: "Jul", amount: 500 },
-  { name: "Aug", amount: 600 },
-  { name: "Sep", amount: 800 },
-  { name: "Oct", amount: 0 },
-  { name: "Nov", amount: 0 },
-  { name: "Dec", amount: 0 },
-];
-
-const transactions = [
-  {
-    id: "t1",
-    title: "Website Development",
-    date: "Oct 20, 2023",
-    amount: 750,
-    status: "completed",
-    type: "income",
-  },
-  {
-    id: "t2",
-    title: "Logo Design Project",
-    date: "Oct 15, 2023",
-    amount: 250,
-    status: "completed",
-    type: "income",
-  },
-  {
-    id: "t3",
-    title: "Content Writing",
-    date: "Oct 10, 2023",
-    amount: 180,
-    status: "processing",
-    type: "income",
-  },
-  {
-    id: "t4",
-    title: "Withdrawal to Bank Account",
-    date: "Oct 5, 2023",
-    amount: 500,
-    status: "completed",
-    type: "withdrawal",
-  },
-  {
-    id: "t5",
-    title: "Mobile App UI Design",
-    date: "Sep 28, 2023",
-    amount: 400,
-    status: "completed",
-    type: "income",
-  },
-  {
-    id: "t6",
-    title: "Withdrawal to PayPal",
-    date: "Sep 20, 2023",
-    amount: 350,
-    status: "completed",
-    type: "withdrawal",
-  },
-];
-
+const data = [{
+  name: "Jan",
+  amount: 400
+}, {
+  name: "Feb",
+  amount: 300
+}, {
+  name: "Mar",
+  amount: 500
+}, {
+  name: "Apr",
+  amount: 200
+}, {
+  name: "May",
+  amount: 700
+}, {
+  name: "Jun",
+  amount: 400
+}, {
+  name: "Jul",
+  amount: 500
+}, {
+  name: "Aug",
+  amount: 600
+}, {
+  name: "Sep",
+  amount: 800
+}, {
+  name: "Oct",
+  amount: 0
+}, {
+  name: "Nov",
+  amount: 0
+}, {
+  name: "Dec",
+  amount: 0
+}];
+const transactions = [{
+  id: "t1",
+  title: "Website Development",
+  date: "Oct 20, 2023",
+  amount: 750,
+  status: "completed",
+  type: "income"
+}, {
+  id: "t2",
+  title: "Logo Design Project",
+  date: "Oct 15, 2023",
+  amount: 250,
+  status: "completed",
+  type: "income"
+}, {
+  id: "t3",
+  title: "Content Writing",
+  date: "Oct 10, 2023",
+  amount: 180,
+  status: "processing",
+  type: "income"
+}, {
+  id: "t4",
+  title: "Withdrawal to Bank Account",
+  date: "Oct 5, 2023",
+  amount: 500,
+  status: "completed",
+  type: "withdrawal"
+}, {
+  id: "t5",
+  title: "Mobile App UI Design",
+  date: "Sep 28, 2023",
+  amount: 400,
+  status: "completed",
+  type: "income"
+}, {
+  id: "t6",
+  title: "Withdrawal to PayPal",
+  date: "Sep 20, 2023",
+  amount: 350,
+  status: "completed",
+  type: "withdrawal"
+}];
 const Earnings = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const navigate = useNavigate();
-  
-  return (
-    <div className="min-h-screen bg-gray-50">
+  return <div className="min-h-screen bg-gray-50">
       <Navigation />
       
-      <main className="container mx-auto px-6 pt-24 pb-16">
+      <main className="container mx-auto px-6 pt-24 pb-16 py-[33px]">
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Earnings Dashboard</h1>
@@ -124,12 +103,7 @@ const Earnings = () => {
               Track your income, withdrawals, and pending payments
             </p>
           </div>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={() => navigate(-1)}
-            className="gap-2"
-          >
+          <Button variant="outline" size="sm" onClick={() => navigate(-1)} className="gap-2">
             <ArrowLeft className="h-4 w-4" /> Back
           </Button>
         </div>
@@ -193,11 +167,7 @@ const Earnings = () => {
           </Card>
         </div>
         
-        <Tabs 
-          value={activeTab} 
-          onValueChange={setActiveTab}
-          className="space-y-4"
-        >
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between">
             <TabsList>
               <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -251,44 +221,15 @@ const Earnings = () => {
                   <AreaChart data={data}>
                     <defs>
                       <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
-                        <stop
-                          offset="5%"
-                          stopColor="#16a34a"
-                          stopOpacity={0.8}
-                        />
-                        <stop
-                          offset="95%"
-                          stopColor="#16a34a"
-                          stopOpacity={0}
-                        />
+                        <stop offset="5%" stopColor="#16a34a" stopOpacity={0.8} />
+                        <stop offset="95%" stopColor="#16a34a" stopOpacity={0} />
                       </linearGradient>
                     </defs>
-                    <XAxis
-                      dataKey="name"
-                      stroke="#888888"
-                      fontSize={12}
-                      tickLine={false}
-                      axisLine={false}
-                    />
-                    <YAxis
-                      stroke="#888888"
-                      fontSize={12}
-                      tickLine={false}
-                      axisLine={false}
-                      tickFormatter={(value) => `$${value}`}
-                    />
-                    <CartesianGrid
-                      strokeDasharray="3 3"
-                      className="stroke-gray-200"
-                    />
-                    <Tooltip formatter={(value) => [`$${value}`, "Amount"]} />
-                    <Area
-                      type="monotone"
-                      dataKey="amount"
-                      stroke="#16a34a"
-                      fillOpacity={1}
-                      fill="url(#colorAmount)"
-                    />
+                    <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
+                    <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={value => `$${value}`} />
+                    <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200" />
+                    <Tooltip formatter={value => [`$${value}`, "Amount"]} />
+                    <Area type="monotone" dataKey="amount" stroke="#16a34a" fillOpacity={1} fill="url(#colorAmount)" />
                   </AreaChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -300,18 +241,9 @@ const Earnings = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-8">
-                    {transactions.slice(0, 3).map((transaction) => (
-                      <div className="flex items-center" key={transaction.id}>
-                        <div className={`mr-4 rounded-full p-2 ${
-                          transaction.type === 'income'
-                            ? 'bg-green-100'
-                            : 'bg-gray-100'
-                        }`}>
-                          {transaction.type === 'income' ? (
-                            <ArrowUpRight className="h-4 w-4 text-green-600" />
-                          ) : (
-                            <ArrowDownRight className="h-4 w-4 text-gray-600" />
-                          )}
+                    {transactions.slice(0, 3).map(transaction => <div className="flex items-center" key={transaction.id}>
+                        <div className={`mr-4 rounded-full p-2 ${transaction.type === 'income' ? 'bg-green-100' : 'bg-gray-100'}`}>
+                          {transaction.type === 'income' ? <ArrowUpRight className="h-4 w-4 text-green-600" /> : <ArrowDownRight className="h-4 w-4 text-gray-600" />}
                         </div>
                         <div className="flex-1 space-y-1">
                           <p className="text-sm font-medium leading-none">
@@ -321,22 +253,13 @@ const Earnings = () => {
                             {transaction.date}
                           </p>
                         </div>
-                        <div className={`font-medium ${
-                          transaction.type === 'income'
-                            ? 'text-green-600'
-                            : 'text-gray-600'
-                        }`}>
+                        <div className={`font-medium ${transaction.type === 'income' ? 'text-green-600' : 'text-gray-600'}`}>
                           {transaction.type === 'income' ? '+' : '-'}${transaction.amount}
                         </div>
-                      </div>
-                    ))}
+                      </div>)}
                   </div>
                   <div className="mt-4 text-center">
-                    <Button
-                      variant="link"
-                      onClick={() => setActiveTab("transactions")}
-                      className="text-green-600 hover:text-green-700"
-                    >
+                    <Button variant="link" onClick={() => setActiveTab("transactions")} className="text-green-600 hover:text-green-700">
                       View All Transactions
                     </Button>
                   </div>
@@ -348,10 +271,7 @@ const Earnings = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-8">
-                    {transactions
-                      .filter(t => t.status === 'processing')
-                      .map((transaction) => (
-                        <div className="flex items-center" key={transaction.id}>
+                    {transactions.filter(t => t.status === 'processing').map(transaction => <div className="flex items-center" key={transaction.id}>
                           <div className="mr-4 rounded-full p-2 bg-yellow-100">
                             <Clock className="h-4 w-4 text-yellow-600" />
                           </div>
@@ -366,13 +286,10 @@ const Earnings = () => {
                           <div className="font-medium text-yellow-600">
                             +${transaction.amount}
                           </div>
-                        </div>
-                      ))}
-                    {transactions.filter(t => t.status === 'processing').length === 0 && (
-                      <div className="text-center py-4">
+                        </div>)}
+                    {transactions.filter(t => t.status === 'processing').length === 0 && <div className="text-center py-4">
                         <p className="text-gray-500 text-sm">No pending payments</p>
-                      </div>
-                    )}
+                      </div>}
                   </div>
                 </CardContent>
               </Card>
@@ -389,19 +306,10 @@ const Earnings = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
-                  {transactions.map((transaction) => (
-                    <div key={transaction.id}>
+                  {transactions.map(transaction => <div key={transaction.id}>
                       <div className="flex items-center">
-                        <div className={`mr-4 rounded-full p-2 ${
-                          transaction.type === 'income'
-                            ? 'bg-green-100'
-                            : 'bg-gray-100'
-                        }`}>
-                          {transaction.type === 'income' ? (
-                            <ArrowUpRight className="h-4 w-4 text-green-600" />
-                          ) : (
-                            <ArrowDownRight className="h-4 w-4 text-gray-600" />
-                          )}
+                        <div className={`mr-4 rounded-full p-2 ${transaction.type === 'income' ? 'bg-green-100' : 'bg-gray-100'}`}>
+                          {transaction.type === 'income' ? <ArrowUpRight className="h-4 w-4 text-green-600" /> : <ArrowDownRight className="h-4 w-4 text-gray-600" />}
                         </div>
                         <div className="flex-1 space-y-1">
                           <p className="text-sm font-medium leading-none">
@@ -411,11 +319,7 @@ const Earnings = () => {
                             {transaction.date} • {transaction.status}
                           </p>
                         </div>
-                        <div className={`font-medium ${
-                          transaction.type === 'income'
-                            ? 'text-green-600'
-                            : 'text-gray-600'
-                        }`}>
+                        <div className={`font-medium ${transaction.type === 'income' ? 'text-green-600' : 'text-gray-600'}`}>
                           {transaction.type === 'income' ? '+' : '-'}${transaction.amount}
                         </div>
                         <Button variant="ghost" size="sm" className="ml-2">
@@ -423,8 +327,7 @@ const Earnings = () => {
                         </Button>
                       </div>
                       <Separator className="my-4" />
-                    </div>
-                  ))}
+                    </div>)}
                 </div>
               </CardContent>
             </Card>
@@ -463,10 +366,7 @@ const Earnings = () => {
                   </div>
                   
                   <div className="text-center mt-6">
-                    <Link
-                      to="/profile/payment-methods"
-                      className="text-green-600 hover:text-green-700 text-sm font-medium"
-                    >
+                    <Link to="/profile/payment-methods" className="text-green-600 hover:text-green-700 text-sm font-medium">
                       + Add Payment Method
                     </Link>
                   </div>
@@ -480,10 +380,7 @@ const Earnings = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
-                  {transactions
-                    .filter(t => t.type === 'withdrawal')
-                    .map((transaction) => (
-                      <div key={transaction.id}>
+                  {transactions.filter(t => t.type === 'withdrawal').map(transaction => <div key={transaction.id}>
                         <div className="flex items-center">
                           <div className="mr-4 rounded-full p-2 bg-gray-100">
                             <ArrowDownRight className="h-4 w-4 text-gray-600" />
@@ -501,13 +398,10 @@ const Earnings = () => {
                           </div>
                         </div>
                         <Separator className="my-4" />
-                      </div>
-                    ))}
-                  {transactions.filter(t => t.type === 'withdrawal').length === 0 && (
-                    <div className="text-center py-4">
+                      </div>)}
+                  {transactions.filter(t => t.type === 'withdrawal').length === 0 && <div className="text-center py-4">
                       <p className="text-gray-500 text-sm">No withdrawal history</p>
-                    </div>
-                  )}
+                    </div>}
                 </div>
               </CardContent>
             </Card>
@@ -528,8 +422,6 @@ const Earnings = () => {
           </TabsContent>
         </Tabs>
       </main>
-    </div>
-  );
+    </div>;
 };
-
 export default Earnings;
