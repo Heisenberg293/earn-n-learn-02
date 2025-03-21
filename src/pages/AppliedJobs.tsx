@@ -6,87 +6,73 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { BookmarkCheck, ChevronRight, Clock, DollarSign, ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-
 const AppliedJobs = () => {
   const [activeTab, setActiveTab] = useState("pending");
   const navigate = useNavigate();
-  
-  const pendingApplications = [
-    {
-      id: 1,
-      title: "Frontend Developer for E-commerce Project",
-      category: "Web Development",
-      status: "pending",
-      appliedAt: "2023-11-28",
-      budget: "$800-1200",
-      company: "TechEcommerce",
-    },
-    {
-      id: 2,
-      title: "UI/UX Designer for Mobile App",
-      category: "Design",
-      status: "pending",
-      appliedAt: "2023-11-25",
-      budget: "$500-700",
-      company: "AppSolutions",
-    },
-    {
-      id: 3,
-      title: "Content Writer for SaaS Blog",
-      category: "Content Writing",
-      status: "pending",
-      appliedAt: "2023-11-20",
-      budget: "$300-500",
-      company: "SaaSPlatform",
-    },
-    {
-      id: 4,
-      title: "Social Media Marketing Specialist",
-      category: "Marketing",
-      status: "pending",
-      appliedAt: "2023-11-18",
-      budget: "$400-600",
-      company: "GrowthMarketing",
-    },
-    {
-      id: 5,
-      title: "JavaScript Developer for Web App",
-      category: "Web Development",
-      status: "pending",
-      appliedAt: "2023-11-15",
-      budget: "$700-900",
-      company: "WebTech Solutions",
-    },
-  ];
-  
-  const rejectedApplications = [
-    {
-      id: 6,
-      title: "WordPress Website Development",
-      category: "Web Development",
-      status: "rejected",
-      appliedAt: "2023-11-10",
-      rejectedAt: "2023-11-15",
-      budget: "$300-500",
-      company: "LocalBusiness",
-    },
-    {
-      id: 7,
-      title: "Logo Design for Startup",
-      category: "Graphic Design",
-      status: "rejected",
-      appliedAt: "2023-11-05",
-      rejectedAt: "2023-11-12",
-      budget: "$100-300",
-      company: "NewStartup",
-    },
-  ];
-  
-  return (
-    <div className="min-h-screen bg-gray-50">
+  const pendingApplications = [{
+    id: 1,
+    title: "Frontend Developer for E-commerce Project",
+    category: "Web Development",
+    status: "pending",
+    appliedAt: "2023-11-28",
+    budget: "$800-1200",
+    company: "TechEcommerce"
+  }, {
+    id: 2,
+    title: "UI/UX Designer for Mobile App",
+    category: "Design",
+    status: "pending",
+    appliedAt: "2023-11-25",
+    budget: "$500-700",
+    company: "AppSolutions"
+  }, {
+    id: 3,
+    title: "Content Writer for SaaS Blog",
+    category: "Content Writing",
+    status: "pending",
+    appliedAt: "2023-11-20",
+    budget: "$300-500",
+    company: "SaaSPlatform"
+  }, {
+    id: 4,
+    title: "Social Media Marketing Specialist",
+    category: "Marketing",
+    status: "pending",
+    appliedAt: "2023-11-18",
+    budget: "$400-600",
+    company: "GrowthMarketing"
+  }, {
+    id: 5,
+    title: "JavaScript Developer for Web App",
+    category: "Web Development",
+    status: "pending",
+    appliedAt: "2023-11-15",
+    budget: "$700-900",
+    company: "WebTech Solutions"
+  }];
+  const rejectedApplications = [{
+    id: 6,
+    title: "WordPress Website Development",
+    category: "Web Development",
+    status: "rejected",
+    appliedAt: "2023-11-10",
+    rejectedAt: "2023-11-15",
+    budget: "$300-500",
+    company: "LocalBusiness"
+  }, {
+    id: 7,
+    title: "Logo Design for Startup",
+    category: "Graphic Design",
+    status: "rejected",
+    appliedAt: "2023-11-05",
+    rejectedAt: "2023-11-12",
+    budget: "$100-300",
+    company: "NewStartup"
+  }];
+  return <div className="min-h-screen bg-gray-50">
       <Navigation />
       
-      <main className="container mx-auto px-6 pt-24 pb-16">
+      <main className="container mx-auto px-6 pt-24 pb-16 py-[35px]">
         <div className="max-w-6xl mx-auto">
           <div className="mb-8 flex items-center justify-between">
             <div className="flex items-center">
@@ -96,22 +82,12 @@ const AppliedJobs = () => {
                 <p className="text-gray-600 mt-1">Track the status of your job applications</p>
               </div>
             </div>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => navigate(-1)}
-              className="gap-2"
-            >
+            <Button variant="outline" size="sm" onClick={() => navigate(-1)} className="gap-2">
               <ArrowLeft className="h-4 w-4" /> Back
             </Button>
           </div>
           
-          <Tabs 
-            defaultValue="pending" 
-            value={activeTab}
-            onValueChange={setActiveTab}
-            className="w-full"
-          >
+          <Tabs defaultValue="pending" value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="mb-8 grid grid-cols-2 w-full md:w-auto max-w-md">
               <TabsTrigger value="pending">Pending ({pendingApplications.length})</TabsTrigger>
               <TabsTrigger value="rejected">Rejected ({rejectedApplications.length})</TabsTrigger>
@@ -119,8 +95,7 @@ const AppliedJobs = () => {
             
             <TabsContent value="pending">
               <div className="space-y-4">
-                {pendingApplications.length === 0 ? (
-                  <Card>
+                {pendingApplications.length === 0 ? <Card>
                     <CardContent className="flex flex-col items-center justify-center py-8">
                       <BookmarkCheck className="h-16 w-16 text-gray-300 mb-4" />
                       <h3 className="text-xl font-semibold text-gray-700 mb-2">No Pending Applications</h3>
@@ -131,10 +106,7 @@ const AppliedJobs = () => {
                         <Button>Find Jobs</Button>
                       </Link>
                     </CardContent>
-                  </Card>
-                ) : (
-                  pendingApplications.map((job) => (
-                    <Card key={job.id} className="hover:shadow-md transition-shadow">
+                  </Card> : pendingApplications.map(job => <Card key={job.id} className="hover:shadow-md transition-shadow">
                       <CardContent className="p-6">
                         <div className="flex justify-between items-start mb-3">
                           <div>
@@ -170,16 +142,13 @@ const AppliedJobs = () => {
                           </Link>
                         </div>
                       </CardContent>
-                    </Card>
-                  ))
-                )}
+                    </Card>)}
               </div>
             </TabsContent>
             
             <TabsContent value="rejected">
               <div className="space-y-4">
-                {rejectedApplications.length === 0 ? (
-                  <Card>
+                {rejectedApplications.length === 0 ? <Card>
                     <CardContent className="flex flex-col items-center justify-center py-8">
                       <BookmarkCheck className="h-16 w-16 text-gray-300 mb-4" />
                       <h3 className="text-xl font-semibold text-gray-700 mb-2">No Rejected Applications</h3>
@@ -187,10 +156,7 @@ const AppliedJobs = () => {
                         You don't have any rejected job applications.
                       </p>
                     </CardContent>
-                  </Card>
-                ) : (
-                  rejectedApplications.map((job) => (
-                    <Card key={job.id} className="hover:shadow-md transition-shadow">
+                  </Card> : rejectedApplications.map(job => <Card key={job.id} className="hover:shadow-md transition-shadow">
                       <CardContent className="p-6">
                         <div className="flex justify-between items-start mb-3">
                           <div>
@@ -230,16 +196,12 @@ const AppliedJobs = () => {
                           </Link>
                         </div>
                       </CardContent>
-                    </Card>
-                  ))
-                )}
+                    </Card>)}
               </div>
             </TabsContent>
           </Tabs>
         </div>
       </main>
-    </div>
-  );
+    </div>;
 };
-
 export default AppliedJobs;
