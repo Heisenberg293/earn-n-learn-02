@@ -24,6 +24,8 @@ import AppliedJobs from "./pages/AppliedJobs";
 import Earnings from "./pages/Earnings";
 import JobDetail from "./pages/JobDetail";
 import Calendar from "./pages/Calendar";
+import CollaborativeProjects from "./pages/CollaborativeProjects";
+import ProjectDetail from "./pages/ProjectDetail";
 
 const queryClient = new QueryClient();
 
@@ -147,6 +149,36 @@ const App = () => (
               <ProtectedRoute>
                 <AppLayout>
                   <Calendar />
+                </AppLayout>
+              </ProtectedRoute>
+            } />
+            
+            {/* Collaborative Projects Routes */}
+            <Route path="/collaborative-projects" element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <CollaborativeProjects />
+                </AppLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/collaborative-projects/:projectId" element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <ProjectDetail />
+                </AppLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/collaborative-projects/my-projects" element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <CollaborativeProjects />
+                </AppLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/collaborative-projects/team-finder" element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <CollaborativeProjects />
                 </AppLayout>
               </ProtectedRoute>
             } />

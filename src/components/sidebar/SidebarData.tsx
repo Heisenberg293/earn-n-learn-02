@@ -1,5 +1,5 @@
 
-import { BookOpen, CreditCard, User, FileText, Users, Settings, Mail, BriefcaseBusiness, Search, DollarSign, BarChart2, MessageSquare, CalendarDays, Bell, Trophy } from 'lucide-react';
+import { BookOpen, CreditCard, User, FileText, Users, Settings, Mail, BriefcaseBusiness, Search, DollarSign, BarChart2, MessageSquare, CalendarDays, Bell, Trophy, Layers, FolderKanban } from 'lucide-react';
 
 export type SubMenuItem = {
   title: string;
@@ -39,6 +39,28 @@ export const SidebarMenuItems: MenuItem[] = [
         title: 'Earnings',
         path: '/profile/earnings',
         icon: DollarSign
+      },
+    ],
+  },
+  {
+    title: 'Collaborative Projects',
+    path: '/collaborative-projects',
+    icon: Layers,
+    subMenus: [
+      {
+        title: 'Browse Projects',
+        path: '/collaborative-projects',
+        icon: Search
+      },
+      {
+        title: 'My Projects',
+        path: '/collaborative-projects/my-projects',
+        icon: FolderKanban
+      },
+      {
+        title: 'Team Finder',
+        path: '/collaborative-projects/team-finder',
+        icon: Users
       },
     ],
   },
