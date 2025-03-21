@@ -18,12 +18,8 @@ const Navigation = () => {
           
           <div className="hidden md:flex ml-12 space-x-8">
             
-            <Link to="/task-hub" className="text-gray-600 hover:text-gray-900 font-medium">
-              Task Hub
-            </Link>
-            <Link to="/microfinance" className="text-gray-600 hover:text-gray-900 font-medium">
-              Microfinance
-            </Link>
+            
+            
             <Link to="/newsfeed" className="text-gray-600 hover:text-gray-900 font-medium">
               Newsfeed
             </Link>
