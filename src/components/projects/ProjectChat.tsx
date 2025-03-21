@@ -27,7 +27,7 @@ const ProjectChat = ({ project }: ProjectChatProps) => {
     },
     {
       id: '2',
-      content: 'Sure, I'll check them out and provide feedback this afternoon.',
+      content: 'Sure, I\'ll check them out and provide feedback this afternoon.',
       senderId: project.members.length > 1 ? project.members[1].id : project.members[0].id,
       timestamp: new Date(Date.now() - 3600000) // 1 hour ago
     },
