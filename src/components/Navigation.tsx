@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
+import { Layers } from "lucide-react";
 
 const Navigation = () => {
   const location = useLocation();
@@ -30,6 +31,12 @@ const Navigation = () => {
             <>
               <Link to="/task-hub">
                 <Button variant="outline">Browse Jobs</Button>
+              </Link>
+              <Link to="/collaborative-projects">
+                <Button variant="outline" className="flex items-center gap-2">
+                  <Layers className="h-4 w-4" />
+                  Projects
+                </Button>
               </Link>
               <Button variant="ghost" onClick={() => logout()}>Logout</Button>
             </>

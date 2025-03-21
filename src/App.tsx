@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -26,14 +25,15 @@ import JobDetail from "./pages/JobDetail";
 import Calendar from "./pages/Calendar";
 import CollaborativeProjects from "./pages/CollaborativeProjects";
 import ProjectDetail from "./pages/ProjectDetail";
+import ProjectCreate from "./pages/ProjectCreate";
+import MyProjects from "./pages/MyProjects";
+import TeamFinder from "./pages/TeamFinder";
 
 const queryClient = new QueryClient();
 
-// Wrapper component to conditionally render the sidebar
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const [sidebarExpanded, setSidebarExpanded] = useState<boolean>(true);
   
-  // Listen for sidebar state changes
   useEffect(() => {
     const handleSidebarChange = (event: any) => {
       setSidebarExpanded(event.detail.expanded);
@@ -41,7 +41,6 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
     
     window.addEventListener('sidebarStateChange', handleSidebarChange);
     
-    // Initialize sidebar state from localStorage
     const savedState = localStorage.getItem('sidebar-expanded');
     if (savedState !== null) {
       setSidebarExpanded(savedState === 'true');
@@ -81,7 +80,6 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             
-            {/* Protected Routes */}
             <Route path="/task-hub" element={
               <ProtectedRoute>
                 <AppLayout>
@@ -153,11 +151,17 @@ const App = () => (
               </ProtectedRoute>
             } />
             
-            {/* Collaborative Projects Routes */}
             <Route path="/collaborative-projects" element={
               <ProtectedRoute>
                 <AppLayout>
                   <CollaborativeProjects />
+                </AppLayout>
+              </ProtectedRoute>
+            } />
+            <Route path="/collaborative-projects/create" element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <ProjectCreate />
                 </AppLayout>
               </ProtectedRoute>
             } />
@@ -171,23 +175,21 @@ const App = () => (
             <Route path="/collaborative-projects/my-projects" element={
               <ProtectedRoute>
                 <AppLayout>
-                  <CollaborativeProjects />
+                  <MyProjects />
                 </AppLayout>
               </ProtectedRoute>
             } />
             <Route path="/collaborative-projects/team-finder" element={
               <ProtectedRoute>
                 <AppLayout>
-                  <CollaborativeProjects />
+                  <TeamFinder />
                 </AppLayout>
               </ProtectedRoute>
             } />
             
-            {/* Catch-all route */}
             <Route path="*" element={<NotFound />} />
           </Routes>
           
-          {/* ChatBot component */}
           <ChatBot />
         </BrowserRouter>
       </TooltipProvider>
