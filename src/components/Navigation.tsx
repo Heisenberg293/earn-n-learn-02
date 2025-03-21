@@ -9,12 +9,10 @@ const Navigation = () => {
     isAuthenticated,
     logout
   } = useContext(AuthContext);
-  return <nav className="bg-white py-4 px-6">
-      <div className="container mx-auto flex items-center justify-between">
-        <div className="flex items-center">
-          <Link to="/" className="text-2xl font-bold">
-            earn-n-learn
-          </Link>
+  return <nav className="bg-white mx-0 px-0 rounded-none py-[15px]">
+      <div className="container flex items-center justify-between mx-[123px] px-[65px]">
+        <div className="flex items-center py-0 px-0 mx-[240px]">
+          <Link to="/" className="text-2xl font-bold my-0 px-0 py-[11px] mx-0">Earn-n-Learn</Link>
           
           <div className="hidden md:flex ml-12 space-x-8">
             
@@ -33,7 +31,7 @@ const Navigation = () => {
                 Log in
               </Link>
               <Button asChild className="bg-green-500 hover:bg-green-600 rounded-full">
-                <Link to="/signup">
+                <Link to="/signup" className="mx-0">
                   Sign up
                 </Link>
               </Button>
