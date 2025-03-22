@@ -1,300 +1,398 @@
-// Fix only the DeadlineList import and its usage to include onMarkComplete prop
-import { useEffect, useState } from "react";
-import { Calendar as CalendarIcon, Plus } from "lucide-react";
-import { format } from "date-fns";
-import { Calendar } from "@/components/ui/calendar";
+
+import { useState } from "react";
+import { format, parseISO, isToday, isThisMonth, isThisWeek, isBefore, addDays, compareAsc } from "date-fns";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { DeadlineList } from "@/components/calendar/DeadlineList";
-import { EventTimeline } from "@/components/calendar/EventTimeline";
-import Navigation from "@/components/Navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { toast } from "sonner";
+import { Check, Clock, X, Plus, Calendar as CalendarIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import EventTimeline from "@/components/calendar/EventTimeline";
+import DeadlineList from "@/components/calendar/DeadlineList";
 
-type Deadline = {
-  id: number;
+// Define types for events and deadlines
+interface Event {
+  id: string;
   title: string;
-  description: string;
   date: Date;
-  category: string;
-  completed: boolean;
-};
-
-type Event = {
-  id: number;
-  title: string;
   time: string;
-  description: string;
-};
+  location: string;
+  type: 'class' | 'meeting' | 'event';
+  description?: string;
+}
 
-const categories = [
-  "Web Development",
-  "Graphic Design",
-  "Content Writing",
-  "Digital Marketing",
-  "Mobile App Development",
-];
+interface Deadline {
+  id: string;
+  title: string;
+  date: Date;
+  course?: string;
+  description?: string;
+  status: 'pending' | 'completed' | 'overdue';
+}
 
 const CalendarPage = () => {
-  const [date, setDate] = useState<Date | undefined>(new Date());
-  const [deadlines, setDeadlines] = useState<Deadline[]>([
-    {
-      id: 1,
-      title: "Website Development for E-commerce",
-      description: "Develop a responsive e-commerce website with user accounts and payment integration.",
-      date: new Date("2023-12-15"),
-      category: "Web Development",
-      completed: false,
-    },
-    {
-      id: 2,
-      title: "Logo Design for Tech Startup",
-      description: "Create a modern and minimalist logo for a tech startup.",
-      date: new Date("2023-12-20"),
-      category: "Graphic Design",
-      completed: false,
-    },
-    {
-      id: 3,
-      title: "Content Writing for SaaS Blog",
-      description: "Write engaging blog posts about SaaS trends and best practices.",
-      date: new Date("2023-12-10"),
-      category: "Content Writing",
-      completed: false,
-    },
-  ]);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+  const [activeTab, setActiveTab] = useState("overview");
+  const [showAddEvent, setShowAddEvent] = useState(false);
+  const [newEvent, setNewEvent] = useState<Partial<Event>>({
+    title: '',
+    time: '',
+    location: '',
+    type: 'event',
+    description: ''
+  });
+  
+  // Mock data
   const [events, setEvents] = useState<Event[]>([
     {
-      id: 1,
-      title: "Team Meeting",
-      time: "10:00 AM",
-      description: "Discuss project progress and assign new tasks.",
+      id: '1',
+      title: 'Marketing 101 Class',
+      date: addDays(new Date(), -1),
+      time: '10:00 AM - 11:30 AM',
+      location: 'Business School, Room 302',
+      type: 'class',
+      description: 'Introduction to marketing principles and strategies'
     },
     {
-      id: 2,
-      title: "Client Presentation",
-      time: "2:00 PM",
-      description: "Present the project proposal to the client.",
-    },
-  ]);
-  const [open, setOpen] = useState(false);
-  const [newDeadline, setNewDeadline] = useState({
-    title: "",
-    description: "",
-    date: new Date(),
-    category: categories[0],
-  });
-
-  useEffect(() => {
-    // Load deadlines from local storage on component mount
-    const storedDeadlines = localStorage.getItem("deadlines");
-    if (storedDeadlines) {
-      setDeadlines(JSON.parse(storedDeadlines));
-    }
-  }, []);
-
-  useEffect(() => {
-    // Save deadlines to local storage whenever the deadlines state changes
-    localStorage.setItem("deadlines", JSON.stringify(deadlines));
-  }, [deadlines]);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setNewDeadline(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleCategoryChange = (value: string) => {
-    setNewDeadline(prev => ({ ...prev, category: value }));
-  };
-
-  const handleDateChange = (date: Date) => {
-    setNewDeadline(prev => ({ ...prev, date: date }));
-  };
-
-  const addDeadline = () => {
-    if (!newDeadline.title || !newDeadline.description) {
-      toast.error("Please fill in all fields.");
-      return;
-    }
-
-    const newId = deadlines.length > 0 ? Math.max(...deadlines.map(d => d.id)) + 1 : 1;
-    const deadlineToAdd = {
-      id: newId,
-      title: newDeadline.title,
-      description: newDeadline.description,
-      date: newDeadline.date,
-      category: newDeadline.category,
-      completed: false,
-    };
-
-    setDeadlines(prev => [...prev, deadlineToAdd]);
-    setOpen(false);
-    setNewDeadline({
-      title: "",
-      description: "",
+      id: '2',
+      title: 'Group Project Meeting',
       date: new Date(),
-      category: categories[0],
-    });
-    toast.success("Deadline added successfully!");
-  };
-
-  const handleMarkComplete = (id: number) => {
-    setDeadlines(prevDeadlines => 
-      prevDeadlines.map(deadline => 
-        deadline.id === id 
-          ? { ...deadline, completed: true } 
-          : deadline
-      )
-    );
+      time: '2:00 PM - 3:30 PM',
+      location: 'Library Study Room 4',
+      type: 'meeting',
+      description: 'Discuss progress on the final project presentation'
+    },
+    {
+      id: '3',
+      title: 'Tech Career Fair',
+      date: addDays(new Date(), 1),
+      time: '11:00 AM - 3:00 PM',
+      location: 'Student Center Main Hall',
+      type: 'event',
+      description: 'Networking event with tech companies hiring for internships and full-time positions'
+    },
+    {
+      id: '4',
+      title: 'Study Group - Economics',
+      date: addDays(new Date(), 2),
+      time: '4:00 PM - 6:00 PM',
+      location: 'Coffee Shop near campus',
+      type: 'meeting',
+      description: 'Review session for upcoming midterm exam'
+    },
+    {
+      id: '5',
+      title: 'Philosophy Discussion',
+      date: addDays(new Date(), 2),
+      time: '7:00 PM - 8:00 PM',
+      location: 'Humanities Building, Room 101',
+      type: 'class',
+      description: 'Open discussion on ethical theories and their applications'
+    }
+  ]);
+  
+  const [deadlines, setDeadlines] = useState<Deadline[]>([
+    {
+      id: '1',
+      title: 'Economics Research Paper',
+      date: addDays(new Date(), -2),
+      course: 'ECON 302',
+      description: '5-page research paper on a macroeconomic policy of your choice',
+      status: 'completed'
+    },
+    {
+      id: '2',
+      title: 'Statistics Problem Set',
+      date: addDays(new Date(), -1),
+      course: 'STAT 201',
+      description: 'Complete problems 1-20 in Chapter 7',
+      status: 'overdue'
+    },
+    {
+      id: '3',
+      title: 'Psychology Quiz',
+      date: new Date(),
+      course: 'PSYC 101',
+      description: 'Online quiz covering chapters 8-10',
+      status: 'pending'
+    },
+    {
+      id: '4',
+      title: 'Computer Science Project',
+      date: addDays(new Date(), 3),
+      course: 'CS 340',
+      description: 'Implement a basic web application using React',
+      status: 'pending'
+    },
+    {
+      id: '5',
+      title: 'Marketing Case Study',
+      date: addDays(new Date(), 7),
+      course: 'MKT 250',
+      description: 'Analyze the marketing strategy of a company of your choice',
+      status: 'pending'
+    },
+    {
+      id: '6',
+      title: 'Biology Lab Report',
+      date: addDays(new Date(), 10),
+      course: 'BIO 203',
+      description: 'Write up findings from the photosynthesis experiment',
+      status: 'pending'
+    }
+  ]);
+  
+  const handleAddEvent = () => {
+    if (!newEvent.title || !selectedDate) return;
     
-    toast.success("Deadline marked as complete!");
+    const event: Event = {
+      id: Date.now().toString(),
+      title: newEvent.title || '',
+      date: selectedDate,
+      time: newEvent.time || '',
+      location: newEvent.location || '',
+      type: newEvent.type || 'event',
+      description: newEvent.description
+    };
+    
+    setEvents([...events, event]);
+    setNewEvent({
+      title: '',
+      time: '',
+      location: '',
+      type: 'event',
+      description: ''
+    });
+    setShowAddEvent(false);
   };
-
+  
+  const handleCompleteDeadline = (id: string) => {
+    setDeadlines(deadlines.map(deadline => 
+      deadline.id === id ? { ...deadline, status: 'completed' } : deadline
+    ));
+  };
+  
+  // Filter by selected date
+  const selectedDateEvents = events.filter(event => 
+    selectedDate && isToday(event.date, selectedDate)
+  );
+  
+  const selectedDateDeadlines = deadlines.filter(deadline => 
+    selectedDate && isToday(deadline.date, selectedDate)
+  );
+  
+  // Filter for today, this week, upcoming, etc.
+  const todayEvents = events.filter(event => isToday(event.date));
+  const thisWeekEvents = events.filter(event => isThisWeek(event.date) && !isToday(event.date));
+  const thisMonthEvents = events.filter(event => isThisMonth(event.date) && !isThisWeek(event.date));
+  
+  const pendingDeadlines = deadlines.filter(deadline => deadline.status === 'pending')
+    .sort((a, b) => compareAsc(a.date, b.date));
+  const overdueDeadlines = deadlines.filter(deadline => 
+    deadline.status === 'overdue' || (deadline.status === 'pending' && isBefore(deadline.date, new Date()))
+  );
+  const completedDeadlines = deadlines.filter(deadline => deadline.status === 'completed');
+  
+  const getEventTypeColor = (type: Event['type']) => {
+    switch (type) {
+      case 'class': return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'meeting': return 'bg-green-100 text-green-800 border-green-200';
+      case 'event': return 'bg-purple-100 text-purple-800 border-purple-200';
+      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+    }
+  };
+  
+  const getDeadlineStatusColor = (status: Deadline['status'], date: Date) => {
+    if (status === 'completed') return 'bg-green-100 text-green-800 border-green-200';
+    if (status === 'overdue' || (status === 'pending' && isBefore(date, new Date()))) 
+      return 'bg-red-100 text-red-800 border-red-200';
+    
+    // Check if due soon (within 2 days)
+    const twoDaysFromNow = addDays(new Date(), 2);
+    if (isBefore(date, twoDaysFromNow)) 
+      return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+    
+    return 'bg-blue-100 text-blue-800 border-blue-200';
+  };
+  
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navigation />
-      <main className="container mx-auto px-6 pt-24 pb-16">
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">Calendar</h1>
-            <p className="text-gray-600 mt-1">Manage your deadlines and events</p>
-          </div>
-        </div>
-
-        <Tabs defaultValue="calendar" className="w-full">
-          <TabsList className="mb-8">
-            <TabsTrigger value="calendar">Calendar</TabsTrigger>
-            <TabsTrigger value="timeline">Timeline</TabsTrigger>
-            <TabsTrigger value="deadlines">Deadlines</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="calendar" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Overview</CardTitle>
-                <CardDescription>
-                  You can add new deadlines and manage existing ones to stay organized.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="grid gap-4">
-                <div className="rounded-md border">
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    className="rounded-md border-none shadow-sm"
+    <div className="container mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">Academic Calendar</h1>
+      
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Left Column - Calendar */}
+        <div className="md:col-span-1">
+          <Card>
+            <CardHeader>
+              <CardTitle>Calendar</CardTitle>
+              <CardDescription>Select a date to view events</CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-col items-center">
+              <Calendar
+                mode="single"
+                selected={selectedDate}
+                onSelect={setSelectedDate}
+                className="rounded-md border w-full"
+              />
+              
+              <Button 
+                onClick={() => setShowAddEvent(!showAddEvent)}
+                className="mt-4 w-full"
+              >
+                <Plus className="mr-2 h-4 w-4" /> Add Event
+              </Button>
+              
+              {showAddEvent && (
+                <div className="mt-4 space-y-3 w-full">
+                  <Input
+                    placeholder="Event title"
+                    value={newEvent.title}
+                    onChange={(e) => setNewEvent({...newEvent, title: e.target.value})}
                   />
+                  <Input
+                    placeholder="Time (e.g. 2:00 PM - 3:30 PM)"
+                    value={newEvent.time}
+                    onChange={(e) => setNewEvent({...newEvent, time: e.target.value})}
+                  />
+                  <Input
+                    placeholder="Location"
+                    value={newEvent.location}
+                    onChange={(e) => setNewEvent({...newEvent, location: e.target.value})}
+                  />
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button onClick={handleAddEvent} className="w-full">Save</Button>
+                    <Button 
+                      variant="outline" 
+                      onClick={() => setShowAddEvent(false)}
+                      className="w-full"
+                    >
+                      Cancel
+                    </Button>
+                  </div>
                 </div>
-                <p>
-                  Selected Date: {date ? format(date, "PPP") : "No date selected"}{" "}
-                </p>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="timeline" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Event Timeline</CardTitle>
+              )}
+            </CardContent>
+          </Card>
+          
+          {/* Selected Date Events */}
+          {selectedDate && (selectedDateEvents.length > 0 || selectedDateDeadlines.length > 0) && (
+            <Card className="mt-6">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">
+                  {format(selectedDate, 'EEEE, MMMM do, yyyy')}
+                </CardTitle>
                 <CardDescription>
-                  View upcoming events in a timeline format.
+                  {selectedDateEvents.length} events, {selectedDateDeadlines.length} deadlines
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <EventTimeline events={events} />
+                {selectedDateEvents.length > 0 && (
+                  <div className="mb-4">
+                    <h3 className="font-medium mb-2">Events</h3>
+                    <div className="space-y-2">
+                      {selectedDateEvents.map(event => (
+                        <div key={event.id} className="p-3 border rounded-md">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <p className="font-medium">{event.title}</p>
+                              {event.time && (
+                                <p className="text-sm text-muted-foreground flex items-center mt-1">
+                                  <Clock className="h-3 w-3 mr-1" /> {event.time}
+                                </p>
+                              )}
+                              {event.location && (
+                                <p className="text-sm text-muted-foreground mt-1">
+                                  {event.location}
+                                </p>
+                              )}
+                            </div>
+                            <Badge className={`${getEventTypeColor(event.type)}`}>
+                              {event.type}
+                            </Badge>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {selectedDateDeadlines.length > 0 && (
+                  <div>
+                    <h3 className="font-medium mb-2">Deadlines</h3>
+                    <div className="space-y-2">
+                      {selectedDateDeadlines.map(deadline => (
+                        <div key={deadline.id} className="p-3 border rounded-md">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <p className="font-medium">{deadline.title}</p>
+                              {deadline.course && (
+                                <p className="text-sm text-muted-foreground mt-1">
+                                  {deadline.course}
+                                </p>
+                              )}
+                            </div>
+                            <Badge className={`${getDeadlineStatusColor(deadline.status, deadline.date)}`}>
+                              {deadline.status === 'completed' ? 'Completed' : 
+                               deadline.status === 'overdue' || isBefore(deadline.date, new Date()) ? 'Overdue' : 
+                               'Due Today'}
+                            </Badge>
+                          </div>
+                          
+                          {deadline.status !== 'completed' && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="mt-2"
+                              onClick={() => handleCompleteDeadline(deadline.id)}
+                            >
+                              <Check className="h-3 w-3 mr-1" /> Mark as Completed
+                            </Button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
-          </TabsContent>
-
-          <TabsContent value="deadlines">
-            <DeadlineList 
-              deadlines={deadlines} 
-              onMarkComplete={handleMarkComplete} 
-            />
-            <Dialog open={open} onOpenChange={setOpen}>
-              <DialogTrigger asChild>
-                <Button variant="outline" className="mt-4 gap-2">
-                  <Plus className="h-4 w-4" />
-                  Add Deadline
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Add New Deadline</DialogTitle>
-                  <DialogDescription>
-                    Add a new deadline to your calendar.
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="title" className="text-right">
-                      Title
-                    </Label>
-                    <Input
-                      type="text"
-                      id="title"
-                      name="title"
-                      value={newDeadline.title}
-                      onChange={handleInputChange}
-                      className="col-span-3"
-                    />
-                  </div>
-                  <div className="grid grid-cols-4 items-start gap-4">
-                    <Label htmlFor="description" className="text-right mt-2">
-                      Description
-                    </Label>
-                    <Textarea
-                      id="description"
-                      name="description"
-                      value={newDeadline.description}
-                      onChange={handleInputChange}
-                      className="col-span-3"
-                    />
-                  </div>
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="date" className="text-right">
-                      Date
-                    </Label>
-                    <Calendar
-                      mode="single"
-                      selected={newDeadline.date}
-                      onSelect={handleDateChange}
-                      className="col-span-3"
-                    />
-                  </div>
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="category" className="text-right">
-                      Category
-                    </Label>
-                    <Select onValueChange={handleCategoryChange} defaultValue={newDeadline.category}>
-                      <SelectTrigger className="col-span-3">
-                        <SelectValue placeholder="Select a category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {categories.map(category => (
-                          <SelectItem key={category} value={category}>
-                            {category}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                <DialogFooter>
-                  <Button type="button" onClick={addDeadline}>
-                    Add Deadline
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          </TabsContent>
-        </Tabs>
-      </main>
+          )}
+        </div>
+        
+        {/* Right Columns - Events & Deadlines */}
+        <div className="md:col-span-2">
+          <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="grid grid-cols-2 md:w-[400px]">
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="deadlines">Deadlines</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="overview" className="mt-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Upcoming Events</CardTitle>
+                  <CardDescription>View your schedule for today and upcoming days</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <EventTimeline events={events as unknown as any[]} />
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="deadlines" className="mt-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Assignment Deadlines</CardTitle>
+                  <CardDescription>Track your upcoming assignments and their due dates</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <DeadlineList deadlines={deadlines as unknown as any[]} onComplete={handleCompleteDeadline} />
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </div>
     </div>
   );
 };

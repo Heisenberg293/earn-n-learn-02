@@ -7,12 +7,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [studentId, setStudentId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { login, isAuthenticated } = useContext(AuthContext);
+  const [showStudentId, setShowStudentId] = useState(false);
+  const { login, isAuthenticated, isUniversityEmail } = useContext(AuthContext);
   const { toast } = useToast();
 
   // Redirect if already authenticated
@@ -25,12 +28,22 @@ const Login = () => {
     setIsLoading(true);
     
     try {
-      await login(email, password);
+      if (email !== "demo@example.com" && !isUniversityEmail(email)) {
+        toast({
+          title: "Invalid Email",
+          description: "Please use your university email address (e.g., @university.edu)",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+      
+      await login(email, password, showStudentId ? studentId : undefined);
       // Login is handled by AuthContext, which will redirect on success
     } catch (error) {
       toast({
         title: "Login Failed",
-        description: "Please check your credentials and try again.",
+        description: error instanceof Error ? error.message : "Please check your credentials and try again.",
         variant: "destructive",
       });
     } finally {
@@ -71,15 +84,18 @@ const Login = () => {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">University Email</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="name@example.com"
+                  placeholder="name@university.edu"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                 />
+                <p className="text-xs text-muted-foreground">
+                  Please use your university email address
+                </p>
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
@@ -99,6 +115,33 @@ const Login = () => {
                   required
                 />
               </div>
+              
+              <div className="flex items-center space-x-2">
+                <Checkbox 
+                  id="use-student-id" 
+                  checked={showStudentId}
+                  onCheckedChange={(checked) => setShowStudentId(checked === true)}
+                />
+                <label
+                  htmlFor="use-student-id"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Use student ID for verification
+                </label>
+              </div>
+              
+              {showStudentId && (
+                <div className="space-y-2">
+                  <Label htmlFor="studentId">Student ID</Label>
+                  <Input
+                    id="studentId"
+                    placeholder="Enter your student ID"
+                    value={studentId}
+                    onChange={(e) => setStudentId(e.target.value)}
+                  />
+                </div>
+              )}
+              
               <Button
                 type="submit"
                 className="w-full bg-green-600 hover:bg-green-700"
