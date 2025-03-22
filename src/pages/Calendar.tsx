@@ -15,6 +15,7 @@ const MOCK_DEADLINES = [
   {
     id: "1",
     title: "Complete Project Proposal",
+    date: new Date(new Date().setDate(new Date().getDate() + 2)),
     dueDate: new Date(new Date().setDate(new Date().getDate() + 2)),
     course: "Business Management",
     status: "pending"
@@ -22,6 +23,7 @@ const MOCK_DEADLINES = [
   {
     id: "2",
     title: "Submit Research Paper Draft",
+    date: new Date(new Date().setDate(new Date().getDate() + 5)),
     dueDate: new Date(new Date().setDate(new Date().getDate() + 5)),
     course: "Academic Writing",
     status: "pending"
@@ -29,6 +31,7 @@ const MOCK_DEADLINES = [
   {
     id: "3",
     title: "Group Presentation",
+    date: new Date(new Date().setDate(new Date().getDate() - 1)),
     dueDate: new Date(new Date().setDate(new Date().getDate() - 1)),
     course: "Marketing Strategies",
     status: "overdue"
@@ -36,6 +39,7 @@ const MOCK_DEADLINES = [
   {
     id: "4",
     title: "Quiz Preparation",
+    date: new Date(new Date().setDate(new Date().getDate() + 1)),
     dueDate: new Date(new Date().setDate(new Date().getDate() + 1)),
     course: "Statistics",
     status: "completed"
@@ -48,28 +52,32 @@ const MOCK_EVENTS = [
     title: "Meeting with Professor",
     date: new Date(new Date().setHours(new Date().getHours() + 3)),
     location: "Faculty Building, Room 302",
-    description: "Discuss research project progress"
+    description: "Discuss research project progress",
+    type: "meeting"
   },
   {
     id: "2",
     title: "Study Group Session",
     date: new Date(new Date().setHours(new Date().getHours() + 5)),
     location: "Library, Study Room B",
-    description: "Prepare for upcoming statistics quiz"
+    description: "Prepare for upcoming statistics quiz",
+    type: "meeting"
   },
   {
     id: "3",
     title: "Career Fair",
     date: new Date(new Date().setDate(new Date().getDate() + 1)),
     location: "Student Center, Main Hall",
-    description: "Networking opportunity with potential employers"
+    description: "Networking opportunity with potential employers",
+    type: "milestone"
   },
   {
     id: "4",
     title: "Guest Lecture: AI in Education",
     date: new Date(new Date().setDate(new Date().getDate() + 2)),
     location: "Science Building, Auditorium",
-    description: "Special lecture by Dr. Jane Smith from Tech University"
+    description: "Special lecture by Dr. Jane Smith from Tech University",
+    type: "task"
   }
 ];
 

@@ -3,11 +3,13 @@ import { format, isToday, isPast, differenceInDays } from 'date-fns';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle, Clock, XCircle } from 'lucide-react';
 
-type Event = {
-  id: number;
+export type Event = {
+  id: string | number;
   title: string;
   date: Date;
   type: 'milestone' | 'task' | 'meeting';
+  location?: string;
+  description?: string;
 };
 
 interface EventTimelineProps {
@@ -54,7 +56,7 @@ export const EventTimeline = ({ events }: EventTimelineProps) => {
                     event.type === 'meeting' ? 'bg-blue-50 text-blue-700 border-blue-200' : 
                     'bg-gray-50 text-gray-700 border-gray-200'}`
                   }>
-                    {event.type.charAt(0).toUpperCase() + event.type.slice(1)}
+                    {event.type ? event.type.charAt(0).toUpperCase() + event.type.slice(1) : 'Task'}
                   </Badge>
                 </div>
                 

@@ -4,10 +4,11 @@ import { CalendarClock, CheckCircle, Clock, XCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
-type Deadline = {
+export type Deadline = {
   id: number | string;
   title: string;
   date: Date;
+  dueDate?: Date;
   status: 'pending' | 'completed' | 'missed' | 'overdue';
 };
 
@@ -34,7 +35,7 @@ export const DeadlineList = ({ deadlines, onStatusChange }: DeadlineListProps) =
             <h4 className="font-medium">{deadline.title}</h4>
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <Clock className="h-3 w-3" />
-              {format(deadline.date, 'MMM d, yyyy')}
+              {deadline.date instanceof Date ? format(deadline.date, 'MMM d, yyyy') : 'Invalid date'}
             </div>
           </div>
           <div className="flex items-center gap-2">
