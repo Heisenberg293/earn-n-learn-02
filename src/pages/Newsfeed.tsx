@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -133,7 +132,7 @@ const Newsfeed = () => {
           <div className="lg:col-span-2 space-y-6">
             <h1 className="text-3xl font-bold tracking-tight mb-2">Campus Newsfeed</h1>
             <p className="text-muted-foreground mb-6">
-              Stay updated with the latest happenings in your university community
+              Stay updated with the latest happenings in the SkillSwap community
             </p>
 
             {/* Create Post Card */}
@@ -141,12 +140,12 @@ const Newsfeed = () => {
               <CardHeader>
                 <CardTitle className="text-xl">Share an update</CardTitle>
                 <CardDescription>
-                  Share your campus experiences, achievements, or ask for help from fellow students!
+                  Share your successes, milestones, or just say hello to the community!
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <Textarea placeholder="What's happening on campus?" value={newPost} onChange={e => setNewPost(e.target.value)} className="min-h-[100px]" />
+                  <Textarea placeholder="What's happening in your SkillSwap journey?" value={newPost} onChange={e => setNewPost(e.target.value)} className="min-h-[100px]" />
                   <div className="flex justify-end">
                     <Button onClick={handlePostSubmit}>Post Update</Button>
                   </div>
@@ -157,9 +156,9 @@ const Newsfeed = () => {
             {/* Loan Notifications Section */}
             <Card className="mb-6">
               <CardHeader>
-                <CardTitle className="text-xl">Recent Campus Loan Activities</CardTitle>
+                <CardTitle className="text-xl">Recent Loan Activities</CardTitle>
                 <CardDescription>
-                  Stay updated with recent peer lending transactions in your university community
+                  Stay updated with recent loan transactions in the community
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -203,14 +202,14 @@ const Newsfeed = () => {
             </div>
           </div>
           
-          {/* Right column - Campus Activities Timeline */}
+          {/* Right column - Loan Timeline */}
           <div className="space-y-6">
             {/* Recent Activities Card */}
             <LoanTimeline loanCompletions={mockLoanCompletions} />
             
             <Card>
               <CardHeader>
-                <CardTitle className="text-xl">Campus Activities</CardTitle>
+                <CardTitle className="text-xl">Recent Activities</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center gap-3">
@@ -218,7 +217,7 @@ const Newsfeed = () => {
                     <MessageSquare className="h-5 w-5 text-blue-600" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium">New message from Study Group</p>
+                    <p className="text-sm font-medium">New message from Tutoring Group</p>
                     <p className="text-xs text-muted-foreground">15 minutes ago</p>
                   </div>
                 </div>
