@@ -4,8 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
-import DeadlineList from "@/components/calendar/DeadlineList";
-import EventTimeline from "@/components/calendar/EventTimeline";
+import { DeadlineList } from "@/components/calendar/DeadlineList";
+import { EventTimeline } from "@/components/calendar/EventTimeline";
 import { format } from "date-fns";
 
 // Define event and deadline types
