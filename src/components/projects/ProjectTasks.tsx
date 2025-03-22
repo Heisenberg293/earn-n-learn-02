@@ -34,7 +34,7 @@ const ProjectTasks = ({ project }: ProjectTasksProps) => {
   const handleTaskToggle = (taskId: string) => {
     setTasks(tasks.map(task => 
       task.id === taskId 
-        ? { ...task, completed: !task.completed } 
+        ? { ...task, status: task.status === 'completed' ? 'todo' : 'completed' } 
         : task
     ));
     
@@ -42,7 +42,7 @@ const ProjectTasks = ({ project }: ProjectTasksProps) => {
     
     if (task) {
       toast({
-        title: task.completed ? "Task marked as incomplete" : "Task completed",
+        title: task.status === 'completed' ? "Task marked as incomplete" : "Task completed",
         description: task.title,
       });
     }
@@ -62,10 +62,10 @@ const ProjectTasks = ({ project }: ProjectTasksProps) => {
       id: String(Date.now()),
       title: newTaskTitle,
       description: newTaskDescription,
-      completed: false,
-      assigneeId: newTaskAssignee || undefined,
-      dueDate: newTaskDueDate ? new Date(newTaskDueDate) : undefined,
-      createdAt: new Date()
+      status: 'todo',
+      assignedTo: newTaskAssignee || null,
+      dueDate: newTaskDueDate || "",
+      priority: 'medium'
     };
     
     setTasks([...tasks, newTask]);
@@ -82,21 +82,26 @@ const ProjectTasks = ({ project }: ProjectTasksProps) => {
   
   const getStatusBadge = (task: ProjectTask) => {
     const today = new Date();
-    if (task.completed) {
+    const taskDueDate = task.dueDate ? new Date(task.dueDate) : null;
+    
+    if (task.status === 'completed') {
       return <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">Completed</Badge>;
     }
-    if (task.dueDate && task.dueDate < today) {
+    
+    if (taskDueDate && taskDueDate < today) {
       return <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">Overdue</Badge>;
     }
-    if (task.dueDate && task.dueDate.getTime() - today.getTime() < 86400000 * 2) { // 2 days
+    
+    if (taskDueDate && (taskDueDate.getTime() - today.getTime() < 86400000 * 2)) { // 2 days
       return <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">Due Soon</Badge>;
     }
+    
     return <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">In Progress</Badge>;
   };
   
-  const findAssignee = (assigneeId?: string) => {
-    if (!assigneeId) return null;
-    return project.members.find(member => member.id === assigneeId);
+  const findAssignee = (assignedTo?: string | null) => {
+    if (!assignedTo) return null;
+    return project.members.find(member => member.id === assignedTo);
   };
   
   return (
@@ -104,7 +109,7 @@ const ProjectTasks = ({ project }: ProjectTasksProps) => {
       <div className="flex items-center justify-between">
         <h3 className="text-xl font-medium">Tasks</h3>
         <div className="text-sm text-muted-foreground">
-          {tasks.filter(task => task.completed).length} of {tasks.length} completed
+          {tasks.filter(task => task.status === 'completed').length} of {tasks.length} completed
         </div>
       </div>
       
@@ -115,14 +120,14 @@ const ProjectTasks = ({ project }: ProjectTasksProps) => {
             <div key={task.id} className="p-4 border rounded-lg">
               <div className="flex items-start gap-3">
                 <Checkbox 
-                  checked={task.completed} 
+                  checked={task.status === 'completed'} 
                   onCheckedChange={() => handleTaskToggle(task.id)}
                   className="mt-1" 
                 />
                 <div className="flex-1">
                   <div className="flex justify-between items-start">
                     <div>
-                      <h4 className={`font-medium ${task.completed ? 'line-through text-muted-foreground' : ''}`}>
+                      <h4 className={`font-medium ${task.status === 'completed' ? 'line-through text-muted-foreground' : ''}`}>
                         {task.title}
                       </h4>
                       {task.description && (
@@ -135,16 +140,16 @@ const ProjectTasks = ({ project }: ProjectTasksProps) => {
                   </div>
                   
                   <div className="flex mt-3 gap-4 text-sm">
-                    {task.assigneeId && (
+                    {task.assignedTo && (
                       <div className="flex items-center gap-1">
                         <Avatar className="h-5 w-5">
-                          <AvatarImage src={findAssignee(task.assigneeId)?.avatar} />
+                          <AvatarImage src={findAssignee(task.assignedTo)?.avatar} />
                           <AvatarFallback className="text-[10px]">
-                            {findAssignee(task.assigneeId)?.name.charAt(0) || '?'}
+                            {findAssignee(task.assignedTo)?.name.charAt(0) || '?'}
                           </AvatarFallback>
                         </Avatar>
                         <span className="text-muted-foreground">
-                          {findAssignee(task.assigneeId)?.name || 'Unassigned'}
+                          {findAssignee(task.assignedTo)?.name || 'Unassigned'}
                         </span>
                       </div>
                     )}
@@ -153,7 +158,7 @@ const ProjectTasks = ({ project }: ProjectTasksProps) => {
                       <div className="flex items-center gap-1 text-muted-foreground">
                         <Calendar className="h-3.5 w-3.5" />
                         <span>
-                          {task.dueDate.toLocaleDateString()}
+                          {new Date(task.dueDate).toLocaleDateString()}
                         </span>
                       </div>
                     )}
