@@ -5,15 +5,15 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
 type Deadline = {
-  id: number;
+  id: number | string;
   title: string;
   date: Date;
-  status: 'pending' | 'completed' | 'missed';
+  status: 'pending' | 'completed' | 'missed' | 'overdue';
 };
 
 interface DeadlineListProps {
   deadlines: Deadline[];
-  onStatusChange?: (id: number, status: 'pending' | 'completed' | 'missed') => void;
+  onStatusChange?: (id: number | string, status: 'pending' | 'completed' | 'missed') => void;
 }
 
 export const DeadlineList = ({ deadlines, onStatusChange }: DeadlineListProps) => {
@@ -48,7 +48,7 @@ export const DeadlineList = ({ deadlines, onStatusChange }: DeadlineListProps) =
               </Badge>
             ) : (
               <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">
-                Missed
+                {deadline.status === 'overdue' ? 'Overdue' : 'Missed'}
               </Badge>
             )}
             

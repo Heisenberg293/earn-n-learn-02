@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { format, parseISO, isToday, isThisMonth, isThisWeek, isBefore, addDays, compareAsc } from "date-fns";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,10 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Check, Clock, X, Plus, Calendar as CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
-import EventTimeline from "@/components/calendar/EventTimeline";
-import DeadlineList from "@/components/calendar/DeadlineList";
+import { EventTimeline } from "@/components/calendar/EventTimeline";
+import { DeadlineList } from "@/components/calendar/DeadlineList";
 
-// Define types for events and deadlines
 interface Event {
   id: string;
   title: string;
@@ -43,7 +41,6 @@ const CalendarPage = () => {
     description: ''
   });
   
-  // Mock data
   const [events, setEvents] = useState<Event[]>([
     {
       id: '1',
@@ -173,7 +170,6 @@ const CalendarPage = () => {
     ));
   };
   
-  // Filter by selected date
   const selectedDateEvents = events.filter(event => 
     selectedDate && isToday(event.date, selectedDate)
   );
@@ -182,7 +178,6 @@ const CalendarPage = () => {
     selectedDate && isToday(deadline.date, selectedDate)
   );
   
-  // Filter for today, this week, upcoming, etc.
   const todayEvents = events.filter(event => isToday(event.date));
   const thisWeekEvents = events.filter(event => isThisWeek(event.date) && !isToday(event.date));
   const thisMonthEvents = events.filter(event => isThisMonth(event.date) && !isThisWeek(event.date));
@@ -208,7 +203,6 @@ const CalendarPage = () => {
     if (status === 'overdue' || (status === 'pending' && isBefore(date, new Date()))) 
       return 'bg-red-100 text-red-800 border-red-200';
     
-    // Check if due soon (within 2 days)
     const twoDaysFromNow = addDays(new Date(), 2);
     if (isBefore(date, twoDaysFromNow)) 
       return 'bg-yellow-100 text-yellow-800 border-yellow-200';
@@ -221,7 +215,6 @@ const CalendarPage = () => {
       <h1 className="text-3xl font-bold mb-6">Academic Calendar</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Left Column - Calendar */}
         <div className="md:col-span-1">
           <Card>
             <CardHeader>
@@ -275,7 +268,6 @@ const CalendarPage = () => {
             </CardContent>
           </Card>
           
-          {/* Selected Date Events */}
           {selectedDate && (selectedDateEvents.length > 0 || selectedDateDeadlines.length > 0) && (
             <Card className="mt-6">
               <CardHeader className="pb-2">
@@ -359,7 +351,6 @@ const CalendarPage = () => {
           )}
         </div>
         
-        {/* Right Columns - Events & Deadlines */}
         <div className="md:col-span-2">
           <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="grid grid-cols-2 md:w-[400px]">
@@ -386,7 +377,10 @@ const CalendarPage = () => {
                   <CardDescription>Track your upcoming assignments and their due dates</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <DeadlineList deadlines={deadlines as unknown as any[]} onComplete={handleCompleteDeadline} />
+                  <DeadlineList 
+                    deadlines={deadlines as unknown as any[]} 
+                    onStatusChange={handleCompleteDeadline} 
+                  />
                 </CardContent>
               </Card>
             </TabsContent>
