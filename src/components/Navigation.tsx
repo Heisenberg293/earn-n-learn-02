@@ -10,10 +10,6 @@ const Navigation = () => {
     isAuthenticated,
     logout
   } = useContext(AuthContext);
-  return <nav className="bg-white shadow-sm fixed top-0 left-0 right-0 z-40 h-16">
-      <div className="container mx-auto h-full px-4">
-        
-      </div>
-    </nav>;
+  return;
 };
 export default Navigation;
