@@ -62,7 +62,7 @@ const MyJobs = () => {
   return <div className="min-h-screen bg-gray-50">
       <Navigation />
       
-      <main className="container mx-auto pt-24 pb-16 px-[26px] py-[34px]">
+      <main className="container mx-auto pt-24 pb-16 px-[26px] py-[35px]">
         <div className="max-w-6xl mx-auto">
           <div className="mb-8 flex items-center justify-between">
             <div className="flex items-center">
