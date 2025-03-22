@@ -1,3 +1,4 @@
+
 import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "@/context/AuthContext";
@@ -51,6 +52,12 @@ const Dashboard = () => {
     postedAt: "1 day ago",
     budget: "$50-100"
   }];
+  
+  // New handler for "View All" button
+  const handleViewAllJobs = () => {
+    navigate('/task-hub', { state: { activeTab: 'browse' } });
+  };
+
   return <div>
       {/* Dashboard Header */}
       <div className="bg-white border-b mb-6 pb-4">
@@ -90,7 +97,12 @@ const Dashboard = () => {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-3">
               <CardTitle className="text-lg font-medium">Recent Jobs</CardTitle>
-              <Button variant="ghost" size="sm" className="text-green-600 hover:text-green-700 p-0 h-auto flex items-center gap-1">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="text-green-600 hover:text-green-700 p-0 h-auto flex items-center gap-1" 
+                onClick={handleViewAllJobs}
+              >
                 View all <ChevronRight className="h-4 w-4" />
               </Button>
             </CardHeader>
