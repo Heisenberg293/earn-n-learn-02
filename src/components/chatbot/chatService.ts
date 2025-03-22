@@ -71,7 +71,9 @@ const faqResponses: Record<string, string> = {
   "apply for job": "To apply for a job, click on the job listing to view details, then click the 'Apply' button. You'll need to submit a proposal outlining your skills and why you're a good fit for the job.",
   "profile": "You can update your profile by going to the Profile page. Here you can add your skills, portfolio items, and personal information to make your profile more attractive to potential clients.",
   "withdraw money": "You can withdraw your earnings through the Earnings page under your Profile. We process withdrawals within 3-5 business days.",
-  "feedback": "After completing a job, both the client and freelancer can leave feedback and ratings. This helps build your reputation on the platform."
+  "feedback": "After completing a job, both the client and freelancer can leave feedback and ratings. This helps build your reputation on the platform.",
+  "browse jobs": "You can browse all available jobs in the Task Hub section. Click on 'View All' in the Recent Jobs section of your Dashboard or navigate directly to the Task Hub page.",
+  "task hub": "The Task Hub is our job marketplace where you can browse and apply for available jobs or post your own job listings if you need work done."
 };
 
 // State variables to track conversation context
@@ -164,6 +166,15 @@ export const generateChatResponse = async (
   ) {
     currentContext.stage = 'asking_category';
     return "I'd be happy to help you find a job! What type of job are you looking for? (e.g., Coding, Design, Marketing, Writing, Academic)";
+  }
+  
+  // Add handling for view all jobs or task hub related queries
+  if (
+    (normalizedMessage.includes('view all') && normalizedMessage.includes('job')) ||
+    normalizedMessage.includes('browse job') ||
+    (normalizedMessage.includes('task') && normalizedMessage.includes('hub'))
+  ) {
+    return "You can view all available jobs in the Task Hub. I can help navigate you there - just click on 'View All' in the Recent Jobs section of your Dashboard, or you can go directly to the Job Hub from the main navigation.";
   }
   
   // Handle conversation based on current context

@@ -52,36 +52,36 @@ const Calendar = () => {
       id: "1",
       title: "Complete Web Development Project",
       date: new Date(2023, 10, 15), // November 15, 2023
-      course: "Web Development Bootcamp",
-      status: "pending"
+      status: "pending",
+      description: "Web Development Bootcamp"
     },
     {
       id: "2",
       title: "Submit Design Mockups",
       date: new Date(2023, 10, 18), // November 18, 2023
-      course: "UI/UX Design Course",
-      status: "completed"
+      status: "completed",
+      description: "UI/UX Design Course"
     },
     {
       id: "3",
       title: "Research Paper Draft",
       date: new Date(2023, 10, 20), // November 20, 2023
-      course: "Research Methodology",
-      status: "pending"
+      status: "pending",
+      description: "Research Methodology"
     },
     {
       id: "4",
       title: "Final Project Presentation",
       date: new Date(2023, 10, 10), // November 10, 2023 (past)
-      course: "Data Science Fundamentals",
-      status: "missed"
+      status: "missed",
+      description: "Data Science Fundamentals"
     },
     {
       id: "5",
       title: "Group Assignment",
       date: new Date(2023, 10, 25), // November 25, 2023
-      course: "Team Management",
-      status: "pending"
+      status: "pending",
+      description: "Team Management"
     }
   ];
 
@@ -188,7 +188,7 @@ const Calendar = () => {
                           <div>
                             <p className="font-medium text-sm">{deadline.title}</p>
                             <p className="text-xs text-muted-foreground">
-                              {deadline.course} · Due today
+                              {deadline.description} · Due today
                             </p>
                           </div>
                         </div>

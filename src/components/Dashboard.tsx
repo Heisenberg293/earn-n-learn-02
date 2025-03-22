@@ -1,4 +1,3 @@
-
 import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "@/context/AuthContext";
@@ -6,11 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Briefcase, BarChart2, BookmarkCheck, DollarSign, ChevronRight, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+
 const Dashboard = () => {
   const {
     user
   } = useContext(AuthContext);
   const navigate = useNavigate();
+  
   const dashboardCards = [{
     title: "My Jobs",
     description: "Manage your active and completed jobs",
@@ -30,6 +31,7 @@ const Dashboard = () => {
     path: "/profile/earnings",
     stats: "$1,250"
   }];
+  
   const recentJobs = [{
     id: 1,
     title: "Website Development for E-commerce",
@@ -53,13 +55,11 @@ const Dashboard = () => {
     budget: "$50-100"
   }];
   
-  // Update handler for "View All" button
   const handleViewAllJobs = () => {
     navigate('/task-hub', { state: { activeTab: 'browse' } });
   };
 
   return <div>
-      {/* Dashboard Header */}
       <div className="bg-white border-b mb-6 pb-4">
         <div className="flex items-center justify-between">
           <div>
@@ -73,10 +73,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Featured Alert/Banner */}
-      
-
-      {/* Dashboard Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         {dashboardCards.map((card, index) => <Card key={index} onClick={() => navigate(card.path)} className="cursor-pointer hover:shadow-md transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
@@ -90,9 +86,7 @@ const Dashboard = () => {
           </Card>)}
       </div>
 
-      {/* Main Dashboard Content */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Recent Jobs */}
         <div className="lg:col-span-2">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-3">
@@ -134,7 +128,6 @@ const Dashboard = () => {
           </Card>
         </div>
 
-        {/* Earnings Summary */}
         <div>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-3">
@@ -211,4 +204,5 @@ const Dashboard = () => {
       </div>
     </div>;
 };
+
 export default Dashboard;
