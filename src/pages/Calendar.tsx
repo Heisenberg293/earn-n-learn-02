@@ -1,263 +1,233 @@
 
 import { useState } from "react";
-import { 
-  Calendar as CalendarComponent, 
-  CalendarProps 
-} from "@/components/ui/calendar";
-import { 
-  Card, 
-  CardContent, 
-  CardHeader,
-  CardTitle 
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import DeadlineList from "@/components/calendar/DeadlineList";
+import EventTimeline from "@/components/calendar/EventTimeline";
 import { format } from "date-fns";
-import { DeadlineList, Deadline } from "@/components/calendar/DeadlineList";
-import { EventTimeline, Event } from "@/components/calendar/EventTimeline";
-import { 
-  Calendar as CalendarIcon, 
-  Clock, 
-  ListTodo, 
-  Calendar as CalendarClock 
-} from "lucide-react";
+
+// Define event and deadline types
+export interface Event {
+  id: string;
+  title: string;
+  date: Date;
+  time: string;
+  location: string;
+  type: "class" | "meeting" | "activity" | "other";
+}
+
+export interface Deadline {
+  id: string;
+  title: string;
+  description: string;
+  date: Date;
+  status: "completed" | "pending" | "overdue";
+  priority: "high" | "medium" | "low";
+  type: "assignment" | "exam" | "project" | "other";
+}
 
 const Calendar = () => {
-  const [date, setDate] = useState<Date | undefined>(new Date());
-  const [view, setView] = useState<"calendar" | "deadlines" | "timeline">("calendar");
-
-  const handleDateSelect: CalendarProps["onDayClick"] = (day, modifiers) => {
-    if (!modifiers.disabled) {
-      setDate(day);
-    }
-  };
-
-  const handleStatusChange = (id: string | number, newStatus: Deadline["status"]) => {
-    // In a real app, you would update the deadline status in your data source
-    console.log(`Updating deadline ${id} to status: ${newStatus}`);
-    
-    // For demo purposes, we're updating the status locally
-    const updatedDeadlines = deadlines.map(deadline => 
-      deadline.id === id 
+  const today = new Date();
+  const [date, setDate] = useState<Date | undefined>(today);
+  const [view, setView] = useState<"calendar" | "list">("calendar");
+  
+  // Deadlines and events are normally fetched from an API
+  const [deadlines, setDeadlines] = useState<Deadline[]>([
+    {
+      id: "1",
+      title: "Math Assignment Due",
+      description: "Complete problems 1-20 in Chapter 5",
+      date: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2),
+      status: "pending",
+      priority: "high",
+      type: "assignment"
+    },
+    {
+      id: "2",
+      title: "History Essay Submission",
+      description: "3000 word essay on World War II",
+      date: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 5),
+      status: "pending",
+      priority: "medium",
+      type: "assignment"
+    },
+    {
+      id: "3",
+      title: "Science Project",
+      description: "Group project presentation on renewable energy",
+      date: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 10),
+      status: "pending",
+      priority: "high",
+      type: "project"
+    },
+    {
+      id: "4",
+      title: "Literature Review",
+      description: "Book review submission",
+      date: new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1),
+      status: "overdue",
+      priority: "low",
+      type: "assignment"
+    },
+    {
+      id: "5",
+      title: "Economics Midterm",
+      description: "Covers chapters 1-7 of the textbook",
+      date: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 15),
+      status: "pending",
+      priority: "high",
+      type: "exam"
+    },
+  ]);
+  
+  const [events] = useState<Event[]>([
+    {
+      id: "1",
+      title: "Study Group Meeting",
+      date: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
+      time: "14:00 - 16:00",
+      location: "Library, Room 204",
+      type: "meeting"
+    },
+    {
+      id: "2",
+      title: "Math Lecture",
+      date: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
+      time: "09:00 - 10:30",
+      location: "Science Building, Hall B",
+      type: "class"
+    },
+    {
+      id: "3",
+      title: "Economic Workshop",
+      date: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1),
+      time: "11:00 - 12:30",
+      location: "Business Building, Room 105",
+      type: "class"
+    },
+    {
+      id: "4",
+      title: "Student Club Meeting",
+      date: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2),
+      time: "16:00 - 17:30",
+      location: "Student Center, Room 302",
+      type: "activity"
+    },
+    {
+      id: "5",
+      title: "Research Group Discussion",
+      date: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 3),
+      time: "13:00 - 14:30",
+      location: "Science Building, Lab 3",
+      type: "meeting"
+    },
+  ]);
+  
+  // Filter deadlines and events for the selected date
+  const selectedDateStr = date ? format(date, "yyyy-MM-dd") : "";
+  const filteredDeadlines = deadlines.filter(deadline => 
+    format(deadline.date, "yyyy-MM-dd") === selectedDateStr
+  );
+  const filteredEvents = events.filter(event => 
+    format(event.date, "yyyy-MM-dd") === selectedDateStr
+  );
+  
+  // Handle deadline status changes
+  const handleDeadlineStatusChange = (deadlineId: string, newStatus: "completed" | "pending" | "overdue") => {
+    setDeadlines(deadlines.map(deadline => 
+      deadline.id === deadlineId 
         ? { ...deadline, status: newStatus } 
         : deadline
-    );
-    
-    console.log("Updated deadlines:", updatedDeadlines);
-    // In a real app, you would set the updated deadlines here
+    ));
   };
-
-  // Deadlines data
-  const deadlines: Deadline[] = [
-    {
-      id: "1",
-      title: "Complete Web Development Project",
-      date: new Date(2023, 10, 15), // November 15, 2023
-      course: "Web Development Bootcamp",
-      status: "pending"
-    },
-    {
-      id: "2",
-      title: "Submit Design Mockups",
-      date: new Date(2023, 10, 18), // November 18, 2023
-      course: "UI/UX Design Course",
-      status: "completed"
-    },
-    {
-      id: "3",
-      title: "Research Paper Draft",
-      date: new Date(2023, 10, 20), // November 20, 2023
-      course: "Research Methodology",
-      status: "pending"
-    },
-    {
-      id: "4",
-      title: "Final Project Presentation",
-      date: new Date(2023, 10, 10), // November 10, 2023 (past)
-      course: "Data Science Fundamentals",
-      status: "missed"
-    },
-    {
-      id: "5",
-      title: "Group Assignment",
-      date: new Date(2023, 10, 25), // November 25, 2023
-      course: "Team Management",
-      status: "pending"
-    }
-  ];
-
-  // Events data
-  const events: Event[] = [
-    {
-      id: "1",
-      title: "Team Meeting",
-      date: new Date(2023, 10, 16, 10, 0), // November 16, 2023, 10:00 AM
-      location: "Virtual Conference Room",
-      description: "Weekly team sync-up to discuss project progress.",
-      type: "meeting"
-    },
-    {
-      id: "2",
-      title: "Project Milestone: Frontend Complete",
-      date: new Date(2023, 10, 20, 9, 0), // November 20, 2023, 9:00 AM
-      location: "Project Management Tool",
-      description: "Complete all frontend tasks and perform initial testing.",
-      type: "milestone"
-    },
-    {
-      id: "3",
-      title: "Coding Session",
-      date: new Date(2023, 10, 17, 14, 0), // November 17, 2023, 2:00 PM
-      location: "Study Room 3",
-      description: "Collaborative coding session to tackle the backend API integration.",
-      type: "task"
-    },
-    {
-      id: "4",
-      title: "Mentor Review",
-      date: new Date(2023, 10, 22, 13, 30), // November 22, 2023, 1:30 PM
-      location: "Office 201",
-      description: "Code review and feedback session with the senior developer.",
-      type: "meeting"
-    },
-    {
-      id: "5",
-      title: "Project Milestone: MVP Ready",
-      date: new Date(2023, 10, 25, 9, 0), // November 25, 2023, 9:00 AM
-      location: "Project Management Tool",
-      description: "Minimum viable product ready for internal testing.",
-      type: "milestone"
-    }
-  ];
-
+  
   return (
-    <div className="container mx-auto p-6">
-      <header className="mb-6">
-        <h1 className="text-3xl font-bold">Calendar & Deadlines</h1>
-        <p className="text-muted-foreground">
-          Keep track of your events, meetings, and assignment deadlines
-        </p>
-      </header>
-      
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-1">
-          <Card>
+    <div className="min-h-screen bg-background p-6">
+      <div className="container mx-auto max-w-6xl">
+        <div className="flex flex-col md:flex-row justify-between items-start mb-6">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Academic Calendar</h1>
+            <p className="text-muted-foreground">
+              Manage your assignments, exams, and class schedule
+            </p>
+          </div>
+          <div className="flex space-x-2 mt-4 md:mt-0">
+            <Button
+              variant={view === "calendar" ? "default" : "outline"}
+              onClick={() => setView("calendar")}
+            >
+              Calendar View
+            </Button>
+            <Button
+              variant={view === "list" ? "default" : "outline"}
+              onClick={() => setView("list")}
+            >
+              List View
+            </Button>
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Calendar Widget */}
+          <Card className="md:col-span-1">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <CalendarIcon className="h-5 w-5 text-muted-foreground" />
-                <span>Calendar</span>
-              </CardTitle>
+              <CardTitle>Date Selection</CardTitle>
+              <CardDescription>Choose a date to view events and deadlines</CardDescription>
             </CardHeader>
             <CardContent>
               <CalendarComponent
                 mode="single"
                 selected={date}
-                onDayClick={handleDateSelect}
+                onSelect={setDate}
                 className="rounded-md border"
               />
-              
-              {date && (
-                <div className="mt-6">
-                  <h3 className="font-medium">
-                    {format(date, "EEEE, MMMM do, yyyy")}
-                  </h3>
-                  <div className="mt-2 space-y-2">
-                    {events
-                      .filter(event => 
-                        format(event.date, "yyyy-MM-dd") === format(date, "yyyy-MM-dd")
-                      )
-                      .map(event => (
-                        <div key={event.id} className="p-2 rounded-md bg-muted flex items-start gap-2">
-                          <Clock className="h-4 w-4 text-muted-foreground mt-0.5" />
-                          <div>
-                            <p className="font-medium text-sm">{event.title}</p>
-                            <p className="text-xs text-muted-foreground">
-                              {format(event.date, "h:mm a")} · {event.location}
-                            </p>
-                          </div>
-                        </div>
-                      ))
-                    }
-                    
-                    {deadlines
-                      .filter(deadline => 
-                        format(deadline.date, "yyyy-MM-dd") === format(date, "yyyy-MM-dd")
-                      )
-                      .map(deadline => (
-                        <div key={deadline.id} className="p-2 rounded-md bg-muted flex items-start gap-2">
-                          <ListTodo className="h-4 w-4 text-muted-foreground mt-0.5" />
-                          <div>
-                            <p className="font-medium text-sm">{deadline.title}</p>
-                            <p className="text-xs text-muted-foreground">
-                              {deadline.course} · Due today
-                            </p>
-                          </div>
-                        </div>
-                      ))
-                    }
-                    
-                    {events.filter(event => 
-                      format(event.date, "yyyy-MM-dd") === format(date, "yyyy-MM-dd")
-                    ).length === 0 && 
-                    deadlines.filter(deadline => 
-                      format(deadline.date, "yyyy-MM-dd") === format(date, "yyyy-MM-dd")
-                    ).length === 0 && (
-                      <p className="text-sm text-muted-foreground">
-                        No events or deadlines scheduled for this day.
-                      </p>
-                    )}
-                  </div>
-                </div>
-              )}
             </CardContent>
           </Card>
-        </div>
-        
-        <div className="lg:col-span-2">
-          <Tabs defaultValue="deadlines" value={view} onValueChange={(v) => setView(v as any)}>
-            <TabsList className="grid grid-cols-3 mb-4">
-              <TabsTrigger value="deadlines" className="flex items-center gap-1">
-                <ListTodo className="h-4 w-4" />
-                <span className="hidden sm:inline">Deadlines</span>
-              </TabsTrigger>
-              <TabsTrigger value="timeline" className="flex items-center gap-1">
-                <CalendarClock className="h-4 w-4" />
-                <span className="hidden sm:inline">Timeline</span>
-              </TabsTrigger>
-              <TabsTrigger value="calendar" className="flex items-center gap-1">
-                <CalendarIcon className="h-4 w-4" />
-                <span className="hidden sm:inline">Calendar</span>
-              </TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="deadlines">
-              <DeadlineList deadlines={deadlines} onStatusChange={handleStatusChange} />
-            </TabsContent>
-            
-            <TabsContent value="timeline">
-              <EventTimeline events={events} />
-            </TabsContent>
-            
-            <TabsContent value="calendar">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Monthly View</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground mb-4">
-                    A more detailed calendar view is coming soon. In the meantime,
-                    you can use the deadlines and timeline views to manage your schedule.
-                  </p>
-                  
-                  <CalendarComponent
-                    mode="single"
-                    selected={date}
-                    onDayClick={handleDateSelect}
-                    className="rounded-md border w-full"
+          
+          {/* Events and Deadlines for Selected Date */}
+          <div className="md:col-span-2">
+            <Tabs defaultValue="events">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="events">Events</TabsTrigger>
+                <TabsTrigger value="deadlines">Deadlines</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="events" className="space-y-4 mt-6">
+                <h2 className="text-xl font-semibold">
+                  {date ? format(date, "MMMM d, yyyy") : "Today's"} Events
+                </h2>
+                {filteredEvents.length > 0 ? (
+                  <EventTimeline events={filteredEvents} />
+                ) : (
+                  <Card>
+                    <CardContent className="pt-6 text-center text-muted-foreground">
+                      No events scheduled for this date
+                    </CardContent>
+                  </Card>
+                )}
+              </TabsContent>
+              
+              <TabsContent value="deadlines" className="space-y-4 mt-6">
+                <h2 className="text-xl font-semibold">
+                  {date ? format(date, "MMMM d, yyyy") : "Today's"} Deadlines
+                </h2>
+                {filteredDeadlines.length > 0 ? (
+                  <DeadlineList 
+                    deadlines={filteredDeadlines} 
+                    onStatusChange={handleDeadlineStatusChange} 
                   />
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
+                ) : (
+                  <Card>
+                    <CardContent className="pt-6 text-center text-muted-foreground">
+                      No deadlines for this date
+                    </CardContent>
+                  </Card>
+                )}
+              </TabsContent>
+            </Tabs>
+          </div>
         </div>
       </div>
     </div>
