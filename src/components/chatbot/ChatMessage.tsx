@@ -73,31 +73,26 @@ export const ChatMessage = ({ message, onFeedback }: ChatMessageProps) => {
         {/* Source tag for the message */}
         {message.source && !message.isLoading && (
           <div className="mb-1 flex justify-start">
-            {message.source.id ? (
-              <Badge 
-                variant="outline" 
-                className={cn(
-                  "text-xs px-2 py-0.5 h-5 rounded-full flex items-center gap-1 font-normal", 
-                  getSourceColor(message.source?.type)
-                )}
-              >
+            <Badge 
+              variant="outline" 
+              className={cn(
+                "text-xs px-2 py-0.5 h-5 rounded-full flex items-center gap-1 font-normal", 
+                getSourceColor(message.source?.type)
+              )}
+              asChild={message.source.id ? true : false}
+            >
+              {message.source.id ? (
                 <Link to={`/task-hub?id=${message.source.id}`}>
                   {getSourceIcon(message.source?.type)}
                   <span>{message.source.title || getSourceLabel(message.source?.type)}</span>
                 </Link>
-              </Badge>
-            ) : (
-              <Badge 
-                variant="outline" 
-                className={cn(
-                  "text-xs px-2 py-0.5 h-5 rounded-full flex items-center gap-1 font-normal", 
-                  getSourceColor(message.source?.type)
-                )}
-              >
-                {getSourceIcon(message.source?.type)}
-                <span>{message.source.title || getSourceLabel(message.source?.type)}</span>
-              </Badge>
-            )}
+              ) : (
+                <>
+                  {getSourceIcon(message.source?.type)}
+                  <span>{message.source.title || getSourceLabel(message.source?.type)}</span>
+                </>
+              )}
+            </Badge>
           </div>
         )}
       
