@@ -53,7 +53,7 @@ const Dashboard = () => {
     budget: "$50-100"
   }];
   
-  // New handler for "View All" button
+  // Update handler for "View All" button
   const handleViewAllJobs = () => {
     navigate('/task-hub', { state: { activeTab: 'browse' } });
   };
