@@ -1,4 +1,3 @@
-
 import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "@/context/AuthContext";
@@ -6,13 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Briefcase, BarChart2, BookmarkCheck, DollarSign, ChevronRight, Activity, Calendar, Package, Coins } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-
 const Dashboard = () => {
   const {
     user
   } = useContext(AuthContext);
   const navigate = useNavigate();
-  
   const dashboardCards = [{
     title: "My Exchange",
     description: "Manage your active and completed exchanges",
@@ -32,37 +29,32 @@ const Dashboard = () => {
     path: "/profile/earnings",
     stats: "$1,250"
   }];
-  
-  const recentActivities = [
-    {
-      id: 1,
-      date: "Oct 25, 2023",
-      action: "Accepted",
-      title: "Python Tutor",
-      type: "job",
-      amount: "$50",
-      path: "/jobs/101"
-    },
-    {
-      id: 2,
-      date: "Oct 24, 2023",
-      action: "Sold",
-      title: "Calculus Textbook",
-      type: "item",
-      amount: "$30",
-      path: "/items/202"
-    },
-    {
-      id: 3,
-      date: "Oct 23, 2023",
-      action: "Applied for",
-      title: "Graphic Design",
-      type: "skill",
-      amount: null,
-      path: "/skills/303"
-    }
-  ];
-  
+  const recentActivities = [{
+    id: 1,
+    date: "Oct 25, 2023",
+    action: "Accepted",
+    title: "Python Tutor",
+    type: "job",
+    amount: "$50",
+    path: "/jobs/101"
+  }, {
+    id: 2,
+    date: "Oct 24, 2023",
+    action: "Sold",
+    title: "Calculus Textbook",
+    type: "item",
+    amount: "$30",
+    path: "/items/202"
+  }, {
+    id: 3,
+    date: "Oct 23, 2023",
+    action: "Applied for",
+    title: "Graphic Design",
+    type: "skill",
+    amount: null,
+    path: "/skills/303"
+  }];
+
   // Function to get appropriate badge color based on activity type
   const getBadgeVariant = (type: string) => {
     switch (type) {
@@ -76,7 +68,7 @@ const Dashboard = () => {
         return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
-  
+
   // Function to get appropriate icon based on activity type
   const getActivityIcon = (type: string) => {
     switch (type) {
@@ -90,25 +82,18 @@ const Dashboard = () => {
         return <Activity className="h-4 w-4" />;
     }
   };
-  
-  return (
-    <div>
+  return <div>
       <div className="bg-white border-b mb-6 pb-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-semibold">Browse</h1>
+            <h1 className="text-2xl font-semibold">Browse Dashboard</h1>
             <p className="text-gray-600 text-sm">Welcome back, {user?.name || "User"}!</p>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        {dashboardCards.map((card, index) => (
-          <Card 
-            key={index} 
-            onClick={() => navigate(card.path)} 
-            className="cursor-pointer hover:shadow-md transition-shadow"
-          >
+        {dashboardCards.map((card, index) => <Card key={index} onClick={() => navigate(card.path)} className="cursor-pointer hover:shadow-md transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
               <CardTitle className="text-lg font-medium">{card.title}</CardTitle>
               {card.icon}
@@ -117,31 +102,20 @@ const Dashboard = () => {
               <p className="text-sm text-gray-500 mb-2">{card.description}</p>
               <p className="text-xl font-semibold text-green-600">{card.stats}</p>
             </CardContent>
-          </Card>
-        ))}
+          </Card>)}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="lg:col-span-2">
           <CardHeader className="flex flex-row items-center justify-between pb-3">
             <CardTitle className="text-lg font-medium">Recent Activity</CardTitle>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={() => navigate("/recent-activity")} 
-              className="text-green-600 hover:text-green-700"
-            >
+            <Button variant="ghost" size="sm" onClick={() => navigate("/recent-activity")} className="text-green-600 hover:text-green-700">
               View All <ChevronRight className="ml-1 h-4 w-4" />
             </Button>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {recentActivities.map(activity => (
-                <div 
-                  key={activity.id} 
-                  className="flex items-center p-3 border-b last:border-0 hover:bg-gray-50 cursor-pointer rounded-md transition-colors"
-                  onClick={() => navigate(activity.path)}
-                >
+              {recentActivities.map(activity => <div key={activity.id} className="flex items-center p-3 border-b last:border-0 hover:bg-gray-50 cursor-pointer rounded-md transition-colors" onClick={() => navigate(activity.path)}>
                   <div className="w-24 text-sm text-gray-500">{activity.date}</div>
                   <div className="flex-1">
                     <div className="flex items-center">
@@ -152,13 +126,10 @@ const Dashboard = () => {
                         {activity.type}
                       </Badge>
                     </div>
-                    {activity.amount && (
-                      <p className="text-sm text-green-600 font-medium">{activity.amount}</p>
-                    )}
+                    {activity.amount && <p className="text-sm text-green-600 font-medium">{activity.amount}</p>}
                   </div>
                   <ChevronRight className="h-4 w-4 text-gray-400" />
-                </div>
-              ))}
+                </div>)}
             </div>
           </CardContent>
         </Card>
@@ -211,12 +182,7 @@ const Dashboard = () => {
           <Card className="mt-6">
             <CardHeader className="flex flex-row items-center justify-between pb-3">
               <CardTitle className="text-lg font-medium">Upcoming Deadlines</CardTitle>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={() => navigate("/calendar")} 
-                className="text-green-600 hover:text-green-700 p-0 h-auto"
-              >
+              <Button variant="ghost" size="sm" onClick={() => navigate("/calendar")} className="text-green-600 hover:text-green-700 p-0 h-auto">
                 <Calendar className="h-4 w-4" />
               </Button>
             </CardHeader>
@@ -245,8 +211,6 @@ const Dashboard = () => {
           </Card>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Dashboard;
