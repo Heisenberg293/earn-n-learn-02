@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProfileTab from "@/components/profile/ProfileTab";
 import GamificationTab from "@/components/profile/GamificationTab";
-import TaskDashboard from "@/components/microfinance/financial/TaskDashboard";
 import SettingsTab from "@/components/profile/SettingsTab";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -38,17 +37,12 @@ const Profile = () => {
         <Tabs value={activeTab} onValueChange={handleTabChange} className="mb-8">
           <TabsList className="mb-6 w-full justify-start flex-wrap">
             <TabsTrigger value="profile">Profile Info</TabsTrigger>
-            <TabsTrigger value="tasks">My Tasks</TabsTrigger>
             <TabsTrigger value="leaderboard">Leaderboard</TabsTrigger>
             <TabsTrigger value="settings">Settings</TabsTrigger>
           </TabsList>
           
           <TabsContent value="profile">
             <ProfileTab />
-          </TabsContent>
-          
-          <TabsContent value="tasks">
-            <TaskDashboard />
           </TabsContent>
           
           <TabsContent value="leaderboard">
