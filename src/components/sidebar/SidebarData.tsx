@@ -1,5 +1,4 @@
-
-import { BookOpen, CreditCard, User, FileText, Users, Settings, Mail, BriefcaseBusiness, Search, DollarSign, BarChart2, MessageSquare, CalendarDays, Bell, Trophy, Layers, FolderKanban } from 'lucide-react';
+import { BookOpen, CreditCard, User, FileText, Users, Settings, Mail, BriefcaseBusiness, Search, DollarSign, BarChart2, MessageSquare, CalendarDays, Bell, Trophy, Layers, FolderKanban, Activity } from 'lucide-react';
 
 export type SubMenuItem = {
   title: string;
@@ -16,22 +15,22 @@ export type MenuItem = {
 
 export const SidebarMenuItems: MenuItem[] = [
   {
-    title: 'Job Hub',
+    title: 'Explore & Exchange',
     path: '/task-hub',
     icon: BriefcaseBusiness,
     subMenus: [
       {
-        title: 'Browse Jobs',
+        title: 'Browse',
         path: '/task-hub',
         icon: Search
       },
       {
-        title: 'My Jobs',
+        title: 'My Exchange',
         path: '/my-jobs',
         icon: FileText
       },
       {
-        title: 'Applied Jobs',
+        title: 'Applied Exchange',
         path: '/applied-jobs',
         icon: Users
       },
@@ -39,6 +38,11 @@ export const SidebarMenuItems: MenuItem[] = [
         title: 'Earnings',
         path: '/profile/earnings',
         icon: DollarSign
+      },
+      {
+        title: 'Recent Activity',
+        path: '/recent-activity',
+        icon: Activity
       },
     ],
   },

@@ -6,9 +6,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { BookmarkCheck, ChevronRight, Clock, DollarSign, ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+
 const AppliedJobs = () => {
   const [activeTab, setActiveTab] = useState("pending");
   const navigate = useNavigate();
+  
   const pendingApplications = [{
     id: 1,
     title: "Frontend Developer for E-commerce Project",
@@ -50,6 +52,7 @@ const AppliedJobs = () => {
     budget: "$700-900",
     company: "WebTech Solutions"
   }];
+  
   const rejectedApplications = [{
     id: 6,
     title: "WordPress Website Development",
@@ -69,6 +72,7 @@ const AppliedJobs = () => {
     budget: "$100-300",
     company: "NewStartup"
   }];
+  
   return <div className="min-h-screen bg-gray-50">
       <Navigation />
       
@@ -78,8 +82,8 @@ const AppliedJobs = () => {
             <div className="flex items-center">
               <BookmarkCheck className="h-8 w-8 text-green-600 mr-3" />
               <div>
-                <h1 className="text-3xl font-bold">Applied Jobs</h1>
-                <p className="text-gray-600 mt-1">Track the status of your job applications</p>
+                <h1 className="text-3xl font-bold">Applied Exchange</h1>
+                <p className="text-gray-600 mt-1">Track the status of your applications</p>
               </div>
             </div>
             <Button variant="outline" size="sm" onClick={() => navigate(-1)} className="gap-2">
@@ -204,4 +208,5 @@ const AppliedJobs = () => {
       </main>
     </div>;
 };
+
 export default AppliedJobs;

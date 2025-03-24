@@ -28,6 +28,7 @@ import ProjectDetail from "./pages/ProjectDetail";
 import ProjectCreate from "./pages/ProjectCreate";
 import MyProjects from "./pages/MyProjects";
 import TeamFinder from "./pages/TeamFinder";
+import RecentActivity from "./pages/RecentActivity";
 
 const queryClient = new QueryClient();
 
@@ -94,6 +95,7 @@ const App = () => (
                 </AppLayout>
               </ProtectedRoute>
             } />
+            
             <Route path="/microfinance" element={
               <ProtectedRoute>
                 <AppLayout>
@@ -183,6 +185,14 @@ const App = () => (
               <ProtectedRoute>
                 <AppLayout>
                   <TeamFinder />
+                </AppLayout>
+              </ProtectedRoute>
+            } />
+            
+            <Route path="/recent-activity" element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <RecentActivity />
                 </AppLayout>
               </ProtectedRoute>
             } />

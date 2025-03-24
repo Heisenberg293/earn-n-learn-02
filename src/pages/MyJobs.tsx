@@ -6,9 +6,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Briefcase, ChevronRight, Clock, DollarSign, ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+
 const MyJobs = () => {
   const [activeTab, setActiveTab] = useState("active");
   const navigate = useNavigate();
+  
   const activeJobs = [{
     id: 1,
     title: "Website Development for E-commerce",
@@ -28,6 +30,7 @@ const MyJobs = () => {
     budget: "$500",
     client: "AppSolutions"
   }];
+  
   const completedJobs = [{
     id: 3,
     title: "Content Writing for Blog",
@@ -59,6 +62,7 @@ const MyJobs = () => {
     client: "GrowthDigital",
     feedback: 4.5
   }];
+  
   return <div className="min-h-screen bg-gray-50">
       <Navigation />
       
@@ -68,8 +72,8 @@ const MyJobs = () => {
             <div className="flex items-center">
               <Briefcase className="h-8 w-8 text-green-600 mr-3" />
               <div>
-                <h1 className="text-3xl font-bold">My Jobs</h1>
-                <p className="text-gray-600 mt-1">Manage your active and completed jobs</p>
+                <h1 className="text-3xl font-bold">My Exchange</h1>
+                <p className="text-gray-600 mt-1">Manage your active and completed exchanges</p>
               </div>
             </div>
             <Button variant="outline" size="sm" onClick={() => navigate(-1)} className="gap-2">
@@ -79,8 +83,8 @@ const MyJobs = () => {
           
           <Tabs defaultValue="active" value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="mb-8 grid grid-cols-2 w-full md:w-auto max-w-md">
-              <TabsTrigger value="active">Active Jobs ({activeJobs.length})</TabsTrigger>
-              <TabsTrigger value="completed">Completed Jobs ({completedJobs.length})</TabsTrigger>
+              <TabsTrigger value="active">Active Exchanges ({activeJobs.length})</TabsTrigger>
+              <TabsTrigger value="completed">Completed Exchanges ({completedJobs.length})</TabsTrigger>
             </TabsList>
             
             <TabsContent value="active">
@@ -88,12 +92,12 @@ const MyJobs = () => {
                 {activeJobs.length === 0 ? <Card>
                     <CardContent className="flex flex-col items-center justify-center py-8">
                       <Briefcase className="h-16 w-16 text-gray-300 mb-4" />
-                      <h3 className="text-xl font-semibold text-gray-700 mb-2">No Active Jobs</h3>
+                      <h3 className="text-xl font-semibold text-gray-700 mb-2">No Active Exchanges</h3>
                       <p className="text-gray-500 text-center max-w-md mb-6">
-                        You don't have any active jobs at the moment. Browse available jobs to find your next opportunity.
+                        You don't have any active exchanges at the moment. Browse available exchanges to find your next opportunity.
                       </p>
                       <Link to="/task-hub">
-                        <Button>Find Jobs</Button>
+                        <Button>Find Exchanges</Button>
                       </Link>
                     </CardContent>
                   </Card> : activeJobs.map(job => <Card key={job.id} className="hover:shadow-md transition-shadow">
@@ -145,12 +149,12 @@ const MyJobs = () => {
                 {completedJobs.length === 0 ? <Card>
                     <CardContent className="flex flex-col items-center justify-center py-8">
                       <Briefcase className="h-16 w-16 text-gray-300 mb-4" />
-                      <h3 className="text-xl font-semibold text-gray-700 mb-2">No Completed Jobs</h3>
+                      <h3 className="text-xl font-semibold text-gray-700 mb-2">No Completed Exchanges</h3>
                       <p className="text-gray-500 text-center max-w-md mb-6">
-                        You haven't completed any jobs yet. Start by applying to available jobs.
+                        You haven't completed any exchanges yet. Start by applying to available exchanges.
                       </p>
                       <Link to="/task-hub">
-                        <Button>Find Jobs</Button>
+                        <Button>Find Exchanges</Button>
                       </Link>
                     </CardContent>
                   </Card> : completedJobs.map(job => <Card key={job.id} className="hover:shadow-md transition-shadow">
@@ -200,4 +204,5 @@ const MyJobs = () => {
       </main>
     </div>;
 };
+
 export default MyJobs;

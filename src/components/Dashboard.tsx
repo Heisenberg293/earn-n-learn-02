@@ -2,23 +2,25 @@ import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "@/context/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Briefcase, BarChart2, BookmarkCheck, DollarSign, ChevronRight, ExternalLink } from "lucide-react";
+import { Briefcase, BarChart2, BookmarkCheck, DollarSign, ChevronRight, ExternalLink, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+
 const Dashboard = () => {
   const {
     user
   } = useContext(AuthContext);
   const navigate = useNavigate();
+  
   const dashboardCards = [{
-    title: "My Jobs",
-    description: "Manage your active and completed jobs",
+    title: "My Exchange",
+    description: "Manage your active and completed exchanges",
     icon: <Briefcase className="h-5 w-5 text-green-600" />,
     path: "/my-jobs",
     stats: "2 Active"
   }, {
-    title: "Applied Jobs",
-    description: "Track your job applications",
+    title: "Applied Exchange",
+    description: "Track your applications",
     icon: <BookmarkCheck className="h-5 w-5 text-green-600" />,
     path: "/applied-jobs",
     stats: "5 Pending"
@@ -29,6 +31,7 @@ const Dashboard = () => {
     path: "/profile/earnings",
     stats: "$1,250"
   }];
+  
   const recentJobs = [{
     id: 1,
     title: "Website Development for E-commerce",
@@ -51,6 +54,7 @@ const Dashboard = () => {
     postedAt: "1 day ago",
     budget: "$50-100"
   }];
+  
   const handleViewAllJobs = () => {
     navigate('/task-hub', {
       state: {
@@ -58,11 +62,12 @@ const Dashboard = () => {
       }
     });
   };
+  
   return <div>
       <div className="bg-white border-b mb-6 pb-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-semibold">Browse Jobs</h1>
+            <h1 className="text-2xl font-semibold">Browse</h1>
             <p className="text-gray-600 text-sm">Welcome back, {user?.name || "User"}!</p>
           </div>
           <div className="flex items-center gap-2">
@@ -86,7 +91,32 @@ const Dashboard = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
+        <Card className="lg:col-span-2">
+          <CardHeader className="flex flex-row items-center justify-between pb-3">
+            <CardTitle className="text-lg font-medium">Recent Items</CardTitle>
+            <Button variant="ghost" size="sm" onClick={handleViewAllJobs} className="text-green-600 hover:text-green-700">
+              View All <ChevronRight className="ml-1 h-4 w-4" />
+            </Button>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {recentJobs.map(job => <div key={job.id} className="flex items-start justify-between border-b pb-4 last:border-0 last:pb-0">
+                  <div>
+                    <h3 className="font-medium text-base">{job.title}</h3>
+                    <div className="flex items-center gap-2 mt-1 text-sm text-gray-600">
+                      <span>{job.category}</span>
+                      <span>•</span>
+                      <span>{job.postedAt}</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-end">
+                    <span className="font-medium">{job.budget}</span>
+                    <Badge variant="outline" className="bg-green-50 text-green-700 mt-1">New</Badge>
+                  </div>
+                </div>)}
+            </div>
+          </CardContent>
+        </Card>
 
         <div>
           <Card>
@@ -164,4 +194,5 @@ const Dashboard = () => {
       </div>
     </div>;
 };
+
 export default Dashboard;

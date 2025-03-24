@@ -27,18 +27,18 @@ const JobDashboard = () => {
 
   return (
     <div className="space-y-8">
-      {/* Job Statistics */}
+      {/* Exchange Statistics */}
       <JobStats getStatusCountByType={getStatusCountByType} />
       
-      {/* Job Post Form */}
+      {/* Exchange Post Form */}
       <JobPostForm setJobPosts={setJobPosts} jobPosts={jobPosts} />
       
       <div className="space-y-4">
         <div className="flex justify-between items-center">
-          <h3 className="text-xl font-bold">Your Jobs</h3>
+          <h3 className="text-xl font-bold">Your Exchanges</h3>
           <div className="flex gap-2">
             <Input
-              placeholder="Search jobs..."
+              placeholder="Search exchanges..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-[200px]"
@@ -56,7 +56,7 @@ const JobDashboard = () => {
           </div>
         </div>
         
-        {/* Job List */}
+        {/* Exchange List */}
         <JobList 
           filteredJobs={filteredJobs} 
           setJobPosts={setJobPosts} 

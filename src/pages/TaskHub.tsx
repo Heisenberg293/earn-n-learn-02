@@ -1,3 +1,4 @@
+
 import { useState, useContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -11,7 +12,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Bell, Filter, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-const JobHub = () => {
+
+const TaskHub = () => {
   const {
     toast
   } = useToast();
@@ -21,12 +23,14 @@ const JobHub = () => {
     user
   } = useContext(AuthContext);
   const location = useLocation();
+  
   useEffect(() => {
     // Check if location state contains activeTab
     if (location.state && location.state.activeTab) {
       setActiveTab(location.state.activeTab);
     }
   }, [location]);
+  
   return <div className="min-h-screen bg-gray-50 p-6">
       <main>
         {isAuthenticated && <Dashboard />}
@@ -34,7 +38,7 @@ const JobHub = () => {
         <div className="mt-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-lg font-medium">Skill & Job Hub</CardTitle>
+              <CardTitle className="text-lg font-medium">Explore & Exchange</CardTitle>
               <div className="flex items-center gap-3">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -52,7 +56,7 @@ const JobHub = () => {
             <CardContent>
               <Tabs defaultValue="browse" value={activeTab} onValueChange={setActiveTab} className="w-full">
                 <TabsList className="mb-6 grid grid-cols-2 w-full max-w-md">
-                  <TabsTrigger value="browse">Browse Jobs</TabsTrigger>
+                  <TabsTrigger value="browse">Browse</TabsTrigger>
                   <TabsTrigger value="match">Skills &amp; Materials Exchange</TabsTrigger>
                 </TabsList>
                 
@@ -70,4 +74,5 @@ const JobHub = () => {
       </main>
     </div>;
 };
-export default JobHub;
+
+export default TaskHub;
