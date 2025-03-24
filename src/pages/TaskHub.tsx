@@ -1,4 +1,3 @@
-
 import { useState, useContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -12,22 +11,23 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Bell, Filter, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-
 const JobHub = () => {
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const [activeTab, setActiveTab] = useState("browse");
-  const { isAuthenticated, user } = useContext(AuthContext);
+  const {
+    isAuthenticated,
+    user
+  } = useContext(AuthContext);
   const location = useLocation();
-  
   useEffect(() => {
     // Check if location state contains activeTab
     if (location.state && location.state.activeTab) {
       setActiveTab(location.state.activeTab);
     }
   }, [location]);
-  
-  return (
-    <div className="min-h-screen bg-gray-50 p-6">
+  return <div className="min-h-screen bg-gray-50 p-6">
       <main>
         {isAuthenticated && <Dashboard />}
         
@@ -38,10 +38,7 @@ const JobHub = () => {
               <div className="flex items-center gap-3">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <Input 
-                    placeholder="Search..." 
-                    className="h-9 w-[200px] md:w-[300px] pl-10 pr-4 rounded-md bg-gray-50 border-gray-200"
-                  />
+                  <Input placeholder="Search..." className="h-9 w-[200px] md:w-[300px] pl-10 pr-4 rounded-md bg-gray-50 border-gray-200" />
                 </div>
                 <Button variant="ghost" size="icon" className="h-9 w-9 relative">
                   <Bell className="h-5 w-5" />
@@ -53,15 +50,10 @@ const JobHub = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <Tabs 
-                defaultValue="browse" 
-                value={activeTab}
-                onValueChange={setActiveTab}
-                className="w-full"
-              >
+              <Tabs defaultValue="browse" value={activeTab} onValueChange={setActiveTab} className="w-full">
                 <TabsList className="mb-6 grid grid-cols-2 w-full max-w-md">
                   <TabsTrigger value="browse">Browse Jobs</TabsTrigger>
-                  <TabsTrigger value="match">Skills Exchange</TabsTrigger>
+                  <TabsTrigger value="match">Skills &amp; Materials Exchange</TabsTrigger>
                 </TabsList>
                 
                 <TabsContent value="browse">
@@ -76,8 +68,6 @@ const JobHub = () => {
           </Card>
         </div>
       </main>
-    </div>
-  );
+    </div>;
 };
-
 export default JobHub;
