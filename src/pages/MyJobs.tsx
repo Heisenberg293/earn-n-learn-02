@@ -1,31 +1,46 @@
+
 import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ExchangeHeader from "@/components/exchanges/ExchangeHeader";
 import ExchangeSections from "@/components/exchanges/ExchangeSections";
-import { activeJobs, activeSkills, activeMaterials, completedJobs, completedSkills, completedMaterials } from "@/data/exchange-data";
+import { 
+  activeJobs, 
+  activeSkills, 
+  activeMaterials, 
+  completedJobs, 
+  completedSkills, 
+  completedMaterials 
+} from "@/data/exchange-data";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
 const MyJobs = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("active");
   const [activeSection, setActiveSection] = useState("jobs");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("all");
+  
   const handleSectionChange = (section: string) => {
     setActiveSection(section);
   };
-  return <div className="min-h-screen bg-gray-50">
+  
+  return (
+    <div className="min-h-screen bg-gray-50">
       <Navigation />
       
-      <main className="container mx-auto pt-24 pb-16 px-0 py-[36px]">
+      <main className="container mx-auto pt-24 pb-16 px-[26px] py-[35px]">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-            <ExchangeHeader title="My Exchange" subtitle="Manage your active and completed exchanges" />
+            <ExchangeHeader 
+              title="My Exchange" 
+              subtitle="Manage your active and completed exchanges" 
+            />
             
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm" onClick={() => navigate(-1)} className="gap-2">
@@ -81,17 +96,37 @@ const MyJobs = () => {
                 </TabsList>
                 
                 <TabsContent value="active">
-                  <ExchangeSections activeJobs={activeJobs} activeSkills={activeSkills} activeMaterials={activeMaterials} completedJobs={completedJobs} completedSkills={completedSkills} completedMaterials={completedMaterials} activeTab="active" onSectionChange={handleSectionChange} />
+                  <ExchangeSections 
+                    activeJobs={activeJobs}
+                    activeSkills={activeSkills}
+                    activeMaterials={activeMaterials}
+                    completedJobs={completedJobs}
+                    completedSkills={completedSkills}
+                    completedMaterials={completedMaterials}
+                    activeTab="active"
+                    onSectionChange={handleSectionChange}
+                  />
                 </TabsContent>
                 
                 <TabsContent value="completed">
-                  <ExchangeSections activeJobs={activeJobs} activeSkills={activeSkills} activeMaterials={activeMaterials} completedJobs={completedJobs} completedSkills={completedSkills} completedMaterials={completedMaterials} activeTab="completed" onSectionChange={handleSectionChange} />
+                  <ExchangeSections 
+                    activeJobs={activeJobs}
+                    activeSkills={activeSkills}
+                    activeMaterials={activeMaterials}
+                    completedJobs={completedJobs}
+                    completedSkills={completedSkills}
+                    completedMaterials={completedMaterials}
+                    activeTab="completed"
+                    onSectionChange={handleSectionChange}
+                  />
                 </TabsContent>
               </Tabs>
             </CardContent>
           </Card>
         </div>
       </main>
-    </div>;
+    </div>
+  );
 };
+
 export default MyJobs;
