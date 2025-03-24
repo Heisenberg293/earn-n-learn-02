@@ -1,8 +1,9 @@
+
 import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "@/context/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Briefcase, BarChart2, BookmarkCheck, DollarSign, ChevronRight, ExternalLink, Activity } from "lucide-react";
+import { Briefcase, BarChart2, BookmarkCheck, DollarSign, ChevronRight, Activity, Calendar, Package, Coins } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -32,35 +33,62 @@ const Dashboard = () => {
     stats: "$1,250"
   }];
   
-  const recentJobs = [{
-    id: 1,
-    title: "Website Development for E-commerce",
-    category: "Web Development",
-    status: "new",
-    postedAt: "2 hours ago",
-    budget: "$500-750"
-  }, {
-    id: 2,
-    title: "Logo Design for Tech Startup",
-    category: "Graphic Design",
-    status: "new",
-    postedAt: "5 hours ago",
-    budget: "$100-200"
-  }, {
-    id: 3,
-    title: "Content Writing for Blog",
-    category: "Writing",
-    status: "new",
-    postedAt: "1 day ago",
-    budget: "$50-100"
-  }];
+  const recentActivities = [
+    {
+      id: 1,
+      date: "Oct 25, 2023",
+      action: "Accepted",
+      title: "Python Tutor",
+      type: "job",
+      amount: "$50",
+      path: "/jobs/101"
+    },
+    {
+      id: 2,
+      date: "Oct 24, 2023",
+      action: "Sold",
+      title: "Calculus Textbook",
+      type: "item",
+      amount: "$30",
+      path: "/items/202"
+    },
+    {
+      id: 3,
+      date: "Oct 23, 2023",
+      action: "Applied for",
+      title: "Graphic Design",
+      type: "skill",
+      amount: null,
+      path: "/skills/303"
+    }
+  ];
   
-  const handleViewAllJobs = () => {
-    navigate('/task-hub', {
-      state: {
-        activeTab: 'browse'
-      }
-    });
+  // Function to get appropriate badge color based on activity type
+  const getBadgeVariant = (type: string) => {
+    switch (type) {
+      case 'job':
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      case 'skill':
+        return "bg-purple-100 text-purple-800 border-purple-200";
+      case 'item':
+        return "bg-amber-100 text-amber-800 border-amber-200";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200";
+    }
+  };
+  
+  // Function to get appropriate icon based on activity type
+  const getActivityIcon = (type: string) => {
+    switch (type) {
+      case 'job':
+        return <Briefcase className="h-4 w-4" />;
+      case 'skill':
+        return <Coins className="h-4 w-4" />;
+      case 'item':
+        return <Package className="h-4 w-4" />;
+      default:
+        return <Activity className="h-4 w-4" />;
+    }
   };
   
   return <div>
@@ -93,27 +121,36 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="lg:col-span-2">
           <CardHeader className="flex flex-row items-center justify-between pb-3">
-            <CardTitle className="text-lg font-medium">Recent Items</CardTitle>
-            <Button variant="ghost" size="sm" onClick={handleViewAllJobs} className="text-green-600 hover:text-green-700">
+            <CardTitle className="text-lg font-medium">Recent Activity</CardTitle>
+            <Button variant="ghost" size="sm" onClick={() => navigate("/recent-activity")} className="text-green-600 hover:text-green-700">
               View All <ChevronRight className="ml-1 h-4 w-4" />
             </Button>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {recentJobs.map(job => <div key={job.id} className="flex items-start justify-between border-b pb-4 last:border-0 last:pb-0">
-                  <div>
-                    <h3 className="font-medium text-base">{job.title}</h3>
-                    <div className="flex items-center gap-2 mt-1 text-sm text-gray-600">
-                      <span>{job.category}</span>
-                      <span>•</span>
-                      <span>{job.postedAt}</span>
+              {recentActivities.map(activity => (
+                <div 
+                  key={activity.id} 
+                  className="flex items-center p-3 border-b last:border-0 hover:bg-gray-50 cursor-pointer rounded-md transition-colors"
+                  onClick={() => navigate(activity.path)}
+                >
+                  <div className="w-24 text-sm text-gray-500">{activity.date}</div>
+                  <div className="flex-1">
+                    <div className="flex items-center">
+                      <p className="font-medium">
+                        {activity.action} <span className="font-semibold">"{activity.title}"</span>
+                      </p>
+                      <Badge className={`ml-2 ${getBadgeVariant(activity.type)}`}>
+                        {activity.type}
+                      </Badge>
                     </div>
+                    {activity.amount && (
+                      <p className="text-sm text-green-600 font-medium">{activity.amount}</p>
+                    )}
                   </div>
-                  <div className="flex flex-col items-end">
-                    <span className="font-medium">{job.budget}</span>
-                    <Badge variant="outline" className="bg-green-50 text-green-700 mt-1">New</Badge>
-                  </div>
-                </div>)}
+                  <ChevronRight className="h-4 w-4 text-gray-400" />
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>
@@ -165,26 +202,29 @@ const Dashboard = () => {
           
           <Card className="mt-6">
             <CardHeader className="flex flex-row items-center justify-between pb-3">
-              <CardTitle className="text-lg font-medium">Recent Activity</CardTitle>
+              <CardTitle className="text-lg font-medium">Upcoming Deadlines</CardTitle>
+              <Button variant="ghost" size="sm" onClick={() => navigate("/calendar")} className="text-green-600 hover:text-green-700 p-0 h-auto">
+                <Calendar className="h-4 w-4" />
+              </Button>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <div className="bg-blue-100 text-blue-700 rounded-full w-8 h-8 flex items-center justify-center shrink-0">
-                    <Briefcase className="h-4 w-4" />
+                  <div className="bg-red-100 text-red-700 rounded-full w-8 h-8 flex items-center justify-center shrink-0">
+                    <Calendar className="h-4 w-4" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium">New job posted</p>
-                    <p className="text-xs text-gray-500">2 hours ago</p>
+                    <p className="text-sm font-medium">Web Development Project</p>
+                    <p className="text-xs text-gray-500">Due in 2 days</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="bg-green-100 text-green-700 rounded-full w-8 h-8 flex items-center justify-center shrink-0">
-                    <DollarSign className="h-4 w-4" />
+                  <div className="bg-amber-100 text-amber-700 rounded-full w-8 h-8 flex items-center justify-center shrink-0">
+                    <Calendar className="h-4 w-4" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Payment received</p>
-                    <p className="text-xs text-gray-500">Yesterday</p>
+                    <p className="text-sm font-medium">UI Design Feedback</p>
+                    <p className="text-xs text-gray-500">Due in 5 days</p>
                   </div>
                 </div>
               </div>
