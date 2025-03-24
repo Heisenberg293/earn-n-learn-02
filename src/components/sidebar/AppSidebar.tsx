@@ -60,8 +60,8 @@ const AppSidebar = () => {
       <div className="flex flex-col h-full">
         {/* Sidebar Header */}
         <div className="p-4 flex items-center justify-between border-b border-white/10 h-16">
-          {expanded ? <Link to="/" className="text-xl font-bold tracking-tight">earn-n-learn</Link> : <span className="w-full text-center text-xl font-bold">e</span>}
-          <Button variant="ghost" size="icon" onClick={toggleSidebar} className="text-primary-foreground hover:bg-white/10">
+          {expanded ? <Link to="/" className="text-xl font-bold tracking-tight">Earn-n-Learn</Link> : <span className="w-full text-center text-xl font-bold">e</span>}
+          <Button variant="ghost" size="icon" onClick={toggleSidebar} className="hover:bg-white/10 text-right text-green-600">
             <Menu className="h-5 w-5" />
           </Button>
         </div>
