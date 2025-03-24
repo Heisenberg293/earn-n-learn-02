@@ -3,46 +3,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import JobExchangeList from "./JobExchangeList";
 import SkillExchangeList from "./SkillExchangeList";
 import MaterialExchangeList from "./MaterialExchangeList";
-import { useState } from "react";
-
-// Define common types for exchange data
-interface Job {
-  id: number;
-  title: string;
-  category: string;
-  status: string;
-  startedAt: string;
-  deadline?: string;
-  completedAt?: string;
-  budget: string;
-  client: string;
-  feedback?: number;
-}
-
-interface Skill {
-  id: number;
-  title: string;
-  category: string;
-  status: string;
-  startedAt: string;
-  completedAt?: string;
-  sessions: number;
-  rate?: string;
-  student: string;
-  feedback?: number;
-}
-
-interface Material {
-  id: number;
-  title: string;
-  category: string;
-  status: string;
-  listedAt: string;
-  soldAt?: string;
-  price: string;
-  condition?: string;
-  buyer?: string;
-}
+import { useState, useEffect } from "react";
+import { Job, Skill, Material } from "./types";
 
 interface ExchangeSectionsProps {
   activeJobs: Job[];
@@ -67,6 +29,12 @@ const ExchangeSections = ({
 }: ExchangeSectionsProps) => {
   const [activeSection, setActiveSection] = useState("jobs");
 
+  // Initialize activeSection with "jobs" whenever the component mounts
+  useEffect(() => {
+    setActiveSection("jobs");
+    onSectionChange("jobs");
+  }, []);
+
   const handleSectionChange = (section: string) => {
     setActiveSection(section);
     onSectionChange(section);
@@ -86,31 +54,31 @@ const ExchangeSections = ({
             Materials ({activeTab === "active" ? activeMaterials.length : completedMaterials.length})
           </TabsTrigger>
         </TabsList>
+
+        <TabsContent value="jobs" className="mt-0">
+          {activeTab === "active" ? (
+            <JobExchangeList jobs={activeJobs} type="active" />
+          ) : (
+            <JobExchangeList jobs={completedJobs} type="completed" />
+          )}
+        </TabsContent>
+
+        <TabsContent value="skills" className="mt-0">
+          {activeTab === "active" ? (
+            <SkillExchangeList skills={activeSkills} type="active" />
+          ) : (
+            <SkillExchangeList skills={completedSkills} type="completed" />
+          )}
+        </TabsContent>
+
+        <TabsContent value="materials" className="mt-0">
+          {activeTab === "active" ? (
+            <MaterialExchangeList materials={activeMaterials} type="active" />
+          ) : (
+            <MaterialExchangeList materials={completedMaterials} type="completed" />
+          )}
+        </TabsContent>
       </Tabs>
-
-      <TabsContent value="jobs" className="mt-0">
-        {activeTab === "active" ? (
-          <JobExchangeList jobs={activeJobs} type="active" />
-        ) : (
-          <JobExchangeList jobs={completedJobs} type="completed" />
-        )}
-      </TabsContent>
-
-      <TabsContent value="skills" className="mt-0">
-        {activeTab === "active" ? (
-          <SkillExchangeList skills={activeSkills} type="active" />
-        ) : (
-          <SkillExchangeList skills={completedSkills} type="completed" />
-        )}
-      </TabsContent>
-
-      <TabsContent value="materials" className="mt-0">
-        {activeTab === "active" ? (
-          <MaterialExchangeList materials={activeMaterials} type="active" />
-        ) : (
-          <MaterialExchangeList materials={completedMaterials} type="completed" />
-        )}
-      </TabsContent>
     </>
   );
 };

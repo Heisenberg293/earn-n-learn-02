@@ -91,22 +91,24 @@ const Dashboard = () => {
     }
   };
   
-  return <div>
+  return (
+    <div>
       <div className="bg-white border-b mb-6 pb-4">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-semibold">Browse</h1>
             <p className="text-gray-600 text-sm">Welcome back, {user?.name || "User"}!</p>
           </div>
-          <div className="flex items-center gap-2">
-            
-            
-          </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        {dashboardCards.map((card, index) => <Card key={index} onClick={() => navigate(card.path)} className="cursor-pointer hover:shadow-md transition-shadow">
+        {dashboardCards.map((card, index) => (
+          <Card 
+            key={index} 
+            onClick={() => navigate(card.path)} 
+            className="cursor-pointer hover:shadow-md transition-shadow"
+          >
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
               <CardTitle className="text-lg font-medium">{card.title}</CardTitle>
               {card.icon}
@@ -115,14 +117,20 @@ const Dashboard = () => {
               <p className="text-sm text-gray-500 mb-2">{card.description}</p>
               <p className="text-xl font-semibold text-green-600">{card.stats}</p>
             </CardContent>
-          </Card>)}
+          </Card>
+        ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="lg:col-span-2">
           <CardHeader className="flex flex-row items-center justify-between pb-3">
             <CardTitle className="text-lg font-medium">Recent Activity</CardTitle>
-            <Button variant="ghost" size="sm" onClick={() => navigate("/recent-activity")} className="text-green-600 hover:text-green-700">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => navigate("/recent-activity")} 
+              className="text-green-600 hover:text-green-700"
+            >
               View All <ChevronRight className="ml-1 h-4 w-4" />
             </Button>
           </CardHeader>
@@ -203,7 +211,12 @@ const Dashboard = () => {
           <Card className="mt-6">
             <CardHeader className="flex flex-row items-center justify-between pb-3">
               <CardTitle className="text-lg font-medium">Upcoming Deadlines</CardTitle>
-              <Button variant="ghost" size="sm" onClick={() => navigate("/calendar")} className="text-green-600 hover:text-green-700 p-0 h-auto">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => navigate("/calendar")} 
+                className="text-green-600 hover:text-green-700 p-0 h-auto"
+              >
                 <Calendar className="h-4 w-4" />
               </Button>
             </CardHeader>
@@ -232,7 +245,8 @@ const Dashboard = () => {
           </Card>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
 
 export default Dashboard;
