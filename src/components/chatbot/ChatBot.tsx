@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { MessageCircle, X, Minimize2, Maximize2, Send, ThumbsUp, ThumbsDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,9 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { ChatMessage } from "./ChatMessage";
 import { generateChatResponse } from "./chatService";
-
 export type MessageSource = "job" | "skill" | "marketplace" | "general";
-
 export type Message = {
   id: string;
   content: string;
@@ -25,7 +22,6 @@ export type Message = {
     title?: string;
   };
 };
-
 const ChatBot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
@@ -63,20 +59,16 @@ const ChatBot = () => {
       });
     }
   }, [messages]);
-  
   const toggleChat = () => {
     setIsOpen(!isOpen);
     setIsMinimized(false);
   };
-  
   const toggleMinimize = () => {
     setIsMinimized(!isMinimized);
   };
-  
   const handleSendMessage = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!inputMessage.trim()) return;
-    
     const userMessage: Message = {
       id: Date.now().toString(),
       content: inputMessage,
@@ -88,7 +80,6 @@ const ChatBot = () => {
         title: "User Message"
       }
     };
-    
     setMessages(prev => [...prev, userMessage]);
     setInputMessage("");
     setIsTyping(true);
@@ -103,7 +94,6 @@ const ChatBot = () => {
       isLoading: true,
       feedback: null
     }]);
-    
     try {
       const response = await generateChatResponse(inputMessage, messages);
 
@@ -134,7 +124,6 @@ const ChatBot = () => {
           title: "System"
         }
       }));
-      
       toast({
         title: "Error",
         description: "Failed to generate a response. Please try again.",
@@ -144,13 +133,11 @@ const ChatBot = () => {
       setIsTyping(false);
     }
   };
-  
   const handleFeedback = (messageId: string, feedbackType: "positive" | "negative") => {
     setMessages(prev => prev.map(msg => msg.id === messageId ? {
       ...msg,
       feedback: feedbackType
     } : msg));
-    
     toast({
       title: feedbackType === "positive" ? "Thanks for the feedback!" : "Sorry about that",
       description: feedbackType === "positive" ? "We're glad this was helpful." : "We'll work on improving our responses.",
@@ -159,11 +146,7 @@ const ChatBot = () => {
   };
 
   // Filter messages based on the active source filter
-  const filteredMessages = messages.filter(message => 
-    activeSourceFilter === "all" || 
-    message.source?.type === activeSourceFilter
-  );
-  
+  const filteredMessages = messages.filter(message => activeSourceFilter === "all" || message.source?.type === activeSourceFilter);
   return <div className="fixed bottom-6 right-6 z-50">
       {/* Chat Icon Button */}
       {!isOpen && <Button onClick={toggleChat} className="h-14 w-14 rounded-full shadow-lg bg-green-600 hover:bg-green-700 transition-all" size="icon">
@@ -190,60 +173,11 @@ const ChatBot = () => {
           
           {!isMinimized && <>
               {/* Source filter tabs */}
-              <div className="px-4 pt-2 border-b">
-                <div className="flex space-x-1 text-xs">
-                  <Button 
-                    variant={activeSourceFilter === "all" ? "default" : "ghost"} 
-                    size="sm" 
-                    className="h-6 text-xs py-0 px-2"
-                    onClick={() => setActiveSourceFilter("all")}
-                  >
-                    All
-                  </Button>
-                  <Button 
-                    variant={activeSourceFilter === "job" ? "default" : "ghost"} 
-                    size="sm" 
-                    className="h-6 text-xs py-0 px-2"
-                    onClick={() => setActiveSourceFilter("job")}
-                  >
-                    Jobs
-                  </Button>
-                  <Button 
-                    variant={activeSourceFilter === "skill" ? "default" : "ghost"} 
-                    size="sm" 
-                    className="h-6 text-xs py-0 px-2"
-                    onClick={() => setActiveSourceFilter("skill")}
-                  >
-                    Skills
-                  </Button>
-                  <Button 
-                    variant={activeSourceFilter === "marketplace" ? "default" : "ghost"} 
-                    size="sm" 
-                    className="h-6 text-xs py-0 px-2"
-                    onClick={() => setActiveSourceFilter("marketplace")}
-                  >
-                    Market
-                  </Button>
-                  <Button 
-                    variant={activeSourceFilter === "general" ? "default" : "ghost"} 
-                    size="sm" 
-                    className="h-6 text-xs py-0 px-2"
-                    onClick={() => setActiveSourceFilter("general")}
-                  >
-                    General
-                  </Button>
-                </div>
-              </div>
+              
           
               <CardContent className="p-4 overflow-y-auto h-[calc(100%-160px)]">
                 <div className="space-y-4">
-                  {filteredMessages.map(message => 
-                    <ChatMessage 
-                      key={message.id} 
-                      message={message} 
-                      onFeedback={handleFeedback} 
-                    />
-                  )}
+                  {filteredMessages.map(message => <ChatMessage key={message.id} message={message} onFeedback={handleFeedback} />)}
                   {/* This div is used for auto-scrolling */}
                   <div ref={messagesEndRef} />
                 </div>
@@ -261,5 +195,4 @@ const ChatBot = () => {
         </Card>}
     </div>;
 };
-
 export default ChatBot;
