@@ -5,13 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Briefcase, BarChart2, BookmarkCheck, DollarSign, ChevronRight, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-
 const Dashboard = () => {
   const {
     user
   } = useContext(AuthContext);
   const navigate = useNavigate();
-  
   const dashboardCards = [{
     title: "My Jobs",
     description: "Manage your active and completed jobs",
@@ -31,7 +29,6 @@ const Dashboard = () => {
     path: "/profile/earnings",
     stats: "$1,250"
   }];
-  
   const recentJobs = [{
     id: 1,
     title: "Website Development for E-commerce",
@@ -54,11 +51,13 @@ const Dashboard = () => {
     postedAt: "1 day ago",
     budget: "$50-100"
   }];
-  
   const handleViewAllJobs = () => {
-    navigate('/task-hub', { state: { activeTab: 'browse' } });
+    navigate('/task-hub', {
+      state: {
+        activeTab: 'browse'
+      }
+    });
   };
-
   return <div>
       <div className="bg-white border-b mb-6 pb-4">
         <div className="flex items-center justify-between">
@@ -87,46 +86,7 @@ const Dashboard = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-3">
-              <CardTitle className="text-lg font-medium">Recent Jobs</CardTitle>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="text-green-600 hover:text-green-700 p-0 h-auto flex items-center gap-1" 
-                onClick={handleViewAllJobs}
-              >
-                View all <ChevronRight className="h-4 w-4" />
-              </Button>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {recentJobs.map(job => <div key={job.id} className="border-b border-gray-100 pb-4 last:border-b-0 last:pb-0">
-                    <div className="flex justify-between items-start mb-1">
-                      <h4 className="font-medium">{job.title}</h4>
-                      <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 text-xs font-medium">
-                        {job.status}
-                      </Badge>
-                    </div>
-                    <div className="flex items-center text-gray-500 text-xs mb-2">
-                      <span className="mr-3">{job.category}</span>
-                      <span>{job.postedAt}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-green-600">{job.budget}</span>
-                      <Button variant="outline" size="sm" className="text-xs font-medium border-gray-200 hover:bg-green-50 hover:text-green-700 hover:border-green-200" onClick={e => {
-                    e.stopPropagation();
-                    navigate(`/jobs/${job.id}`);
-                  }}>
-                        View Details
-                      </Button>
-                    </div>
-                  </div>)}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        
 
         <div>
           <Card>
@@ -204,5 +164,4 @@ const Dashboard = () => {
       </div>
     </div>;
 };
-
 export default Dashboard;
