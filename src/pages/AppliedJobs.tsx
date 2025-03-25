@@ -91,7 +91,7 @@ const AppliedJobs = () => {
                 
                 <TabsContent value="pending">
                   <Tabs value={activeSection} onValueChange={setActiveSection} className="w-full mb-6">
-                    <TabsList className="grid grid-cols-2 w-full md:w-auto max-w-md mx-[240px] px-0 my-0 py-0">
+                    <TabsList className="grid grid-cols-2 w-full md:w-auto max-w-md px-0 my-0 py-0 mx-[240px]">
                       <TabsTrigger value="jobs">Jobs ({pendingJobApplications.length})</TabsTrigger>
                       <TabsTrigger value="skills">Skills ({pendingSkillApplications.length})</TabsTrigger>
                     </TabsList>
