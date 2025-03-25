@@ -37,7 +37,7 @@ const ExchangeSections = ({
   };
   return <>
       <Tabs value={activeSection} onValueChange={handleSectionChange} className="w-full mb-6">
-        <TabsList className="grid grid-cols-3 w-full md:w-auto max-w-md mx-[228px]">
+        <TabsList className="grid grid-cols-3 w-full md:w-auto max-w-md mx-[240px]">
           <TabsTrigger value="jobs" className="mx-0">
             Jobs ({activeTab === "active" ? activeJobs.length : completedJobs.length})
           </TabsTrigger>
