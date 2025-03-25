@@ -62,8 +62,12 @@ export const EventTimeline = ({ events }: EventTimelineProps) => {
                 
                 <div className="text-sm text-gray-500 mt-1 flex items-center gap-1">
                   <Clock className="h-3 w-3" />
-                  {format(event.date, 'EEEE, MMMM d, yyyy')}
+                  {format(event.date, 'EEEE, MMMM d, yyyy')} at {format(event.date, 'h:mm a')}
                 </div>
+                
+                {event.description && (
+                  <p className="mt-2 text-sm text-gray-600">{event.description}</p>
+                )}
               </div>
             </div>
           );

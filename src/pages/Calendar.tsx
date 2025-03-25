@@ -12,8 +12,8 @@ import {
 } from "@/components/ui/popover";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import EventTimeline, { Event as TimelineEvent } from "@/components/calendar/EventTimeline";
-import DeadlineList, { Deadline } from "@/components/calendar/DeadlineList";
+import { EventTimeline, Event as TimelineEvent } from "@/components/calendar/EventTimeline";
+import { DeadlineList, Deadline } from "@/components/calendar/DeadlineList";
 
 const CalendarPage = () => {
   const [date, setDate] = useState<Date>(new Date());
@@ -24,30 +24,30 @@ const CalendarPage = () => {
     {
       id: 1,
       title: "Website Mockup Review",
-      time: "10:00 AM - 11:00 AM",
       description: "Review website design mockups with client",
-      type: "meeting", // meeting, deadline, task
+      type: "meeting",
+      date: new Date(2023, 11, 15, 10, 0) // December 15, 2023, 10:00 AM
     },
     {
       id: 2,
       title: "Python Assignment Progress",
-      time: "1:00 PM - 2:30 PM",
       description: "Work on Python data analysis project",
       type: "task",
+      date: new Date(2023, 11, 15, 13, 0) // December 15, 2023, 1:00 PM
     },
     {
       id: 3,
       title: "UI Design Discussion",
-      time: "3:00 PM - 4:00 PM",
       description: "Discuss UI design principles with mentor",
       type: "meeting",
+      date: new Date(2023, 11, 15, 15, 0) // December 15, 2023, 3:00 PM
     },
     {
       id: 4,
       title: "Essay Outline Submission",
-      time: "11:59 PM",
       description: "Submit outline for humanities essay",
-      type: "deadline",
+      type: "milestone",
+      date: new Date(2023, 11, 15, 23, 59) // December 15, 2023, 11:59 PM
     },
   ];
 
@@ -56,38 +56,26 @@ const CalendarPage = () => {
     {
       id: 1,
       title: "Python Programming Assignment",
-      date: "2023-12-15",
-      client: "Academic Department",
-      priority: "High",
-      type: "Academic",
-      status: "pending"
+      date: new Date(2023, 11, 15),
+      status: "pending",
     },
     {
       id: 2,
       title: "Logo Design for Tech Startup",
-      date: "2023-12-20",
-      client: "TechVentures Inc.",
-      priority: "Medium",
-      type: "Design",
-      status: "pending"
+      date: new Date(2023, 11, 20),
+      status: "pending",
     },
     {
       id: 3,
       title: "Research Paper Review",
-      date: "2023-12-10",
-      client: "Academic Journal",
-      priority: "High",
-      type: "Academic",
-      status: "pending"
+      date: new Date(2023, 11, 10),
+      status: "pending",
     },
     {
       id: 4,
       title: "Social Media Strategy",
-      date: "2023-12-25",
-      client: "Wellness Inc.",
-      priority: "Low",
-      type: "Marketing",
-      status: "pending"
+      date: new Date(2023, 11, 25),
+      status: "pending",
     },
   ];
 
@@ -160,7 +148,7 @@ const CalendarPage = () => {
             </CardHeader>
             <CardContent className="pb-6">
               {activeTab === "timeline" ? (
-                <EventTimeline events={events} date={date} />
+                <EventTimeline events={events} />
               ) : (
                 <DeadlineList deadlines={deadlines} />
               )}
