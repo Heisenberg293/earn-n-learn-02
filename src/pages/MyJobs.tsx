@@ -34,7 +34,7 @@ const MyJobs = () => {
     <div className="min-h-screen bg-gray-50">
       <Navigation />
       
-      <main className="container mx-auto pt-24 pb-16 px-[26px] py-[35px]">
+      <main className="container mx-auto pt-24 pb-16 px-4 md:px-6">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
             <ExchangeHeader 
