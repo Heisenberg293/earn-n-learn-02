@@ -1,15 +1,11 @@
-
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PostJobSection } from "./PostJobSection";
-
 export const JobBrowser = () => {
   const [activeTab, setActiveTab] = useState("browse");
-
-  return (
-    <div>
+  return <div>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="mb-6 grid grid-cols-2 w-full max-w-md mx-0 my-0 px-0 py-0 rounded-none">
+        <TabsList className="mb-6 grid grid-cols-2 w-full max-w-md rounded-none mx-[240px] px-0 my-[6px] py-0">
           <TabsTrigger value="browse">Browse Jobs</TabsTrigger>
           <TabsTrigger value="post">Post a Job</TabsTrigger>
         </TabsList>
@@ -27,6 +23,5 @@ export const JobBrowser = () => {
           <PostJobSection />
         </TabsContent>
       </Tabs>
-    </div>
-  );
+    </div>;
 };
