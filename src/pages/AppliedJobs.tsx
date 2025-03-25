@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -8,24 +7,16 @@ import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import JobApplicationList from "@/components/exchanges/applied/JobApplicationList";
 import SkillApplicationList from "@/components/exchanges/applied/SkillApplicationList";
-import { 
-  pendingJobApplications,
-  pendingSkillApplications,
-  rejectedJobApplications,
-  rejectedSkillApplications
-} from "@/data/exchange-data";
+import { pendingJobApplications, pendingSkillApplications, rejectedJobApplications, rejectedSkillApplications } from "@/data/exchange-data";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
 const AppliedJobs = () => {
   const [activeTab, setActiveTab] = useState("pending");
   const [activeSection, setActiveSection] = useState("jobs");
   const navigate = useNavigate();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("all");
-  
-  return (
-    <div className="min-h-screen bg-gray-50">
+  return <div className="min-h-screen bg-gray-50">
       <Navigation />
       
       <main className="container mx-auto px-6 pt-24 pb-16 py-[35px]">
@@ -100,7 +91,7 @@ const AppliedJobs = () => {
                 
                 <TabsContent value="pending">
                   <Tabs value={activeSection} onValueChange={setActiveSection} className="w-full mb-6">
-                    <TabsList className="grid grid-cols-2 w-full md:w-auto max-w-md">
+                    <TabsList className="grid grid-cols-2 w-full md:w-auto max-w-md mx-[240px] px-0 my-0 py-0">
                       <TabsTrigger value="jobs">Jobs ({pendingJobApplications.length})</TabsTrigger>
                       <TabsTrigger value="skills">Skills ({pendingSkillApplications.length})</TabsTrigger>
                     </TabsList>
@@ -136,8 +127,6 @@ const AppliedJobs = () => {
           </Card>
         </div>
       </main>
-    </div>
-  );
+    </div>;
 };
-
 export default AppliedJobs;
