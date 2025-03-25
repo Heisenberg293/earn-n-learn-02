@@ -1,3 +1,4 @@
+
 import { useState, useContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -14,15 +15,11 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Link } from "react-router-dom";
+
 const TaskHub = () => {
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("browse");
-  const {
-    isAuthenticated,
-    user
-  } = useContext(AuthContext);
+  const { isAuthenticated, user } = useContext(AuthContext);
   const location = useLocation();
 
   // Filter states
@@ -31,12 +28,20 @@ const TaskHub = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedDifficulty, setSelectedDifficulty] = useState("all");
   const [selectedBudget, setSelectedBudget] = useState("all");
+
   useEffect(() => {
     // Check if location state contains activeTab
     if (location.state && location.state.activeTab) {
       setActiveTab(location.state.activeTab);
     }
+    
+    // Update document title to set the branding
+    document.title = "Earn-n-Learn";
+    
+    // Set the platform name in localStorage to ensure consistent branding
+    localStorage.setItem("platformName", "Earn-n-Learn");
   }, [location]);
+
   const handleApplyFilters = () => {
     setIsFilterOpen(false);
     // Pass filter values to child components via context or props
@@ -46,13 +51,16 @@ const TaskHub = () => {
       description: "Results have been filtered based on your criteria."
     });
   };
+
   const handleResetFilters = () => {
     setSearchTerm("");
     setSelectedCategory("all");
     setSelectedDifficulty("all");
     setSelectedBudget("all");
   };
-  return <div className="min-h-screen bg-gray-50 p-6">
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-6">
       <main>
         {isAuthenticated && <Dashboard />}
         
@@ -63,7 +71,12 @@ const TaskHub = () => {
               <div className="flex items-center gap-3">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <Input placeholder="Search..." className="h-9 w-[200px] md:w-[300px] pl-10 pr-4 rounded-md bg-gray-50 border-gray-200" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
+                  <Input 
+                    placeholder="Search..." 
+                    className="h-9 w-[200px] md:w-[300px] pl-10 pr-4 rounded-md bg-gray-50 border-gray-200" 
+                    value={searchTerm} 
+                    onChange={e => setSearchTerm(e.target.value)} 
+                  />
                 </div>
                 <Button variant="ghost" size="icon" className="h-9 w-9 relative">
                   <Bell className="h-5 w-5" />
@@ -150,7 +163,7 @@ const TaskHub = () => {
               </div>
               
               <Tabs defaultValue="browse" value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList className="mb-6 grid grid-cols-2 w-full max-w-md mx-0 my-0 px-0 py-0 rounded-none">
+                <TabsList className="mb-6 grid grid-cols-2 w-full max-w-md mx-auto">
                   <TabsTrigger value="browse">Browse Jobs</TabsTrigger>
                   <TabsTrigger value="match">Skills &amp; Materials Exchange</TabsTrigger>
                 </TabsList>
@@ -167,6 +180,8 @@ const TaskHub = () => {
           </Card>
         </div>
       </main>
-    </div>;
+    </div>
+  );
 };
+
 export default TaskHub;

@@ -2,7 +2,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, X, Clock, Tag, DollarSign, MessageCircle } from "lucide-react";
+import { Check, X, Clock, Tag, DollarSign, MessageCircle, Calendar, User } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
@@ -79,36 +79,66 @@ export const JobDetailView = ({ job, onClose, onUpdateJobStatus }: JobDetailView
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center justify-between border-b pb-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4">
             <div className="flex items-center gap-2">
-              <DollarSign className="h-5 w-5 text-accent" />
-              <span className="font-semibold">Budget:</span>
-            </div>
-            <span>{job.budget}</span>
-          </div>
-          
-          {job.deadline && (
-            <div className="flex items-center justify-between border-b pb-4">
-              <div className="flex items-center gap-2">
-                <Clock className="h-5 w-5 text-accent" />
-                <span className="font-semibold">Deadline:</span>
+              <DollarSign className="h-4 w-4 text-gray-500" />
+              <div>
+                <span className="text-gray-500 block">Budget</span>
+                <span className="font-medium">{job.budget}</span>
               </div>
-              <span>{job.deadline}</span>
             </div>
-          )}
-          
-          <div className="flex items-center justify-between border-b pb-4">
+            
+            {job.deadline && (
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4 text-gray-500" />
+                <div>
+                  <span className="text-gray-500 block">Deadline</span>
+                  <span className="font-medium">{job.deadline}</span>
+                </div>
+              </div>
+            )}
+            
             <div className="flex items-center gap-2">
-              <Tag className="h-5 w-5 text-accent" />
-              <span className="font-semibold">Category:</span>
+              <Tag className="h-4 w-4 text-gray-500" />
+              <div>
+                <span className="text-gray-500 block">Category</span>
+                <span className="font-medium">{job.category}</span>
+              </div>
             </div>
-            <span>{job.category}</span>
+            
+            <div className="flex items-center gap-2">
+              <User className="h-4 w-4 text-gray-500" />
+              <div>
+                <span className="text-gray-500 block">Difficulty</span>
+                <span className="font-medium">{job.difficulty}</span>
+              </div>
+            </div>
           </div>
           
           <div>
             <h3 className="font-semibold mb-2">Description:</h3>
             <p className="text-gray-700">{job.description}</p>
           </div>
+          
+          {job.status === "available" && (
+            <div className="mt-4 bg-gray-50 p-4 rounded-lg border border-gray-100">
+              <h3 className="font-semibold mb-2">What to expect:</h3>
+              <ul className="space-y-2 text-sm">
+                <li className="flex items-start gap-2">
+                  <Check className="h-4 w-4 text-green-500 mt-0.5" />
+                  <span>Once you accept, the job poster will be notified.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="h-4 w-4 text-green-500 mt-0.5" />
+                  <span>You can communicate with the poster via messaging.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="h-4 w-4 text-green-500 mt-0.5" />
+                  <span>Payment is securely held in escrow until completion.</span>
+                </li>
+              </ul>
+            </div>
+          )}
         </CardContent>
         
         <CardFooter className="flex flex-col gap-4">

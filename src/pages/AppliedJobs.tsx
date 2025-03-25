@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -10,16 +11,19 @@ import SkillApplicationList from "@/components/exchanges/applied/SkillApplicatio
 import { pendingJobApplications, pendingSkillApplications, rejectedJobApplications, rejectedSkillApplications } from "@/data/exchange-data";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
 const AppliedJobs = () => {
   const [activeTab, setActiveTab] = useState("pending");
   const [activeSection, setActiveSection] = useState("jobs");
   const navigate = useNavigate();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("all");
-  return <div className="min-h-screen bg-gray-50">
+  
+  return (
+    <div className="min-h-screen bg-gray-50">
       <Navigation />
       
-      <main className="container mx-auto px-6 pt-24 pb-16 py-[35px]">
+      <main className="container mx-auto px-6 pt-24 pb-16">
         <div className="max-w-6xl mx-auto">
           <div className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div className="flex items-center">
@@ -80,7 +84,7 @@ const AppliedJobs = () => {
             </CardHeader>
             <CardContent className="p-6">
               <Tabs defaultValue="pending" value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList className="mb-8 grid grid-cols-2 w-full md:w-auto max-w-md">
+                <TabsList className="mb-8 grid grid-cols-2 w-full md:w-auto max-w-md mx-auto">
                   <TabsTrigger value="pending" className="font-medium">
                     Pending ({pendingJobApplications.length + pendingSkillApplications.length})
                   </TabsTrigger>
@@ -91,7 +95,7 @@ const AppliedJobs = () => {
                 
                 <TabsContent value="pending">
                   <Tabs value={activeSection} onValueChange={setActiveSection} className="w-full mb-6">
-                    <TabsList className="grid grid-cols-2 w-full md:w-auto max-w-md px-0 my-0 py-0 mx-[240px]">
+                    <TabsList className="grid grid-cols-2 w-full md:w-auto max-w-md mx-auto">
                       <TabsTrigger value="jobs">Jobs ({pendingJobApplications.length})</TabsTrigger>
                       <TabsTrigger value="skills">Skills ({pendingSkillApplications.length})</TabsTrigger>
                     </TabsList>
@@ -108,7 +112,7 @@ const AppliedJobs = () => {
                 
                 <TabsContent value="rejected">
                   <Tabs value={activeSection} onValueChange={setActiveSection} className="w-full mb-6">
-                    <TabsList className="grid grid-cols-2 w-full md:w-auto max-w-md">
+                    <TabsList className="grid grid-cols-2 w-full md:w-auto max-w-md mx-auto">
                       <TabsTrigger value="jobs">Jobs ({rejectedJobApplications.length})</TabsTrigger>
                       <TabsTrigger value="skills">Skills ({rejectedSkillApplications.length})</TabsTrigger>
                     </TabsList>
@@ -127,6 +131,8 @@ const AppliedJobs = () => {
           </Card>
         </div>
       </main>
-    </div>;
+    </div>
+  );
 };
+
 export default AppliedJobs;
