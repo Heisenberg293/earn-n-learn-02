@@ -7,8 +7,7 @@ import {
   CardContent, 
   CardHeader, 
   CardTitle, 
-  CardDescription,
-  CardFooter
+  CardDescription
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -258,146 +257,150 @@ const JobDetail = () => {
                     </Tabs>
                   </CardHeader>
                   <CardContent>
-                    <TabsContent value="details" className="space-y-6">
-                      <div>
-                        <h3 className="font-semibold mb-3">Description</h3>
-                        <p className="text-gray-700">{job.description}</p>
-                      </div>
-                      
-                      <div>
-                        <h3 className="font-semibold mb-3">Required Skills</h3>
-                        <div className="flex flex-wrap gap-2">
-                          {job.skills.map((skill: string, index: number) => (
-                            <Badge key={index} variant="secondary">{skill}</Badge>
-                          ))}
+                    {activeTab === "details" && (
+                      <div className="space-y-6">
+                        <div>
+                          <h3 className="font-semibold mb-3">Description</h3>
+                          <p className="text-gray-700">{job.description}</p>
                         </div>
-                      </div>
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                        <div className="flex items-center gap-2">
-                          <Calendar className="h-4 w-4 text-gray-500" />
-                          <div>
-                            <span className="text-gray-500 block">Start Date</span>
-                            <span>{job.startedAt}</span>
+                        
+                        <div>
+                          <h3 className="font-semibold mb-3">Required Skills</h3>
+                          <div className="flex flex-wrap gap-2">
+                            {job.skills.map((skill: string, index: number) => (
+                              <Badge key={index} variant="secondary">{skill}</Badge>
+                            ))}
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <Clock className="h-4 w-4 text-gray-500" />
-                          <div>
-                            <span className="text-gray-500 block">Deadline</span>
-                            <span>{job.deadline}</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <DollarSign className="h-4 w-4 text-gray-500" />
-                          <div>
-                            <span className="text-gray-500 block">Budget</span>
-                            <span>{job.budget}</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Tag className="h-4 w-4 text-gray-500" />
-                          <div>
-                            <span className="text-gray-500 block">Category</span>
-                            <span>{job.category}</span>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <h3 className="font-semibold mb-3">Progress Tracking</h3>
-                        <div className="space-y-3">
-                          {job.milestones.map((milestone: any) => (
-                            <div key={milestone.id} className="flex items-center gap-3">
-                              <div className={`h-5 w-5 rounded-full flex items-center justify-center ${milestone.completed ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400'}`}>
-                                {milestone.completed ? <CheckCircle className="h-3 w-3" /> : <Clock className="h-3 w-3" />}
-                              </div>
-                              <div className="flex-1">
-                                <div className="flex justify-between">
-                                  <span className={milestone.completed ? 'text-gray-700' : 'text-gray-600'}>
-                                    {milestone.title}
-                                  </span>
-                                  <span className="text-sm text-gray-500">
-                                    {milestone.dueDate}
-                                  </span>
-                                </div>
-                                {!milestone.completed && (
-                                  <div className="w-full bg-gray-200 rounded-full h-1.5 mt-1">
-                                    <div className="bg-blue-600 h-1.5 rounded-full w-1/3"></div>
-                                  </div>
-                                )}
-                              </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                          <div className="flex items-center gap-2">
+                            <Calendar className="h-4 w-4 text-gray-500" />
+                            <div>
+                              <span className="text-gray-500 block">Start Date</span>
+                              <span>{job.startedAt}</span>
                             </div>
-                          ))}
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Clock className="h-4 w-4 text-gray-500" />
+                            <div>
+                              <span className="text-gray-500 block">Deadline</span>
+                              <span>{job.deadline}</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <DollarSign className="h-4 w-4 text-gray-500" />
+                            <div>
+                              <span className="text-gray-500 block">Budget</span>
+                              <span>{job.budget}</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Tag className="h-4 w-4 text-gray-500" />
+                            <div>
+                              <span className="text-gray-500 block">Category</span>
+                              <span>{job.category}</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <h3 className="font-semibold mb-3">Progress Tracking</h3>
+                          <div className="space-y-3">
+                            {job.milestones.map((milestone: any) => (
+                              <div key={milestone.id} className="flex items-center gap-3">
+                                <div className={`h-5 w-5 rounded-full flex items-center justify-center ${milestone.completed ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400'}`}>
+                                  {milestone.completed ? <CheckCircle className="h-3 w-3" /> : <Clock className="h-3 w-3" />}
+                                </div>
+                                <div className="flex-1">
+                                  <div className="flex justify-between">
+                                    <span className={milestone.completed ? 'text-gray-700' : 'text-gray-600'}>
+                                      {milestone.title}
+                                    </span>
+                                    <span className="text-sm text-gray-500">
+                                      {milestone.dueDate}
+                                    </span>
+                                  </div>
+                                  {!milestone.completed && (
+                                    <div className="w-full bg-gray-200 rounded-full h-1.5 mt-1">
+                                      <div className="bg-blue-600 h-1.5 rounded-full w-1/3"></div>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </div>
-                    </TabsContent>
+                    )}
                     
-                    <TabsContent value="applicants">
-                      {job.applicants.length > 0 ? (
-                        <div className="space-y-4">
-                          {job.applicants.map((applicant: any) => (
-                            <Card key={applicant.id} className="border border-gray-200">
-                              <CardContent className="p-4">
-                                <div className="flex justify-between items-start">
-                                  <div className="flex items-center gap-3">
-                                    <div className="bg-gray-200 w-12 h-12 rounded-full flex items-center justify-center">
-                                      <User className="h-6 w-6 text-gray-500" />
-                                    </div>
-                                    <div>
-                                      <h4 className="font-semibold">{applicant.name}</h4>
-                                      <div className="flex flex-wrap gap-1 mt-1">
-                                        {applicant.skills.map((skill: string, index: number) => (
-                                          <span key={index} className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded">
-                                            {skill}
-                                          </span>
-                                        ))}
+                    {activeTab === "applicants" && (
+                      <div>
+                        {job.applicants.length > 0 ? (
+                          <div className="space-y-4">
+                            {job.applicants.map((applicant: any) => (
+                              <Card key={applicant.id} className="border border-gray-200">
+                                <CardContent className="p-4">
+                                  <div className="flex justify-between items-start">
+                                    <div className="flex items-center gap-3">
+                                      <div className="bg-gray-200 w-12 h-12 rounded-full flex items-center justify-center">
+                                        <User className="h-6 w-6 text-gray-500" />
+                                      </div>
+                                      <div>
+                                        <h4 className="font-semibold">{applicant.name}</h4>
+                                        <div className="flex flex-wrap gap-1 mt-1">
+                                          {applicant.skills.map((skill: string, index: number) => (
+                                            <span key={index} className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded">
+                                              {skill}
+                                            </span>
+                                          ))}
+                                        </div>
                                       </div>
                                     </div>
+                                    <Badge variant={
+                                      applicant.status === "accepted" ? "default" : 
+                                      applicant.status === "rejected" ? "destructive" : "outline"
+                                    }>
+                                      {applicant.status.charAt(0).toUpperCase() + applicant.status.slice(1)}
+                                    </Badge>
                                   </div>
-                                  <Badge variant={
-                                    applicant.status === "accepted" ? "success" : 
-                                    applicant.status === "rejected" ? "destructive" : "outline"
-                                  }>
-                                    {applicant.status.charAt(0).toUpperCase() + applicant.status.slice(1)}
-                                  </Badge>
-                                </div>
-                                
-                                {applicant.status === "pending" && (
-                                  <div className="flex justify-end gap-2 mt-4">
-                                    <Button 
-                                      variant="outline" 
-                                      size="sm"
-                                      onClick={() => handleApplicantAction(applicant.id, "reject")}
-                                    >
-                                      Reject
-                                    </Button>
-                                    <Button 
-                                      size="sm"
-                                      onClick={() => handleApplicantAction(applicant.id, "accept")}
-                                    >
-                                      Hire
-                                    </Button>
-                                  </div>
-                                )}
-                              </CardContent>
-                            </Card>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="text-center py-12">
-                          <Users className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                          <h3 className="text-lg font-medium text-gray-600 mb-2">
-                            No Applicants Yet
-                          </h3>
-                          <p className="text-gray-500 max-w-md mx-auto">
-                            Once users apply for your job, they will appear here.
-                          </p>
-                        </div>
-                      )}
-                    </TabsContent>
+                                  
+                                  {applicant.status === "pending" && (
+                                    <div className="flex justify-end gap-2 mt-4">
+                                      <Button 
+                                        variant="outline" 
+                                        size="sm"
+                                        onClick={() => handleApplicantAction(applicant.id, "reject")}
+                                      >
+                                        Reject
+                                      </Button>
+                                      <Button 
+                                        size="sm"
+                                        onClick={() => handleApplicantAction(applicant.id, "accept")}
+                                      >
+                                        Hire
+                                      </Button>
+                                    </div>
+                                  )}
+                                </CardContent>
+                              </Card>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="text-center py-12">
+                            <Users className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                            <h3 className="text-lg font-medium text-gray-600 mb-2">
+                              No Applicants Yet
+                            </h3>
+                            <p className="text-gray-500 max-w-md mx-auto">
+                              Once users apply for your job, they will appear here.
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    )}
                     
-                    <TabsContent value="messages">
+                    {activeTab === "messages" && (
                       <div className="text-center py-12">
                         <MessageCircle className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                         <h3 className="text-lg font-medium text-gray-600 mb-2">
@@ -408,7 +411,7 @@ const JobDetail = () => {
                         </p>
                         <Button>Message All Applicants</Button>
                       </div>
-                    </TabsContent>
+                    )}
                   </CardContent>
                 </Card>
               ) : (

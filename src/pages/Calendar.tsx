@@ -1,159 +1,175 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navigation from "@/components/Navigation";
-import { DeadlineList } from "@/components/calendar/DeadlineList";
-import { EventTimeline } from "@/components/calendar/EventTimeline";
+import { Button } from "@/components/ui/button";
+import { Calendar as CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
+import { format } from "date-fns";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Check, Clock, Calendar as CalendarIcon, Plus, List } from "lucide-react";
+import EventTimeline, { Event as TimelineEvent } from "@/components/calendar/EventTimeline";
+import DeadlineList, { Deadline } from "@/components/calendar/DeadlineList";
 
-const Calendar = () => {
-  const [date, setDate] = useState<Date | undefined>(new Date());
-  const [view, setView] = useState<"calendar" | "list">("calendar");
-  
-  // Sample upcoming deadlines
-  const upcomingDeadlines = [
+const CalendarPage = () => {
+  const [date, setDate] = useState<Date>(new Date());
+  const [activeTab, setActiveTab] = useState("timeline");
+
+  // Sample events data
+  const events: TimelineEvent[] = [
     {
       id: 1,
-      title: "Website Development Project",
-      deadline: "2023-12-15",
-      client: "TechVentures Inc.",
-      priority: "high",
-      type: "job"
+      title: "Website Mockup Review",
+      time: "10:00 AM - 11:00 AM",
+      description: "Review website design mockups with client",
+      type: "meeting", // meeting, deadline, task
     },
     {
       id: 2,
-      title: "Logo Design Feedback",
-      deadline: "2023-12-10",
-      client: "StartupBrands",
-      priority: "medium",
-      type: "job"
+      title: "Python Assignment Progress",
+      time: "1:00 PM - 2:30 PM",
+      description: "Work on Python data analysis project",
+      type: "task",
     },
     {
       id: 3,
-      title: "Content Writing Submission",
-      deadline: "2023-12-18",
-      client: "BlogMasters",
-      priority: "low",
-      type: "job"
-    }
+      title: "UI Design Discussion",
+      time: "3:00 PM - 4:00 PM",
+      description: "Discuss UI design principles with mentor",
+      type: "meeting",
+    },
+    {
+      id: 4,
+      title: "Essay Outline Submission",
+      time: "11:59 PM",
+      description: "Submit outline for humanities essay",
+      type: "deadline",
+    },
   ];
-  
+
+  // Sample deadlines data
+  const deadlines: Deadline[] = [
+    {
+      id: 1,
+      title: "Python Programming Assignment",
+      date: "2023-12-15",
+      client: "Academic Department",
+      priority: "High",
+      type: "Academic",
+      status: "pending"
+    },
+    {
+      id: 2,
+      title: "Logo Design for Tech Startup",
+      date: "2023-12-20",
+      client: "TechVentures Inc.",
+      priority: "Medium",
+      type: "Design",
+      status: "pending"
+    },
+    {
+      id: 3,
+      title: "Research Paper Review",
+      date: "2023-12-10",
+      client: "Academic Journal",
+      priority: "High",
+      type: "Academic",
+      status: "pending"
+    },
+    {
+      id: 4,
+      title: "Social Media Strategy",
+      date: "2023-12-25",
+      client: "Wellness Inc.",
+      priority: "Low",
+      type: "Marketing",
+      status: "pending"
+    },
+  ];
+
+  // Navigation between days
+  const navigateDay = (direction: "prev" | "next") => {
+    const newDate = new Date(date);
+    if (direction === "prev") {
+      newDate.setDate(newDate.getDate() - 1);
+    } else {
+      newDate.setDate(newDate.getDate() + 1);
+    }
+    setDate(newDate);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
       
-      <main className="container mx-auto pt-24 pb-16 px-4">
+      <main className="container mx-auto px-6 pt-24 pb-16">
         <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
             <div>
-              <h1 className="text-3xl font-bold mb-1">Calendar</h1>
-              <p className="text-gray-600">Track your deadlines and upcoming events</p>
+              <h1 className="text-3xl font-bold">Calendar</h1>
+              <p className="text-gray-600">Manage your schedule and deadlines</p>
             </div>
-            <div className="flex items-center gap-2 mt-4 md:mt-0">
-              <Button variant="outline" size="sm" className="gap-1" onClick={() => setView("calendar")}>
-                <CalendarIcon className="h-4 w-4" />
-                Calendar
-              </Button>
-              <Button variant="outline" size="sm" className="gap-1" onClick={() => setView("list")}>
-                <List className="h-4 w-4" />
-                List
-              </Button>
-              <Button size="sm" className="gap-1">
-                <Plus className="h-4 w-4" />
-                Add Event
-              </Button>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <Card className="lg:col-span-2">
-              <CardHeader>
-                <CardTitle>
-                  {view === "calendar" ? "Monthly Calendar" : "Timeline View"}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {view === "calendar" ? (
-                  <div className="flex justify-center">
-                    <CalendarComponent
-                      mode="single"
-                      selected={date}
-                      onSelect={setDate}
-                      className="rounded-md border"
-                    />
-                  </div>
-                ) : (
-                  <EventTimeline />
-                )}
-              </CardContent>
-            </Card>
             
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-amber-500" />
-                  <span>Upcoming Deadlines</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <DeadlineList deadlines={upcomingDeadlines} />
-              </CardContent>
-            </Card>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigateDay("prev")}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="w-[240px] justify-start text-left font-normal">
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    <span>{format(date, "PPPP")}</span>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <CalendarComponent
+                    mode="single"
+                    selected={date}
+                    onSelect={(newDate) => newDate && setDate(newDate)}
+                  />
+                </PopoverContent>
+              </Popover>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigateDay("next")}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
           
-          <div className="mt-8">
-            <Card>
-              <CardHeader>
-                <CardTitle>Completed Tasks</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Tabs defaultValue="recent">
-                  <TabsList className="mb-4 grid w-full grid-cols-3 max-w-md">
-                    <TabsTrigger value="recent">Recent</TabsTrigger>
-                    <TabsTrigger value="this-week">This Week</TabsTrigger>
-                    <TabsTrigger value="this-month">This Month</TabsTrigger>
-                  </TabsList>
-                  
-                  <TabsContent value="recent" className="space-y-4">
-                    <div className="flex items-center gap-3 p-3 border rounded-md">
-                      <div className="bg-green-100 rounded-full p-1">
-                        <Check className="h-4 w-4 text-green-600" />
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="font-medium">Logo Design</h4>
-                        <p className="text-sm text-gray-500">Completed yesterday</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center gap-3 p-3 border rounded-md">
-                      <div className="bg-green-100 rounded-full p-1">
-                        <Check className="h-4 w-4 text-green-600" />
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="font-medium">Content Writing for Blog</h4>
-                        <p className="text-sm text-gray-500">Completed 2 days ago</p>
-                      </div>
-                    </div>
-                  </TabsContent>
-                  
-                  <TabsContent value="this-week">
-                    <p className="text-center text-gray-500 py-4">No tasks completed this week yet.</p>
-                  </TabsContent>
-                  
-                  <TabsContent value="this-month">
-                    <p className="text-center text-gray-500 py-4">Loading this month's completed tasks...</p>
-                  </TabsContent>
-                </Tabs>
-              </CardContent>
-            </Card>
-          </div>
+          <Card>
+            <CardHeader>
+              <Tabs defaultValue={activeTab} onValueChange={setActiveTab}>
+                <TabsList>
+                  <TabsTrigger value="timeline">Today's Schedule</TabsTrigger>
+                  <TabsTrigger value="deadlines">Upcoming Deadlines</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </CardHeader>
+            <CardContent className="pb-6">
+              {activeTab === "timeline" ? (
+                <EventTimeline events={events} date={date} />
+              ) : (
+                <DeadlineList deadlines={deadlines} />
+              )}
+            </CardContent>
+          </Card>
         </div>
       </main>
     </div>
   );
 };
 
-export default Calendar;
+export default CalendarPage;
